@@ -35,7 +35,12 @@ app.factory('Path', function(ActiveResource) {
     this.string('name');
     this.string('description');
     this.string('version');
-    return this;
+
+    this.validates({
+      name: { presence: true },
+      curator: { presence: true },
+      version: { presence: true },
+    });
   };
 
   Path.inherits(ActiveResource.Base);
