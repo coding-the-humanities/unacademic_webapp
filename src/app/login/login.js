@@ -1,4 +1,4 @@
-angular.module('example-app.login', [
+angular.module('unacademic.login', [
   'ui.router'
 ])
   .config(function ($stateProvider) {

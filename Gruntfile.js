@@ -72,6 +72,11 @@ module.exports = function(grunt) {
         tasks: [ 'index:build' ]
       },
 
+      templates: {
+        files: [ '<%= app_files.atpl %>' ],
+        tasks: [ 'html2js' ]
+      },
+
       sass: {
         files: ['src/sass/**/*.scss'],
         tasks: [ 'sass:build']

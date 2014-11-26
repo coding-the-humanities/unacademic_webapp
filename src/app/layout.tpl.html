@@ -1,0 +1,24 @@
+<nav-bar></nav-bar>
+<side-bar></side-bar>
+
+<div class="cards">
+  <div class="card" ng-repeat="path in app.paths">
+    <div class="ribbon-wrapper"><div class="ribbon">RIBBON</div></div>
+    <div class="card-image">
+      <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/mountains-4.png" alt="">
+    </div>
+    <div class="card-header">
+      {{path.name}}
+    </div>
+    <div class="card-copy">
+      <p>{{path.description}}</p>
+    </div>
+    <div class="card-stats">
+      <ul>
+        <li>{{path.version}}<span>Version</span></li>
+        <li>8<span>Places</span></li>
+        <li>923<span>Users</span></li>
+        </ul>
+      </div>
+  </div>
+</div>

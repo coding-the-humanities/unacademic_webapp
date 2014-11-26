@@ -1,4 +1,4 @@
-angular.module('example-app.modules', [
-  require('./doge-debug').name,
+angular.module('unacademic.modules', [
+  require('./lodash').name,
   require('angular-browserify-event-dispatcher').name
 ]);

@@ -1,25 +1,47 @@
-angular.module('example-app', [
-  'example-app.login',
+var app = angular.module('unacademic', [
   'ui.router',
+  'ActiveResource',
   'templates-app',
-  'example-app.modules'
+  'unacademic.modules',
 ])
 
-  .config(function($stateProvider, $urlRouterProvider) {
-    $stateProvider
-      .state('root', {
-        url: '/',
-        template: '<div>{{test.statement}}</div>',
-        controller: 'TestCtrl as test'
-      });
+app.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+  .state('app', {
+    url: '/',
+    templateUrl: 'layout.tpl.html',
+    controller: 'Main as app'
+  });
 
-    $urlRouterProvider.otherwise('/');
-  })
+  $urlRouterProvider.otherwise('/');
+})
 
-  .controller('TestCtrl', function(debug) {
-    debug('say it is so.');
-    this.statement = 'This is the application root.'
-    this.collection = [1,2,3,4,5];
-  })
+app.controller('Main', function(Path) {
+  var app = this;
 
-;
+
+  Path.all().then(function(response){
+    app.paths = response;
+  });
+
+});
+
+
+app.factory('Path', function(ActiveResource) {
+
+  function Path(data) {
+    this.number('id');
+    this.string('curator');
+    this.string('name');
+    this.string('description');
+    this.string('version');
+    return this;
+  };
+
+  Path.inherits(ActiveResource.Base);
+  Path.api.set('http://cth.loc/api/0/paths');
+
+  window.Path = Path;
+
+  return Path;
+});

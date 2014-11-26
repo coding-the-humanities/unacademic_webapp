@@ -19,7 +19,11 @@ module.exports = {
 
   vendor_files: {
     js: [
+      'vendor/lodash/dist/lodash.js',
       'vendor/angular/angular.js',
+      'vendor/active-support/lib/active-support.js',
+      'vendor/async//lib/async.js',
+      'vendor/ngActiveResource/dist/ng-active-resource.js',
       'vendor/angular-ui-router/release/angular-ui-router.js'
     ]
   }
