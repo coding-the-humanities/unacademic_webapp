@@ -10,7 +10,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   .state('app', {
     url: '/',
     templateUrl: 'layout.tpl.html',
-    controller: 'Main as app'
+    controller: 'Main as app',
   });
 
   $urlRouterProvider.otherwise('/');
@@ -18,6 +18,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
 app.controller('Main', function(Path) {
   var app = this;
+
+  /* - Resolve */
 
   Path.all().then(function(response){
     var paths = response.map(function(path){
@@ -28,29 +30,42 @@ app.controller('Main', function(Path) {
     app.paths = paths;
   });
 
-  app.addNew = function(){
-    var path = Path.new({name: "new path", curator: "yeehaa", version: "0.0.0"});
-    path.editing = true;
-    app.paths.push(path);
+  /* - CardCtrl- */
+
+  app.delete = function(path){
+    path.$delete().then(function(){
+      _.remove(app.paths, path);
+    });
   }
 
   app.save = function(path){
     path.$save().then(function(){
-      path.editing = false;
+      path.creating = false;
     });
   };
 
-  app.clear = function(){
-    Path.all().then(function(paths){
-      paths.forEach(function(path){
-        path.$delete();
-        app.paths = [];
-      });
+  /* - CardsCtrl - */
+
+  app.add = function(){
+    var path = Path.new({name: "new path", curator: "yeehaa", version: "0.0.0"});
+    path.creating = true;
+    app.paths.push(path);
+  }
+
+  app.organize = function(){
+    app.paths.map(function(path){
+      path.organizing = true;
+      return path;
     });
   }
 
+  app.clear = function(){
+    app.paths.forEach(function(path){
+      path.$delete();
+      app.paths = [];
+    });
+  }
 });
-
 
 app.factory('Path', function(ActiveResource) {
 
