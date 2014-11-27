@@ -7,7 +7,10 @@
     <div class="card-image">
       <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/mountains-4.png" alt="">
     </div>
-    <div class="card-header">
+    <div ng-show="path.editing" class="card-header">
+      <input ng-model="path.name"></input>
+    </div>
+    <div ng-hide="path.editing" class="card-header">
       {{path.name}}
     </div>
     <div class="card-copy">
@@ -18,7 +21,11 @@
         <li>{{path.version}}<span>Version</span></li>
         <li>8<span>Places</span></li>
         <li>923<span>Users</span></li>
-        </ul>
-      </div>
+      </ul>
+    </div>
+    <button ng-show="path.editing" ng-click="app.save(path)">Save</button>
   </div>
 </div>
+
+<button ng-click="app.addNew()">+</button>
+<button ng-click="app.clear()">Clear</button>

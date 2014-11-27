@@ -19,10 +19,35 @@ app.config(function($stateProvider, $urlRouterProvider) {
 app.controller('Main', function(Path) {
   var app = this;
 
-
   Path.all().then(function(response){
-    app.paths = response;
+    var paths = response.map(function(path){
+      path.editing = false;
+      return path;
+    });
+
+    app.paths = paths;
   });
+
+  app.addNew = function(){
+    var path = Path.new({name: "new path", curator: "yeehaa", version: "0.0.0"});
+    path.editing = true;
+    app.paths.push(path);
+  }
+
+  app.save = function(path){
+    path.$save().then(function(){
+      path.editing = false;
+    });
+  };
+
+  app.clear = function(){
+    Path.all().then(function(paths){
+      paths.forEach(function(path){
+        path.$delete();
+        app.paths = [];
+      });
+    });
+  }
 
 });
 
