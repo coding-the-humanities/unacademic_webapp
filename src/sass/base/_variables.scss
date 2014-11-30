@@ -1,5 +1,21 @@
 // Typography
-$sans-serif: $helvetica;
+
+@font-face {
+  font-family: NittyNormal;
+  src: url('../assets/fonts/NN.woff') format('woff');
+}
+
+@font-face {
+  font-family: NittyBold;
+  src: url('../assets/fonts/NB.woff') format('woff');
+}
+
+$font-family-sans-serif:          Helvetica, Arial, "Lucida Grande", sans-serif !default;
+$font-family-light-sans-serif:    "Helvetica Neue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !default;
+$font-family-serif:               Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace:           "NittyNormal", Monaco, Menlo, Consolas, "Courier New", monospace !default;
+
+$sans-serif: $font-family-monospace;
 $serif: $georgia;
 $base-font-family: $sans-serif;
 $header-font-family: $base-font-family;
@@ -23,13 +39,13 @@ $base-spacing: $base-line-height * 1em;
 $base-z-index: 0;
 
 // Colors
-$blue: #477DCA;
+$blue: #75C7B3;
 $dark-gray: #333;
 $medium-gray: #999;
 $light-gray: #DDD;
-$light-red: #FBE3E4;
-$light-yellow: #FFF6BF;
-$light-green: #E6EFC2;
+$light-red: #E34D2F;
+$light-yellow: #E5CF39;
+$light-green: #A5CC45;
 
 // Background Color
 $base-background-color: white;

@@ -28,7 +28,7 @@ header.navigation {
   }
 
   .logo {
-    float: left;    
+    float: left;
     max-height: $navigation-height;
     padding-left: $navigation-padding;
     padding-right: 2em;
@@ -69,9 +69,13 @@ header.navigation {
     @include media ($horizontal-bar-mode) {
       float: left;
     }
+
+    a {
+      margin-right: 10px;
+    }
   }
 
-  ul#navigation-menu {    
+  ul#navigation-menu {
     -webkit-transform-style: preserve-3d; // stop webkit flicker
     clear: both;
     display: none;
@@ -259,12 +263,12 @@ header.navigation {
     }
   }
 
-  .sign-up {
+  .button {
     @extend button;
     margin-top: 1.2em;
     float: right;
     display: inline;
-    font-size: .8em;  
+    font-size: .8em;
     text-transform: uppercase;
     padding: .75em 1em;
   }

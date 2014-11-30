@@ -1,13 +1,13 @@
 <div class="card">
-  <div class="ribbon-wrapper"><div class="ribbon">RIBBON</div></div>
+  <div ng-show="path.isFork" class="ribbon-wrapper"><div class="ribbon">Fork</div></div>
   <div class="card-image">
-    <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/mountains-4.png" alt="">
+    <img src="http://amaridesplays.files.wordpress.com/2013/10/coding-dojo.jpg" alt="">
   </div>
   <div ng-show="path.creating" class="card-header">
-    <input ng-model="path.name"></input>
+    <input ng-model="path.title"></input>
   </div>
   <div ng-hide="path.creating" class="card-header">
-    {{path.name}}
+    {{path.title}}
   </div>
   <div class="card-copy">
     <p>{{path.description}}</p>
@@ -15,10 +15,10 @@
   <div class="card-stats">
     <ul>
       <li>{{path.version}}<span>Version</span></li>
-      <li>8<span>Places</span></li>
-      <li>923<span>Users</span></li>
+      <li>{{path.places.length}}<span>Places</span></li>
+      <li>{{path.learners.length}}<span>Learners</span></li>
     </ul>
   </div>
   <button ng-show="path.creating" ng-click="app.save(path)">Save</button>
-  <button ng-show="path.organizing" ng-click="app.delete(path)">Delete</button>
+  <button ng-show="path.organizing" ng-click="app.remove(path)">Remove</button>
 </div>
