@@ -1,4 +1,4 @@
-<section ng-controller="Paths as paths">
+<section>
   <side-bar></side-bar>
   <!-- <nav-bar mode="curation" level="paths"></nav-bar> -->
 
@@ -8,6 +8,6 @@
   <!-- <card type="path" mode="curation" ng-repeat="card in cards"></card> -->
 
   <div class="cards">
-    <card ng-repeat="path in paths.all"></card>
+    <card ng-repeat="path in paths.all" model="path"></card>
   </div>
 </section>
