@@ -6,9 +6,10 @@ module.exports = {
     // source, but NO specs
     js: [ 'src/app/**/*.js', '!src/app/**/*.spec.js' ],
     // our partial templates
-    atpl: [ 'src/app/**/*.tpl.html' ],
+    atpl: [ 'src/app/**/*.html', '!src/app/index.html'],
     // the index.html
-    html: [ 'src/index.html' ]
+    html: [ 'src/index.html' ],
+    fonts: ['src/fonts/**/*']
   },
 
   test_files: {

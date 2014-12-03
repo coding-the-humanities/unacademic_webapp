@@ -9,21 +9,31 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
   .state('app', {
     url: '/',
-    templateUrl: 'paths/views/paths.tpl.html',
-    controller: 'Paths as paths',
+    templateUrl: 'paths/views/paths.html',
+    controller: 'PathsList as pathsList',
     resolve: {
-      allPaths: function(Path){
+      paths: function(Path){
         return Path.all()
       }
     }
   })
   .state('path', {
     url: '/path',
-    templateUrl: 'paths/views/path.tpl.html',
-    controller: 'Path as path',
+    templateUrl: 'paths/views/path.html',
+    controller: 'PathDetails as pathDetails',
     resolve: {
-      onePath: function(Path){
+      path: function(Path){
         return Path.find(1);
+      }
+    }
+  })
+  .state('newPath', {
+    url: '/newPath',
+    templateUrl: 'paths/views/path.html',
+    controller: 'PathDetails as pathDetails',
+    resolve: {
+      path: function(Path){
+        return Path.new({name: "new path", curator: "yeehaa", version: "0.0.0"});
       }
     }
   });

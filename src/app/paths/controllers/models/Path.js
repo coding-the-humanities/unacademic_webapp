@@ -7,6 +7,7 @@ app.factory('Path', function(ActiveResource) {
     this.string('curator');
     this.string('title');
     this.string('description');
+    this.string('summary');
     this.number('forked_from');
     this.string('version');
     this.forks = data.forks;

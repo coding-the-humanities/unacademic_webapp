@@ -18,6 +18,9 @@ angular.module('unacademic').directive('card', function(){
         return template;
       }
 
+      $scope.remove = function(){
+        alert("YOOOOOHOOO");
+      }
     }
   }
 

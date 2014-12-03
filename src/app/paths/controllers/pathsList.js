@@ -1,62 +1,57 @@
 var app = angular.module('unacademic');
 
-app.controller('Paths', function(allPaths) {
-  var paths = this;
+app.controller('PathsList', function(paths, $state) {
+  var pathsList = this;
 
-  paths.all = allPaths;
+  pathsList.all = paths;
 
-  paths.viewActions = pathActions();
-  paths.organizeActions = pathActions(true);
 
-  paths.remove= remove;
-  paths.save = save;
+  pathsList.remove= remove;
+  pathsList.save = save;
+
+  pathsList.actions = pathActions();
 
   function pathActions(organizing){
 
     function add(){
-      var path = Path.new({name: "new path", curator: "yeehaa", version: "0.0.0"});
-      path.creating = true;
-      paths.all.push(path);
+      $state.go('newPath');
     }
 
     function organize(){
-      paths.all.map(function(path){
-        paths.organizing = true;
+      pathsList.all.map(function(path){
+        pathsList.organizing = true;
         path.organizing = true;
         return path;
       });
     }
 
     function done(){
-      paths.all.map(function(path){
-        paths.organizing = false;
+      pathsList.all.map(function(path){
+        pathsList.organizing = false;
         path.organizing = false;
         return path;
       });
     }
 
     function clear(){
-      paths.all.forEach(function(path){
+      pathsList.all.forEach(function(path){
         path.$delete();
-        paths.all = [];
+        pathsList.all = [];
       });
     }
 
-    if(!organizing){
-      return {
+    return {
+      view: {
         add: add,
         organize: organize,
         clear: clear
-      }
-    } else {
-
-      return {
+      },
+      organize: {
         add: add,
         done: done,
         clear: clear
       }
     }
-
   };
 
   function save(path){
@@ -67,7 +62,7 @@ app.controller('Paths', function(allPaths) {
 
   function remove(path){
     path.$delete().then(function(){
-      _.remove(paths.all, path);
+      _.remove(pathsList.all, path);
     });
   };
 });

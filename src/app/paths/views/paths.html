@@ -2,12 +2,13 @@
   <side-bar></side-bar>
   <!-- <nav-bar mode="curation" level="paths"></nav-bar> -->
 
-  <nav-bar></nav-bar>
+  <nav-bar actions="pathsList.actions"></nav-bar>
 
   <!-- <deck type="paths" mode="curation" cards="app.cards"></deck> -->
   <!-- <card type="path" mode="curation" ng-repeat="card in cards"></card> -->
 
   <div class="cards">
-    <card ng-repeat="path in paths.all" model="path"></card>
+    <card ng-repeat="path in pathsList.all" model="path"></card>
+    <div class="card newCard" ng-click="pathsList.actions.view.add()"></div>
   </div>
 </section>

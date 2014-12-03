@@ -7,14 +7,14 @@
       <a ng-show="paths.organizing"
          href="javascript:void(0)"
          class="button"
-         ng-repeat="(name, action) in paths.organizeActions"
+         ng-repeat="(name, action) in actions.organize"
          ng-click="action()">
          {{name}}
        </a>
       <a ng-show="!paths.organizing"
          href="javascript:void(0)"
          class="button"
-         ng-repeat="(name, action) in paths.viewActions"
+         ng-repeat="(name, action) in actions.view"
          ng-click="action()">
          {{name}}
        </a>
