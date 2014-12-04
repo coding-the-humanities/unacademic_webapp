@@ -4,20 +4,25 @@
     <!--   <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png" alt="Logo Image"> -->
     <!-- </a> -->
     <div class="nav">
-      <a ng-show="paths.organizing"
+      <a ng-show="mode === 'curation'"
          href="javascript:void(0)"
          class="button"
          ng-repeat="(name, action) in actions.organize"
          ng-click="action()">
          {{name}}
        </a>
-      <a ng-show="!paths.organizing"
+      <a ng-show="mode === 'learning'"
          href="javascript:void(0)"
          class="button"
          ng-repeat="(name, action) in actions.view"
          ng-click="action()">
-         {{name}}
-       </a>
+         {{name}} 
+      </a>
+      <a href="javascript:void(0)"
+         class="button"
+         ng-click="mode === 'curation' ? mode = 'learning' : mode = 'curation'">
+         {{ mode === 'curation' ? 'learn' : 'curate'}}
+      </a>
     </div>
     <label class="label-switch">
       <input type="checkbox" />

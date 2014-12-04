@@ -9,7 +9,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
   .state('app', {
     url: '/',
-    templateUrl: 'paths/views/paths.html',
+    templateUrl: 'paths/views/pathsList.html',
     controller: 'PathsList as pathsList',
     resolve: {
       paths: function(Path){
@@ -19,7 +19,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   })
   .state('path', {
     url: '/path',
-    templateUrl: 'paths/views/path.html',
+    templateUrl: 'paths/views/pathDetails.html',
     controller: 'PathDetails as pathDetails',
     resolve: {
       path: function(Path){
@@ -29,11 +29,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
   })
   .state('newPath', {
     url: '/newPath',
-    templateUrl: 'paths/views/path.html',
-    controller: 'PathDetails as pathDetails',
+    templateUrl: 'paths/views/newPath.html',
+    controller: 'NewPath as newPath',
     resolve: {
       path: function(Path){
-        return Path.new({name: "new path", curator: "yeehaa", version: "0.0.0"});
+        var path = Path.new({title: "new path", curator: "yeehaa", version: "0.0.0"});
+        path.creating = true;
+        return path;
       }
     }
   });

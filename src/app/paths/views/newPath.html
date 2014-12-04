@@ -1,0 +1,62 @@
+<section>
+  <side-bar></side-bar>
+  <!-- <nav-bar mode="curation" level="paths"></nav-bar> -->
+
+  <nav-bar actions="newPath.actions"></nav-bar>
+
+  <!-- <deck type="paths" mode="curation" cards="app.cards"></deck> -->
+  <!-- <card type="path" mode="curation" ng-repeat="card in cards"></card> -->
+
+  <div class="newPath">
+
+    <section class="pathInfo">
+
+      <section ng-hide="newPath.info.creating" class="card">
+        <div ng-show="newPath.info.isFork" class="ribbon-wrapper"><div class="ribbon">Fork</div></div>
+        <div class="card-image">
+          <img src="http://amaridesplays.files.wordpress.com/2013/10/coding-dojo.jpg" alt="">
+        </div>
+        <div class="card-header">
+          {{newPath.info.title}}
+        </div>
+        <div class="card-copy">
+          <p><strong>Summary: </strong>{{newPath.info.summary}}</p>
+          <hr/>
+          <p><strong>Description: </strong>{{newPath.info.description}}</p>
+        </div>
+        <div class="card-stats">
+          <ul>
+            <li>{{newPath.info.version}}<span>Version</span></li>
+            <li>{{newPath.info.places.length}}<span>Places</span></li>
+            <li>{{newPath.info.learners.length}}<span>Learners</span></li>
+          </ul>
+        </div>
+        <button ng-show="newPath.info.creating" ng-click="paths.save(newPath.info)">Save</button>
+        <button ng-show="newPath.info.organizing" ng-click="paths.remove(newPath.info)">Remove</button>
+      </section>
+
+      <section ng-show="newPath.info.creating" class="card">
+        <div ng-show="newPath.info.isFork" class="ribbon-wrapper"><div class="ribbon">Fork</div></div>
+        <div class="card-image">
+          <img src="http://amaridesplays.files.wordpress.com/2013/10/coding-dojo.jpg" alt="">
+        </div>
+        <div class="card-header">
+          <input ng-model="newPath.info.title"></input>
+        </div>
+        <div class="card-copy">
+          <p><strong>Summary: <input ng-model="newPath.info.summary">{{newPath.info.summary}}</input></p>
+          <hr/>
+          <p><strong>Description: <input ng-model="newPath.info.description">{{newPath.info.description}}</input></p>
+        </div>
+        <button ng-show="newPath.info.creating" ng-click="paths.save(newPath.info)">Add Places</button>
+        <button ng-show="newPath.info.creating" ng-click="paths.save(newPath.info)">Save</button>
+        <button ng-show="newPath.info.organizing" ng-click="paths.remove(newPath.info)">Remove</button>
+      </section>
+
+    </section>
+
+    <section class="deck pathPlaces">
+      <card ng-repeat="place in newPath.places" model="place"></card>
+    </section>
+  </div>
+</section>

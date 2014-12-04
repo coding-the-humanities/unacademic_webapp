@@ -1,9 +1,13 @@
 var app = angular.module('unacademic');
 
-app.controller('PathsList', function(paths, $state) {
+app.value('appMode', 'curation')
+
+app.controller('PathsList', function(paths, $state, appMode) {
   var pathsList = this;
 
   pathsList.all = paths;
+
+  pathsList.appMode = appMode;
 
 
   pathsList.remove= remove;
@@ -42,9 +46,7 @@ app.controller('PathsList', function(paths, $state) {
 
     return {
       view: {
-        add: add,
         organize: organize,
-        clear: clear
       },
       organize: {
         add: add,
