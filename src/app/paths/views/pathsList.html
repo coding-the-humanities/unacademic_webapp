@@ -1,14 +1,22 @@
-<section>
-  <side-bar></side-bar>
-  <!-- <nav-bar mode="curation" level="paths"></nav-bar> -->
+<fa-app style="width: 100%; height: 100%;">
+  <fa-modifier ng-repeat="path in pathsList.all"
+                fa-translate="[0, $index * 110, 0]"
+                fa-size= [undefined,100]
+                fa-color="'#fff'">
+    <fa-surface fa-background-color="'#FA5C4F'">
+    {{path.title}}
+    </fa-surface>
+  </fa-modifier>
+  <!-- <side-bar></side-bar> -->
+  <!-- <1!-- <nav-bar mode="curation" level="paths"></nav-bar> --1> -->
 
-  <nav-bar mode="pathsList.appMode" actions="pathsList.actions"></nav-bar>
+  <!-- <nav-bar mode="pathsList.appMode" actions="pathsList.actions"></nav-bar> -->
 
-  <!-- <deck type="paths" mode="curation" cards="app.cards"></deck> -->
-  <!-- <card type="path" mode="curation" ng-repeat="card in cards"></card> -->
+  <!-- <1!-- <deck type="paths" mode="curation" cards="app.cards"></deck> --1> -->
+  <!-- <1!-- <card type="path" mode="curation" ng-repeat="card in cards"></card> --1> -->
 
-  <div class="cards">
-    <card ng-repeat="path in pathsList.all" model="path"></card>
-    <div ng-show="pathsList.appMode === 'curation'" class="card newCard" ng-click="pathsList.actions.view.add()"></div>
-  </div>
-</section>
+  <!-- <div class="cards"> -->
+  <!--   <card ng-repeat="path in pathsList.all" model="path"></card> -->
+  <!--   <div ng-show="pathsList.appMode === 'curation'" class="card newCard" ng-click="pathsList.actions.organize.add()"></div> -->
+  <!-- </div> -->
+</fa-app>

@@ -18,14 +18,12 @@
          ng-click="action()">
          {{name}} 
       </a>
-      <a href="javascript:void(0)"
-         class="button"
-         ng-click="mode === 'curation' ? mode = 'learning' : mode = 'curation'">
-         {{ mode === 'curation' ? 'learn' : 'curate'}}
-      </a>
     </div>
     <label class="label-switch">
-      <input type="checkbox" />
+      <input type="checkbox" 
+             ng-model="mode"
+             ng-true-value="'curation'"
+             ng-false-value="'learning'"/>
       <div class="checkbox"></div>
     </label>
   </div>

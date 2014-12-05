@@ -3,6 +3,7 @@ var app = angular.module('unacademic', [
   'ActiveResource',
   'templates-app',
   'unacademic.modules',
+  'famous.angular'
 ])
 
 app.config(function($stateProvider, $urlRouterProvider) {

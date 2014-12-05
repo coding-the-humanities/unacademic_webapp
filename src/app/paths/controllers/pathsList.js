@@ -9,7 +9,6 @@ app.controller('PathsList', function(paths, $state, appMode) {
 
   pathsList.appMode = appMode;
 
-
   pathsList.remove= remove;
   pathsList.save = save;
 
