@@ -1,6 +1,5 @@
 var app = angular.module('unacademic');
 
-app.value('appMode', 'curation')
 
 app.controller('PathsList', function(paths, $state, appMode) {
   var pathsList = this;

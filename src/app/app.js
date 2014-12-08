@@ -3,23 +3,16 @@ var app = angular.module('unacademic', [
   'ActiveResource',
   'templates-app',
   'unacademic.modules',
-  'famous.angular'
+  'famous.angular',
+  'contenteditable'
 ])
+
+app.value('appMode', 'learning')
 
 app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
   .state('app', {
     url: '/',
-    templateUrl: 'paths/views/pathsList.html',
-    controller: 'PathsList as pathsList',
-    resolve: {
-      paths: function(Path){
-        return Path.all()
-      }
-    }
-  })
-  .state('path', {
-    url: '/path',
     templateUrl: 'paths/views/pathDetails.html',
     controller: 'PathDetails as pathDetails',
     resolve: {
@@ -28,17 +21,5 @@ app.config(function($stateProvider, $urlRouterProvider) {
       }
     }
   })
-  .state('newPath', {
-    url: '/newPath',
-    templateUrl: 'paths/views/newPath.html',
-    controller: 'NewPath as newPath',
-    resolve: {
-      path: function(Path){
-        var path = Path.new({title: "new path", curator: "yeehaa", version: "0.0.0"});
-        path.creating = true;
-        return path;
-      }
-    }
-  });
   $urlRouterProvider.otherwise('/');
 });

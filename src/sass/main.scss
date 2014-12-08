@@ -7,10 +7,6 @@
 @import "modules/sidebar";
 @import "modules/navbar";
 
-header {
-  margin-bottom: 20px;
-}
-
 .pathDetails {
   @include outer-container;
   max-width: 100%;
@@ -33,7 +29,7 @@ header {
 
 
 .label-switch {
-  $switch-width: 52px;
+  $switch-width: 340px;
   $switch-padding: 2px;
   $switch-height: 32px;
   $switch-radius: $switch-height;

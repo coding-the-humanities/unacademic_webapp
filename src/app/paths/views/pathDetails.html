@@ -1,45 +1,22 @@
-<section>
-  <side-bar></side-bar>
-  <!-- <nav-bar mode="curation" level="paths"></nav-bar> -->
+<fa-app>
+  <fa-header-footer-layout fa-options="{direction: 0}">
+    <fa-modifier fa-size="[400, undefined]" fa-translate="[0, 0, 100]">
+      <fa-surface fa-background-color="'black'">
+        <sidebar mode="pathDetails.mode" info="pathDetails.info"></sidebar>
+      </fa-surface>
+    </fa-modifier>
 
-  <nav-bar actions="pathDetails.actions"></nav-bar>
+  <fa-scroll-view fa-pipe-from="pathDetails.myEventHandler" fa-options="{direction: 0}">
+    <fa-view ng-repeat="deck in pathDetails.decks">
+      <fa-modifier fa-size="[420, 320]" fa-translate="[20, 20]">
+        <fa-surface fa-pipe-to="pathDetails.myEventHandler">
+          <section ng-repeat="card in deck">
+            <card card="card"></card>
+          </section>
+        </fa-surface>
+      </fa-modifier>
+    </fa-view>
+  </fa-scroll-view>
 
-  <!-- <deck type="paths" mode="curation" cards="app.cards"></deck> -->
-  <!-- <card type="path" mode="curation" ng-repeat="card in cards"></card> -->
-
-  <div class="pathDetails">
-
-    <section class="pathInfo">
-      <section class="card">
-        <div ng-show="pathDetails.info.isFork" class="ribbon-wrapper"><div class="ribbon">Fork</div></div>
-        <div class="card-image">
-          <img src="http://amaridesplays.files.wordpress.com/2013/10/coding-dojo.jpg" alt="">
-        </div>
-        <div ng-show="pathDetails.info.creating" class="card-header">
-          <input ng-pathDetails.info="pathDetails.info.title"></input>
-        </div>
-        <div ng-hide="pathDetails.info.creating" class="card-header">
-          {{pathDetails.info.title}}
-        </div>
-        <div class="card-copy">
-          <p><strong>Summary: </strong>{{pathDetails.info.summary}}</p>
-          <hr/>
-          <p><strong>Description: </strong>{{pathDetails.info.description}}</p>
-        </div>
-        <div class="card-stats">
-          <ul>
-            <li>{{pathDetails.info.version}}<span>Version</span></li>
-            <li>{{pathDetails.info.places.length}}<span>Places</span></li>
-            <li>{{pathDetails.info.learners.length}}<span>Learners</span></li>
-          </ul>
-        </div>
-        <button ng-show="pathDetails.info.creating" ng-click="paths.save(pathDetails.info)">Save</button>
-        <button ng-show="pathDetails.info.organizing" ng-click="paths.remove(pathDetails.info)">Remove</button>
-      </section>
-    </section>
-
-    <section class="deck pathPlaces">
-      <card ng-repeat="place in pathDetails.places" model="place"></card>
-    </section>
-  </div>
-</section>
+  </fa-header-footer-layout>
+</fa-app>

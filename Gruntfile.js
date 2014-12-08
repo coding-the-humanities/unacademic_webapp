@@ -27,8 +27,22 @@ module.exports = function(grunt) {
       },
       fonts: {
         src: [ '<%= app_files.fonts %>' ],
-        dest: '<%= build_dir %>/',
+        dest: '<%= build_dir %>/assets/fonts',
         cwd: '.',
+        expand: true,
+        flatten: true
+      },
+      css: {
+        src: [ '<%= app_files.css %>' ],
+        dest: '<%= build_dir %>/assets/css',
+        cwd: '.',
+        expand: true,
+        flatten: true
+      },
+      images: {
+        src: [ '<%= app_files.images %>' ],
+        dest: '<%= build_dir %>/assets/img',
+        cwd: 'src/assets/img',
         expand: true
       },
       vendorjs: {

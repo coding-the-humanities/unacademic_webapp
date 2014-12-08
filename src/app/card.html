@@ -1,0 +1,26 @@
+<section class="card ng-class:card.type">
+  <div ng-show="card.isFork" class="ribbon-wrapper">
+    <div class="ribbon">Fork</div>
+  </div>
+  <div class="card-image">
+    <img ng-src="{{card.image_url}}" alt="">
+  </div>
+  <div ng-show="place.creating" class="card-header">
+    <input ng-model="card.title"></input>
+  </div>
+  <div ng-hide="place.creating" class="card-header">
+    {{card.title}}
+  </div>
+  <div class="card-copy">
+    <p><strong>Summary: </strong>{{card.summary}}</p>
+    <hr/>
+    <p><strong>Description: </strong>{{card.description}}</p>
+  </div>
+  <div class="card-stats">
+    <ul>
+      <li>{{card.version}}<span>Version</span></li>
+      <li>{{card.placesCount}}<span>Places</span></li>
+      <li>{{card.learnersCount}}<span>Learners</span></li>
+    </ul>
+  </div>
+</section>

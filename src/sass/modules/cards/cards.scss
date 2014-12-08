@@ -2,13 +2,89 @@
   @include clearfix;
 }
 
+.sidebar {
+  $card-border-color: $base-border-color;
+  $card-border: 1px solid $card-border-color;
+  $card-background: lighten($card-border-color, 10);
+  $card-header-background: $card-background;
+  $card-hover-background: lighten($card-background, 5);
+  $card-image-background: white;
+  $card-image-hover-background: lighten($card-image-background, 5);
+  $card-stats-color: lighten($base-accent-color, 10);
+
+  [contenteditable="true"]{
+    border: 1px dotted white;
+  }
+
+  background-color: black;
+  color: $card-background;
+  box-shadow: 0 2px 4px darken($base-background-color, 10);
+  border-radius: $base-border-radius;
+
+  padding: 10px 20px 0 20px;
+  height: 100vh;
+
+  .toolbox {
+    position: absolute;
+    bottom: 30px;
+  }
+
+  .metabox {
+
+    h1 {
+      line-height: 1em;
+      margin-top: 1em;
+      margin-bottom: 2em;
+      padding: 10px;
+    }
+    span {
+      font-weight: 500;
+    }
+
+    p {
+      padding: 10px;
+    }
+
+    .card-stats {
+      padding: $base-spacing/2 $gutter/2;
+      overflow: auto;
+
+      ul li {
+        display: inline;
+        color: $blue;
+        font-weight: 800;
+        font-size: 1.2em;
+        float: left;
+        border-right: 1px solid white;
+        line-height: 1.1em;
+        padding: 0 .7em 0 .7em;
+
+        &:first-child {
+          padding-left: 0;
+        }
+
+        &:last-child {
+          border-right: 0;
+        }
+
+        span {
+          color: white;
+          font-size: .7em;
+          display: block;
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
+
 .card {
   $card-border-color: $base-border-color;
   $card-border: 1px solid $card-border-color;
   $card-background: lighten($card-border-color, 10);
   $card-header-background: $card-background;
   $card-hover-background: lighten($card-background, 5);
-  $card-image-background: #DBD199;
+  $card-image-background: white;
   $card-image-hover-background: lighten($card-image-background, 5);
   $card-stats-color: lighten($base-accent-color, 10);
 
@@ -20,15 +96,16 @@
   cursor: pointer;
   box-shadow: 0 2px 4px darken($base-background-color, 10);
   position: relative;
+  width: 90%;
 
-  @include media($large-screen) {
-    @include span-columns(4);
-    @include omega(3n);
-  }
+  // @include media($large-screen) {
+  //   @include span-columns(4);
+  //   @include omega(3n);
+  // }
 
   .card-image {
     overflow: hidden;
-    max-height: 150px;
+    margin: 5px;
 
     img {
       width: 100%;
@@ -130,6 +207,4 @@
     }
   }
 }
-.newCard {
-  height: 312px;
-}
+

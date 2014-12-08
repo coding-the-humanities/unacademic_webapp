@@ -9,7 +9,9 @@ module.exports = {
     atpl: [ 'src/app/**/*.html', '!src/app/index.html'],
     // the index.html
     html: [ 'src/index.html' ],
-    fonts: ['src/fonts/**/*']
+    fonts: ['src/assets/fonts/**/*'],
+    css: ['src/assets/css/famous-angular.css'],
+    images: ['**/*']
   },
 
   test_files: {
@@ -27,7 +29,8 @@ module.exports = {
       'vendor/ngActiveResource/dist/ng-active-resource.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/famous/dist/famous-global.js',
-      'vendor/famous-angular/dist/famous-angular.js'
+      'vendor/famous-angular/dist/famous-angular.js',
+      'vendor/angular-contenteditable/angular-contenteditable.js'
     ]
   }
 };

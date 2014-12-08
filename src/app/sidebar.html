@@ -1,0 +1,28 @@
+<div class="sidebar">
+
+  <div ng-show="mode === 'learning'" class="metabox">
+    <h1>{{info.title}}</h1>
+    <p><strong>Curator: </strong>{{info.curator}}</p>
+    <p><strong>Summary: </strong>{{info.summary}}</p>
+    <p><strong>Description: </strong>{{info.description}}</p>
+  </div>
+
+  <div ng-show="mode === 'curation'" class="metabox">
+    <h1 contenteditable="true" ng-model="info.title"></h1>
+    <div><span>Curator: </span><p contenteditable="true" ng-model="info.curator"></p></div>
+    <div><span>Summary: </span><p contenteditable="true" ng-model="info.summary"</p></div>
+    <div><span>Description:: </span><p contenteditable="true" ng-model="info.description"</p></div>
+  </div>
+
+  <div class="toolbox">
+    <label class="label-switch">
+      <input type="checkbox" 
+      ng-model="mode"
+      ng-true-value="'curation'"
+      ng-false-value="'learning'"/>
+      <div class="checkbox"></div>
+    </label>
+  </div>
+
+</div>
+

@@ -1,32 +1,15 @@
 var app = angular.module('unacademic');
 
-app.factory('Path', function(ActiveResource) {
+app.service('Path', function($http) {
+  var fireBaseUrl = 'https://cth-curriculum.firebaseio.com/paths/1.json';
+  var apiaryBaseUrl = "http://private-7c8dd-unacademic.apiary-mock.com/paths/1"
 
-  function Path(data) {
-    this.number('id');
-    this.string('curator');
-    this.string('title');
-    this.string('description');
-    this.string('summary');
-    this.number('forked_from');
-    this.string('version');
-    this.forks = data.forks;
-    this.places = data.places;
-    this.learners = data.learners;
-    this.isFork = !!data.forked_from;
-
-
-    this.validates({
-      title: { presence: true },
-      curator: { presence: true },
-      version: { presence: true },
-    });
+  return {
+    find: find
   };
 
-  Path.inherits(ActiveResource.Base);
-  Path.api.set('http://private-7c8dd-unacademic.apiary-mock.com');
+  function find(){
+    return $http.get(apiaryBaseUrl);
+  }
 
-  window.Path = Path;
-
-  return Path;
 });
