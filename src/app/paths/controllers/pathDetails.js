@@ -1,25 +1,14 @@
 var app = angular.module('unacademic');
 
-app.controller('PathDetails', function(path, appMode, $famous) {
-  path = path.data;
+app.controller('PathDetails', function(path, appMode, $famous, $stateParams) {
+  console.log($stateParams);
 
   var pathDetails = this;
   pathDetails.mode = appMode;
+  pathDetails.info = path;
 
   function makeDirFromTitle(title){
     return title.toLowerCase().split(' ').join('_');
-  }
-
-  pathDetails.info = {
-    title: path.title,
-    type: 'cover',
-    curator: path.curator,
-    image_url: 'assets/img/cth_logo.svg',
-    description: path.description,
-    summary: path.summary,
-    version: path.version,
-    placesCount: path.places.length,
-    learnersCount: path.learners.length
   }
 
   function coverCard(card){

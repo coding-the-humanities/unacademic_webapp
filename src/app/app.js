@@ -7,19 +7,23 @@ var app = angular.module('unacademic', [
   'contenteditable'
 ])
 
-app.value('appMode', 'learning')
+app.value('appMode', 'curation')
 
 app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
-  .state('app', {
-    url: '/',
-    templateUrl: 'paths/views/pathDetails.html',
-    controller: 'PathDetails as pathDetails',
-    resolve: {
-      path: function(Path){
-        return Path.find(1);
-      }
-    }
-  })
-  $urlRouterProvider.otherwise('/');
+    .state('paths', {
+      url: '/paths',
+      template: '<ui-view/>'
+    })
+    .state('paths.details', {
+      url: '/:pathId',
+      controller: 'PathDetails as pathDetails',
+      templateUrl: 'paths/views/pathDetails.html',
+      resolve: {
+        path: function(Path){
+          return Path.find('coding_the_humanities');
+        }
+      },
+    })
+  $urlRouterProvider.otherwise('/paths/1');
 });
