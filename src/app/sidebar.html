@@ -10,10 +10,10 @@
 
   <div ng-show="mode === 'curation'" class="metabox">
     <h1 contenteditable="true" ng-class="{'error' : model.$errors.title}" ng-model="model.title"></h1>
-    <div><span>Curator: </span><p contenteditable="true" ng-class="{'error' : model.$errors.title}" ng-model="model.curator"></p></div>
+    <div><span>Curator: </span><p contenteditable="true" ng-class="{'error' : model.$errors.curator}" ng-model="model.curator"></p></div>
     <div><span>Summary: </span><p contenteditable="true" ng-model="model.summary"</p></div>
     <div><span>Description: </span><p contenteditable="true" ng-model="model.description"</p></div>
-    <div><span>Version: </span><p contenteditable="true" ng-class="{'error' : model.$errors.title}" ng-model="model.version"</p></div>
+    <div><span>Version: </span><p contenteditable="true" ng-class="{'error' : model.$errors.version}" ng-model="model.version"</p></div>
     <button ng-click="save()">{{buttonText}}</button>
     <button ng-click="add()">Add</button>
   </div>

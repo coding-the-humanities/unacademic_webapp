@@ -4,7 +4,7 @@ app.factory('Path', function(ActiveResource) {
 
   var fireBaseUrl = 'https://cth-curriculum.firebaseio.com/.json'
   var apiaryUrl = 'http://private-7c8dd-unacademic.apiary-mock.com'
-  var baseUrl = apiaryUrl;
+  var baseUrl = fireBaseUrl;
 
   function Path(data) {
     this.number('id');
