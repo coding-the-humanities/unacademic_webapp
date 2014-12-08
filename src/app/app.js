@@ -7,7 +7,7 @@ var app = angular.module('unacademic', [
   'contenteditable'
 ])
 
-app.value('appMode', 'curation')
+app.value('appMode', 'learning')
 
 app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -21,9 +21,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: 'paths/views/pathDetails.html',
       resolve: {
         path: function(Path){
-          return Path.find('coding_the_humanities');
+          return Path.find(1);
         }
       },
     })
-  $urlRouterProvider.otherwise('/paths/1');
+  $urlRouterProvider.otherwise('/paths/coding_the_humanities');
 });

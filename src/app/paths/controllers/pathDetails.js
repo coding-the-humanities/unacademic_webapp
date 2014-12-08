@@ -1,11 +1,16 @@
 var app = angular.module('unacademic');
 
 app.controller('PathDetails', function(path, appMode, $famous, $stateParams) {
-  console.log($stateParams);
-
   var pathDetails = this;
+  var EventHandler = $famous['famous/core/EventHandler'];
+
+
   pathDetails.mode = appMode;
   pathDetails.info = path;
+  pathDetails.decks = [];
+  pathDetails.actions = pathActions();
+
+  pathDetails.myEventHandler = new EventHandler();
 
   function makeDirFromTitle(title){
     return title.toLowerCase().split(' ').join('_');
@@ -32,18 +37,10 @@ app.controller('PathDetails', function(path, appMode, $famous, $stateParams) {
     })
     return deck;
   }
-  pathDetails.decks = [];
 
-  _.each(path.places, function(place){
+  _.each(path.waypoints, function(place){
     pathDetails.decks.push(new Deck(place));
   });
-
-  // pathDetails.places = path.places;
-
-  var EventHandler = $famous['famous/core/EventHandler'];
-  pathDetails.myEventHandler = new EventHandler();
-
-  pathDetails.actions = pathActions();
 
   function pathActions(organizing){
 

@@ -2,8 +2,12 @@ var app = angular.module('unacademic');
 
 app.factory('Path', function(ActiveResource) {
 
+  var fireBaseUrl = 'https://cth-curriculum.firebaseio.com/.json'
+  var apiaryUrl = 'http://private-7c8dd-unacademic.apiary-mock.com'
+  var baseUrl = apiaryUrl;
+
   function Path(data) {
-    this.string('id');
+    this.number('id');
     this.string('curator');
     this.string('title');
     this.string('description');
@@ -26,7 +30,8 @@ app.factory('Path', function(ActiveResource) {
   };
 
   Path.inherits(ActiveResource.Base);
-  Path.api.set('https://cth-curriculum.firebaseio.com/.json').format('json')
+
+  Path.api.set(baseUrl).format('json')
 
   window.Path = Path;
 

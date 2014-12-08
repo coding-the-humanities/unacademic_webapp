@@ -18,7 +18,7 @@ angular.module('unacademic').directive('sidebar', function(){
       function save(){
         $scope.buttonText = 'Pending';
         if(!$scope.model.id){
-          $scope.model.id = $scope.model.title.split(' ').join('_').toLowerCase();
+          $scope.model.id = 1;
         }
         $scope.model.$update().then(function(response){
           $scope.mode = 'learning';
