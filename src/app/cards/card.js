@@ -1,6 +1,6 @@
 angular.module('unacademic').directive('card', function(){
   return {
-    templateUrl: 'card.html',
+    templateUrl: 'cards/card.html',
     restrict: 'E',
     replace: true,
     scope: {

@@ -8,6 +8,7 @@ var app = angular.module('unacademic', [
 ])
 
 app.value('tracker', {mode: 'learning', path: ''});
+
 app.service('generateId', function(){
   function generateId(model){
     var version = model.version.split(".").join("_");

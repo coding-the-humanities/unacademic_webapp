@@ -1,6 +1,6 @@
 angular.module('unacademic').directive('sidebar', function(){
   return {
-    templateUrl: 'sidebar.html',
+    templateUrl: 'sidebar/sidebar.html',
     replace: true,
     scope: {
       model: '=',
