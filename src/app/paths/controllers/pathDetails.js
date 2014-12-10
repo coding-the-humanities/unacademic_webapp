@@ -1,76 +1,39 @@
 var app = angular.module('unacademic');
 
-app.controller('PathDetails', function(path, tracker, $famous, $stateParams) {
-  var pathDetails = this;
+app.controller('PathDetails', function(path, tracker, $state, $famous, $stateParams) {
+  var vm = this;
   var EventHandler = $famous['famous/core/EventHandler'];
 
+  vm.points = _.map(path.points, function(point){
+    point.image_url = 'assets/img/objectives/' + makeDirFromTitle(point.title) + '/logo.svg';
+    return point;
+  });
 
-  pathDetails.tracker = tracker;
-  pathDetails.info = path;
-  pathDetails.decks = [];
-  pathDetails.actions = pathActions();
+  vm.mode = tracker.mode;
+  vm.info = path;
+  vm.info.displayProperties = ['curator', 'summary', 'description', 'version'];
 
-  pathDetails.myEventHandler = new EventHandler();
+  vm.actions = {
+    save: save,
+    addPoint: addPoint
+  }
+
+  vm.myEventHandler = new EventHandler();
+
+  function save(){
+    var model = vm.info;
+    model.$update().then(function(response){
+      vm.mode = tracker.mode = 'learning';
+    });
+  }
+
+  function addPoint(){
+    save();
+    $state.go('points.new');
+  }
 
   function makeDirFromTitle(title){
     return title.toLowerCase().split(' ').join('_');
   }
 
-  function coverCard(card){
-    return {
-      title: card.title,
-      type: 'normal',
-      image_url: 'assets/img/objectives/' + makeDirFromTitle(card.title) + '/logo.svg',
-      description: card.description,
-      summary: card.summary,
-      version: card.version,
-      objectivesCount: card.objectives.length,
-      learnersCount: card.learners.length
-    }
-  }
-
-  function Deck(place){
-    var deck = [];
-    deck.push(new coverCard(place));
-    _.each(place.objectives, function(objective){
-      deck.push({title: objective.title});
-    })
-    return deck;
-  }
-
-  _.each(path.waypoints, function(place){
-    pathDetails.decks.push(new Deck(place));
-  });
-
-  function pathActions(organizing){
-
-    function add(){
-      console.log("add new place...")
-    }
-
-    function organize(){
-      console.log("add new place...")
-    }
-
-    function done(){
-      console.log("add new place...")
-    }
-
-    function clear(){
-      console.log("add new place...")
-    }
-
-    return {
-      view: {
-        add: add,
-        organize: organize,
-        clear: clear
-      },
-      organize: {
-        add: add,
-        done: done,
-        clear: clear
-      }
-    }
-  };
 });

@@ -4,7 +4,7 @@ app.factory('Path', function(ActiveResource) {
 
   var fireBaseUrl = 'https://cth-curriculum.firebaseio.com/.json'
   var apiaryUrl = 'http://private-7c8dd-unacademic.apiary-mock.com'
-  var baseUrl = fireBaseUrl;
+  var baseUrl = apiaryUrl;
 
   function Path(data) {
     this.string('id');
@@ -16,7 +16,7 @@ app.factory('Path', function(ActiveResource) {
     this.number('forked_from');
     this.string('version');
     this.forks = data.forks;
-    this.waypoints = data.waypoints;
+    this.points = data.waypoints;
     this.learners = data.learners;
 
     this.isFork = !!data.forked_from;
@@ -30,7 +30,7 @@ app.factory('Path', function(ActiveResource) {
 
   Path.inherits(ActiveResource.Base);
 
-  Path.api.set(baseUrl).format('json')
+  Path.api.set(baseUrl);
 
   window.Path = Path;
 

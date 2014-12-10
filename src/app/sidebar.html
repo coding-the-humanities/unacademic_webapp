@@ -2,22 +2,17 @@
 
   <div ng-show="mode === 'learning'" class="metabox">
     <h1>{{model.title}}</h1>
-    <p><strong>Curator: </strong>{{model.curator}}</p>
-    <p><strong>Summary: </strong>{{model.summary}}</p>
-    <p><strong>Description: </strong>{{model.description}}</p>
-    <p><strong>Version: </strong>{{model.version}}</p>
+    <p ng-repeat="property in model.displayProperties"><strong>{{property}}: </strong>{{model[property]}}</p>
   </div>
 
   <div ng-show="mode === 'curation'" class="metabox">
     <h1 contenteditable="true" ng-class="{'error' : model.$errors.title}" ng-model="model.title"></h1>
-    <div><span>Curator: </span><p contenteditable="true" ng-class="{'error' : model.$errors.curator}" ng-model="model.curator"></p></div>
-    <div><span>Summary: </span><p contenteditable="true" ng-model="model.summary"</p></div>
-    <div><span>Description: </span><p contenteditable="true" ng-model="model.description"</p></div>
-    <div><span>Version: </span><p contenteditable="true" ng-class="{'error' : model.$errors.version}" ng-model="model.version"</p></div>
-    <div ng-show="model.paths"><span>Paths: <p>{{model.paths.join(", ")}}</p></div>
-    <button ng-click="save()">{{buttonText}}</button>
-    <button ng-click="add()">Add</button>
-    <button ng-click="done()">Done</button>
+    <div ng-repeat="property in model.displayProperties">
+      <span>{{property}}: </span>
+      <p contenteditable="true" ng-class="{'error' : model.$errors[property]}" ng-model="model[property]"></p>
+    </div>
+
+    <button ng-repeat="(key, value) in actions" ng-click="actions[key]()">{{key}}</button>
   </div>
 
   <div class="toolbox">

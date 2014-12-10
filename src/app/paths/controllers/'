@@ -1,0 +1,98 @@
+var app = angular.module('unacademic');
+
+app.controller('PathsIndex', function(paths, $famous, tracker) {
+  var pathsIndex = this;
+  var EventHandler = $famous['famous/core/EventHandler'];
+
+  pathsIndex.tracker = tracker;
+  pathsIndex.info = {
+    title: 'UnAcademic'
+  };
+  pathsIndex.decks = [];
+
+  PathsIndex.myEventHandler = new EventHandler();
+
+  function coverCard(card){
+    return {
+      title: card.title,
+      type: 'normal',
+      image_url: 'assets/img/objectives/' + makeDirFromTitle(card.title) + '/logo.svg',
+      description: card.description,
+      summary: card.summary,
+      version: card.version,
+    }
+  }
+
+  function Deck(path){
+    var deck = [];
+    deck.push(new coverCard(path));
+    return deck;
+  }
+
+  function makeDirFromTitle(title){
+    return title.toLowerCase().split(' ').join('_');
+  }
+
+
+  _.each(paths, function(path){
+    pathsIndex.decks.push(new Deck(path));
+  });
+
+  // pathsIndex.remove= remove;
+  // pathsIndex.save = save;
+
+  // pathsIndex.actions = pathActions();
+
+  // function pathActions(organizing){
+
+  //   function add(){
+  //     $state.go('newPath');
+  //   }
+
+  //   function organize(){
+  //     pathsIndex.all.map(function(path){
+  //       pathsIndex.organizing = true;
+  //       path.organizing = true;
+  //       return path;
+  //     });
+  //   }
+
+  //   function done(){
+  //     pathsIndex.all.map(function(path){
+  //       pathsIndex.organizing = false;
+  //       path.organizing = false;
+  //       return path;
+  //     });
+  //   }
+
+  //   function clear(){
+  //     pathsIndex.all.forEach(function(path){
+  //       path.$delete();
+  //       pathsIndex.all = [];
+  //     });
+  //   }
+
+  //   return {
+  //     view: {
+  //       organize: organize,
+  //     },
+  //     organize: {
+  //       add: add,
+  //       done: done,
+  //       clear: clear
+  //     }
+  //   }
+  // };
+
+  // function save(path){
+  //   path.$save().then(function(){
+  //     path.creating = false;
+  //   });
+  // };
+
+  // function remove(path){
+  //   path.$delete().then(function(){
+  //     _.remove(pathsIndex.all, path);
+  //   });
+  // };
+});
