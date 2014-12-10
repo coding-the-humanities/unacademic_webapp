@@ -1,18 +1,22 @@
 var app = angular.module('unacademic');
 
-app.controller('NewPath', function(Path, tracker, $famous) {
-  var newPath = this;
+app.controller('newPoint', function(Point, tracker, $famous) {
+  var newPoint = this;
   var EventHandler = $famous['famous/core/EventHandler'];
 
 
-  newPath.tracker = tracker;
-  newPath.tracker.mode = 'curation';
-  newPath.info = Path.new({});
+  newPoint.tracker = tracker;
+  newPoint.tracker.mode = 'curation';
+  newPoint.info = Point.new({});
+  console.log(tracker.path);
+  if(tracker.path){
+    newPoint.info.paths = [tracker.path];
+  }
 
-  // newPath.decks = [];
-  // newPath.actions = pathActions();
+  // newPoint.decks = [];
+  // newPoint.actions = pathActions();
 
-  // newPath.myEventHandler = new EventHandler();
+  // newPoint.myEventHandler = new EventHandler();
 
   // function makeDirFromTitle(title){
   //   return title.toLowerCase().split(' ').join('_');
@@ -41,7 +45,7 @@ app.controller('NewPath', function(Path, tracker, $famous) {
   // }
 
   // _.each(path.waypoints, function(place){
-  //   newPath.decks.push(new Deck(place));
+  //   newPoint.decks.push(new Deck(place));
   // });
 
   // function pathActions(organizing){

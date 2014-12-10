@@ -1,12 +1,12 @@
 var app = angular.module('unacademic');
 
-app.factory('Path', function(ActiveResource) {
+app.factory('Point', function(ActiveResource) {
 
   var fireBaseUrl = 'https://cth-curriculum.firebaseio.com/.json'
   var apiaryUrl = 'http://private-7c8dd-unacademic.apiary-mock.com'
   var baseUrl = fireBaseUrl;
 
-  function Path(data) {
+  function Point(data) {
     this.string('id');
     this.string('curator');
     this.string('title');
@@ -16,10 +16,12 @@ app.factory('Path', function(ActiveResource) {
     this.number('forked_from');
     this.string('version');
     this.forks = data.forks;
-    this.waypoints = data.waypoints;
+    this.tasks = data.tasks;
     this.learners = data.learners;
+    this.paths = data.paths;
 
     this.isFork = !!data.forked_from;
+
 
     this.validates({
       title: { presence: true },
@@ -28,11 +30,9 @@ app.factory('Path', function(ActiveResource) {
     });
   };
 
-  Path.inherits(ActiveResource.Base);
+  Point.inherits(ActiveResource.Base);
 
-  Path.api.set(baseUrl).format('json')
+  Point.api.set(baseUrl).format('json')
 
-  window.Path = Path;
-
-  return Path;
+  return Point;
 });

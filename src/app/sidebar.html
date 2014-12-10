@@ -14,8 +14,10 @@
     <div><span>Summary: </span><p contenteditable="true" ng-model="model.summary"</p></div>
     <div><span>Description: </span><p contenteditable="true" ng-model="model.description"</p></div>
     <div><span>Version: </span><p contenteditable="true" ng-class="{'error' : model.$errors.version}" ng-model="model.version"</p></div>
+    <div ng-show="model.paths"><span>Paths: <p>{{model.paths.join(", ")}}</p></div>
     <button ng-click="save()">{{buttonText}}</button>
     <button ng-click="add()">Add</button>
+    <button ng-click="done()">Done</button>
   </div>
 
   <div class="toolbox">

@@ -1,11 +1,11 @@
 var app = angular.module('unacademic');
 
-app.controller('PathDetails', function(path, appMode, $famous, $stateParams) {
+app.controller('PathDetails', function(path, tracker, $famous, $stateParams) {
   var pathDetails = this;
   var EventHandler = $famous['famous/core/EventHandler'];
 
 
-  pathDetails.mode = appMode;
+  pathDetails.tracker = tracker;
   pathDetails.info = path;
   pathDetails.decks = [];
   pathDetails.actions = pathActions();

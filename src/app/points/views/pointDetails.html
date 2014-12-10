@@ -2,14 +2,14 @@
   <fa-header-footer-layout fa-options="{direction: 0}">
     <fa-modifier fa-size="[400, undefined]" fa-translate="[0, 0, 100]">
       <fa-surface fa-background-color="'black'">
-        <sidebar tracker="newPath.tracker" model="newPath.info"></sidebar>
+        <sidebar tracker="newPoint.tracker" model="newPoint.info"></sidebar>
       </fa-surface>
     </fa-modifier>
 
-  <fa-scroll-view fa-pipe-from="newPath.myEventHandler" fa-options="{direction: 0}">
-    <fa-view ng-repeat="deck in newPath.decks">
+  <fa-scroll-view fa-pipe-from="newPoint.myEventHandler" fa-options="{direction: 0}">
+    <fa-view ng-repeat="deck in newPoint.decks">
       <fa-modifier fa-size="[420, 320]" fa-translate="[20, 20]">
-        <fa-surface fa-pipe-to="newPath.myEventHandler">
+        <fa-surface fa-pipe-to="newPoint.myEventHandler">
           <section ng-repeat="card in deck">
             <card card="card"></card>
           </section>
