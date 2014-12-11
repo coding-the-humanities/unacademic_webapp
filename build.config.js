@@ -3,11 +3,8 @@ module.exports = {
   build_dir: 'build',
 
   app_files: {
-    // source, but NO specs
     js: [ 'src/app/**/*.js', '!src/app/**/*.spec.js' ],
-    // our partial templates
     atpl: [ 'src/app/**/*.html', '!src/app/index.html'],
-    // the index.html
     html: [ 'src/index.html' ],
     fonts: ['src/assets/fonts/**/*'],
     css: ['src/assets/css/famous-angular.css'],
