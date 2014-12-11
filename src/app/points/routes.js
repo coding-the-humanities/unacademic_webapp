@@ -1,7 +1,7 @@
 (function(){
   var app = angular.module('unacademic.points');
 
-  app.config(function($stateProvider, $urlRouterProvider) {
+  app.config(function($stateProvider) {
     $stateProvider
       .state('points', {
         url: '/points',

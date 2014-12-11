@@ -2,7 +2,7 @@
   var app = angular.module('unacademic.paths');
 
 
-  app.config(function($stateProvider, $urlRouterProvider) {
+  app.config(function($stateProvider) {
     $stateProvider
 
       .state('paths', {

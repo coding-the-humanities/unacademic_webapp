@@ -24,9 +24,4 @@
     return generateId;
   });
 
-  app.config(function($stateProvider, $urlRouterProvider) {
-    $stateProvider
-
-    $urlRouterProvider.otherwise('/paths/index');
-  });
 })();
