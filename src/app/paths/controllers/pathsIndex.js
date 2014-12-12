@@ -1,39 +1,38 @@
 (function(){
   var app = angular.module('unacademic.paths');
 
-  app.controller('PathsIndex', function(paths, $state, $famous, tracker) {
-    var description = "Welcome to UnAcademic. We understand that learning is personal. Therefore everything in our interface is fully customizable. Including this landing page. Start your journey by sliding the curation button below.";
+  app.controller('PathsIndex', PathsIndex);
+    
+  function PathsIndex(paths, $state, $famous, tracker) {
 
-    var pathsIndex = this;
-    var EventHandler = $famous['famous/core/EventHandler'];
+    var vm = this;
 
-    pathsIndex.mode = tracker.mode;
+    vm.paths = paths;
 
-    pathsIndex.info = {
+    vm.info = {
       title: 'UnAcademic',
       summary: 'Learning By Dwelling',
       description: description
     };
 
-    pathsIndex.actions = {
+    vm.info.displayProperties = ['summary', 'description'];
+
+    vm.actions = {
       save: save,
       addNewPath: addNewPath
     };
 
-    pathsIndex.info.displayProperties = ['summary', 'description'];
-
-    pathsIndex.paths = paths;
-
-    pathsIndex.myEventHandler = new EventHandler();
 
     function save(){
-      pathsIndex.mode = 'learning';
+      vm.mode = 'learning';
     }
 
     function addNewPath(){
       $state.go('paths.new');
     }
+  };
 
-  });
+  var description = "Welcome to UnAcademic. We understand that learning is personal. Therefore everything in our interface is fully customizable. Including this landing page. Start your journey by sliding the curation button below.";
+
 
 })();

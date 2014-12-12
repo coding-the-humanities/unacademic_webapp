@@ -29,7 +29,17 @@
 
   .toolbox {
     position: absolute;
+    width: 360px;
     bottom: 30px;
+
+    button {
+      width: 100%;
+      background-color: black;
+      border: 1px solid $blue;
+      color: white;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
   }
 
   .metabox {

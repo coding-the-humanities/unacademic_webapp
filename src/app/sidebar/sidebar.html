@@ -1,28 +1,56 @@
 <div class="sidebar">
 
-  <div ng-show="mode === 'learning'" class="metabox">
-    <h1>{{model.title}}</h1>
-    <p ng-repeat="property in model.displayProperties"><strong>{{property}}: </strong>{{model[property]}}</p>
+  <div ng-show="sidebar.mode === 'learning' || !sidebar.user" 
+       class="metabox">
+
+    <h1>{{sidebar.model.title}}</h1>
+
+    <p ng-repeat="property in sidebar.model.displayProperties">
+      <strong>{{property}}: </strong>
+      {{sidebar.model[property]}}
+    </p>
+
   </div>
 
-  <div ng-show="mode === 'curation'" class="metabox">
-    <h1 contenteditable="true" ng-class="{'error' : model.$errors.title}" ng-model="model.title"></h1>
-    <div ng-repeat="property in model.displayProperties">
+  <div ng-show="sidebar.mode === 'curation' && sidebar.user" 
+       class="metabox">
+
+    <h1 contenteditable="true" 
+        ng-class="{'error' : sidebar.model.$errors.title}" 
+        ng-model="sidebar.model.title">
+    </h1>
+
+    <div ng-repeat="property in sidebar.model.displayProperties">
       <span>{{property}}: </span>
-      <p contenteditable="true" ng-class="{'error' : model.$errors[property]}" ng-model="model[property]"></p>
+      <p contenteditable="true" 
+         ng-class="{'error' : sidebar.model.$errors[property]}" 
+         ng-model="sidebar.model[property]"></p>
     </div>
 
-    <button ng-repeat="(key, value) in actions" ng-click="actions[key]()">{{key}}</button>
   </div>
 
   <div class="toolbox">
-    <label class="label-switch">
-      <input type="checkbox" 
-      ng-model="mode"
-      ng-true-value="'curation'"
-      ng-false-value="'learning'"/>
-      <div class="checkbox"></div>
-    </label>
+
+    <div ng-hide="sidebar.user">
+      <button ng-click="sidebar.signIn()">Sign In</button>
+    </div>
+
+    <div ng-show="sidebar.user">
+      <button ng-show="sidebar.mode === 'curation'" 
+              ng-repeat="(key, value) in sidebar.actions" 
+              ng-click="actions[key]()">
+        {{key}}
+      </button>
+
+      <label class="label-switch">
+        <input type="checkbox" 
+               ng-model="sidebar.mode"
+               ng-true-value="'curation'"
+               ng-false-value="'learning'"/>
+        <div class="checkbox"></div>
+      </label>
+    </div>
+
   </div>
 
 </div>

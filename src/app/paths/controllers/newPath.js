@@ -1,9 +1,10 @@
 (function(){
   var app = angular.module('unacademic.paths');
 
-  app.controller('NewPath', function(Path, $state, generateId, tracker, $famous) {
+  app.controller('NewPath', function(Path, $state, generateId, $q, tracker, $famous) {
     var vm = this;
     var EventHandler = $famous['famous/core/EventHandler'];
+    vm.myEventHandler = new EventHandler();
 
     tracker.mode = 'curation';
     vm.mode = tracker.mode;
@@ -14,27 +15,35 @@
     vm.actions = {
       save: save,
       addPoint: addPoint,
+      cancel: cancel,
       done: done
     }
 
     function save(){
+      var deferred = $q.defer();
       var model = vm.info;
-      if (!model.$valid){ return };
-      if(!model.id){
-        model.id = generateId(model);
-      }
+      model.id = generateId(model);
       model.$update().then(function(response){
-        vm.mode = tracker.mode = 'learning';
+        deferred.resolve()
       });
+      return deferred.promise;
     };
 
     function addPoint(){
-      save();
+      tracker.parentModel = vm.info;
       $state.go('points.new');
     }
 
-    function done(){
+    function cancel(){
+      vm.mode = tracker.mode = 'learning';
       $state.go('paths.index')
+    }
+
+    function done(){
+      save().then(function(){
+        vm.mode = tracker.mode = 'curation';
+        $state.go('paths.index')
+      });
     }
 
   });

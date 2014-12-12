@@ -5,7 +5,7 @@
 
     var fireBaseUrl = 'https://cth-curriculum.firebaseio.com/.json'
     var apiaryUrl = 'http://private-7c8dd-unacademic.apiary-mock.com'
-    var baseUrl = apiaryUrl;
+    var baseUrl = fireBaseUrl;
 
     function Path(data) {
       this.string('id');
@@ -17,7 +17,7 @@
       this.number('forked_from');
       this.string('version');
       this.forks = data.forks;
-      this.points = data.waypoints;
+      this.points = data.points;
       this.learners = data.learners;
 
       this.isFork = !!data.forked_from;
@@ -31,7 +31,7 @@
 
     Path.inherits(ActiveResource.Base);
 
-    Path.api.set(baseUrl);
+    Path.api.set(baseUrl).format('json');
 
     window.Path = Path;
 

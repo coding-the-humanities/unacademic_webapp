@@ -1,14 +1,21 @@
 (function(){
   var app = angular.module('unacademic.points');
 
-  app.controller('NewPoint', function(Point, generateId, tracker, $famous) {
+  app.controller('NewPoint', function(Point, generateId, $state, tracker, $famous) {
     var vm = this;
     var EventHandler = $famous['famous/core/EventHandler'];
 
     vm.mode = tracker.mode;
     vm.mode = 'curation';
     vm.info = Point.new({});
-    vm.info.displayProperties = ['curator', 'summary', 'description', 'version'];
+
+    var parent = tracker.parentModel;
+
+    if(parent){
+      vm.info.path = parent.title;
+    }
+
+    vm.info.displayProperties = ['curator', 'summary', 'description', 'version', 'path'];
 
     vm.actions = {
       save: save
@@ -16,12 +23,17 @@
 
     function save(){
       var model = vm.info;
-      if (!model.$valid){ return };
-      if(!model.id){
-        model.id = generateId(model);
-      }
+      model.id = generateId(model);
+
       model.$update().then(function(response){
-        vm.mode = tracker.mode = 'learning';
+
+        if(!parent.points){
+          parent.points = [];
+        }
+
+        parent.points.push(model);
+        vm.mode = tracker.mode = 'curation';
+        $state.go('paths.details', {pathId: tracker.parentModel.id});
       });
     }
   });
