@@ -13,9 +13,14 @@
 
       .state('paths.new', {
         url: '/new',
-        controller: 'NewPath',
+        controller: 'PathDetails',
         controllerAs: 'newPath',
-        templateUrl: 'paths/views/newPath.html'
+        templateUrl: 'paths/views/newPath.html',
+        resolve: {
+          path: function(Path, $stateParams){
+            return Path.new();
+          }
+        },
       })
 
       .state('paths.index', {

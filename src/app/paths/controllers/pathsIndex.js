@@ -3,11 +3,12 @@
 
   app.controller('PathsIndex', PathsIndex);
     
-  function PathsIndex(paths, $state, $famous, tracker) {
+  function PathsIndex(paths, $state, tracker) {
 
     var vm = this;
 
     vm.paths = paths;
+    vm.mode = tracker.mode;
 
     vm.info = {
       title: 'UnAcademic',
@@ -18,8 +19,8 @@
     vm.info.displayProperties = ['summary', 'description'];
 
     vm.actions = {
-      save: save,
-      addNewPath: addNewPath
+      "Save": save,
+      "Add New Path": addNewPath
     };
 
 

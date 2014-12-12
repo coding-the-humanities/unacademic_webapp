@@ -13,14 +13,15 @@
 
     vm.mode = tracker.mode;
     vm.user = tracker.user;
+
     vm.info = path;
     vm.info.displayProperties = ['curator', 'summary', 'description', 'version'];
 
     vm.actions = {
-      save: save,
-      addPoint: addPoint,
-      cancel: cancel,
-      done: done
+      "Save": save,
+      "Add New Point": addPoint,
+      "Cancel": cancel,
+      "Done": done
     }
 
     function save(){
@@ -53,6 +54,5 @@
     function makeDirFromTitle(title){
       return title.toLowerCase().split(' ').join('_');
     }
-
   });
 })();
