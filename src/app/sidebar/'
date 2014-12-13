@@ -1,0 +1,41 @@
+(function(){
+  var app = angular.module('unacademic.sidebar', [])
+
+  app.directive('sidebar', sidebar);
+
+  function sidebar(){
+    return {
+      templateUrl: 'sidebar/sidebar.html',
+      replace: true,
+      scope: {
+        model: '=',
+        actions: '='
+      },
+      bindToController: true,
+      controllerAs: 'sidebar',
+      controller: function($scope, tracker){
+        var sidebar = this;
+
+        sidebar.mode = tracker.mode;
+        sidebar.user = tracker.user;
+
+        $scope.tracker = tracker;
+
+        $scope.$watch('sidebar', function(newValue){
+          tracker.mode = newValue.mode;
+          tracker.user = newValue.user;
+        }, true)
+
+        $scope.$watch('tracker', function(newValue){
+          console.log(newValue)
+          sidebar.mode = newValue.mode;
+        }, true)
+
+
+        sidebar.signIn = function(){
+          sidebar.user = "yeehaa";
+        }
+      }
+    }
+  };
+})();

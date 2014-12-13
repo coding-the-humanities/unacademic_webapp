@@ -1,7 +1,7 @@
 (function(){
   var app = angular.module('unacademic.paths');
 
-  app.controller('PathDetails', function(path, tracker, $state, $famous, generateId, $q) {
+  app.controller('PathDetails', function(path, $scope, tracker, $state, $famous, generateId, $q) {
     var vm = this;
     var EventHandler = $famous['famous/core/EventHandler'];
     vm.myEventHandler = new EventHandler();
@@ -11,8 +11,7 @@
       return point;
     });
 
-    vm.mode = tracker.mode;
-    vm.user = tracker.user;
+    vm.tracker = tracker;
 
     vm.info = path;
     vm.info.displayProperties = ['curator', 'summary', 'description', 'version'];

@@ -5,10 +5,7 @@
   <div class="card-image">
     <img ng-src="{{card.image_url}}" alt="">
   </div>
-  <div ng-show="place.creating" class="card-header">
-    <input ng-model="card.title"></input>
-  </div>
-  <div ng-hide="place.creating" class="card-header">
+  <div class="card-header">
     {{card.title}}
   </div>
   <div class="card-copy">

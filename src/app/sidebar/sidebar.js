@@ -11,20 +11,37 @@
         model: '=',
         actions: '='
       },
+      bindToController: true,
       controllerAs: 'sidebar',
-      controller: function($scope, tracker){
-        var vm = this;
-
-        vm.model = $scope.model;
-        vm.actions = $scope.actions;
-
-        vm.mode = tracker.mode;
-        vm.user = tracker.user;
-
-        vm.signIn = function(){
-          vm.user = tracker.user = "yeehaa";
-        }
-      }
+      controller: Sidebar
     }
   };
+
+  function Sidebar($scope, tracker){
+    var sidebar = this;
+
+    sidebar.mode = tracker.mode;
+    sidebar.user = tracker.user;
+    sidebar.signIn = signIn;
+
+    $scope.$watch('sidebar', watchSidebar, true);
+
+    function watchSidebar(newValue, oldValue){
+      tracker.user = newValue.user;
+      if(oldValue.mode === 'curation' && newValue.mode === 'learning'){
+        if(newValue.model.$invalid){
+          return sidebar.mode = tracker.mode = oldValue.mode;
+        }
+        sidebar.actions['Save']().then(function(){
+          sidebar.mode = tracker.mode = newValue.mode;
+        })
+      } else {
+        tracker.mode = newValue.mode
+      }
+    }
+
+    function signIn(){
+      sidebar.user = "yeehaa";
+    }
+  }
 })();

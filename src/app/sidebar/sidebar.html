@@ -38,7 +38,7 @@
     <div ng-show="sidebar.user">
       <button ng-show="sidebar.mode === 'curation'" 
               ng-repeat="(key, value) in sidebar.actions" 
-              ng-click="actions[key]()">
+              ng-click="sidebar.actions[key]()">
         {{key}}
       </button>
 
