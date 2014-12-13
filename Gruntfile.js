@@ -65,6 +65,7 @@ module.exports = function(grunt) {
           '<%= build_dir %>/src/app/app.js',
           '<%= build_dir %>/src/app/paths/paths.js',
           '<%= build_dir %>/src/app/points/points.js',
+          '<%= build_dir %>/src/app/sidebar/sidebar.js',
           '<%= build_dir %>/src/app/**/*.js',
           '<%= html2js.app.dest %>',
           '<%= build_dir %>/bundle.js',
