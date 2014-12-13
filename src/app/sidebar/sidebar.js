@@ -29,11 +29,11 @@
     function watchSidebar(newValue, oldValue){
       tracker.user = newValue.user;
       if(oldValue.mode === 'curation' && newValue.mode === 'learning'){
-        if(newValue.model.$invalid){
-          return sidebar.mode = tracker.mode = oldValue.mode;
-        }
         sidebar.actions['Save']().then(function(){
           sidebar.mode = tracker.mode = newValue.mode;
+        }, function(err){
+          sidebar.mode = tracker.mode = oldValue.mode;
+          alert(err);
         })
       } else {
         tracker.mode = newValue.mode

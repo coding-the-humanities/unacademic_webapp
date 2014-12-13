@@ -27,9 +27,15 @@
       var deferred = $q.defer();
       var model = vm.info;
       model.id = generateId(model);
-      model.$update().then(function(response){
-        deferred.resolve()
-      });
+      if(model.$valid){
+        model.$update().then(function(response){
+          deferred.resolve();
+        }, function(err){
+           deferred.reject('could not save your shit');
+        });
+      } else {
+        deferred.reject('complete form first, mothafucka');
+      }
       return deferred.promise;
     };
 

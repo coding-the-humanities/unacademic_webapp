@@ -5,7 +5,7 @@
 
     var fireBaseUrl = 'https://cth-curriculum.firebaseio.com/.json'
     var apiaryUrl = 'http://private-7c8dd-unacademic.apiary-mock.com'
-    var baseUrl = fireBaseUrl;
+    var baseUrl = apiaryUrl;
 
     function Path(data) {
       this.string('id');
