@@ -1,7 +1,9 @@
 (function(){
   var app = angular.module('unacademic.paths');
 
-  app.controller('NewPath', function($scope, Path, $state, generateId, $q, tracker, $famous) {
+  app.controller('NewPath', NewPath);
+
+  function NewPath($scope, Path, $state, generateId, $q, tracker, $famous) {
     var vm = this;
     var EventHandler = $famous['famous/core/EventHandler'];
     vm.myEventHandler = new EventHandler();
@@ -46,5 +48,5 @@
       });
     }
 
-  });
+  };
 })();

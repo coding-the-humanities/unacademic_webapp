@@ -2,6 +2,7 @@
   var app = angular.module('unacademic.paths');
 
 
+  /*@ngInject*/
   app.config(function($stateProvider) {
     $stateProvider
 

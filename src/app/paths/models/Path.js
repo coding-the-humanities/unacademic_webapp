@@ -1,11 +1,9 @@
 (function(){
   var app = angular.module('unacademic.paths');
 
-  app.factory('Path', function(ActiveResource) {
+  app.factory('Path', Path);
 
-    var fireBaseUrl = 'https://cth-curriculum.firebaseio.com/.json'
-    var apiaryUrl = 'http://private-7c8dd-unacademic.apiary-mock.com'
-    var baseUrl = fireBaseUrl;
+  function Path(ActiveResource, baseUrl) {
 
     function Path(data) {
       this.string('id');
@@ -30,15 +28,12 @@
     };
 
     Path.inherits(ActiveResource.Base);
+    Path.api.set(baseUrl).format('json');
 
-    if(baseUrl === fireBaseUrl){
-      Path.api.set(baseUrl).format('json');
-    } else {
+    if(/mock/.test(baseUrl)) {
       Path.api.set(baseUrl);
     }
 
-    window.Path = Path;
-
     return Path;
-  });
+  };
 })();

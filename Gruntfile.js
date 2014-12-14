@@ -8,6 +8,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-ng-annotate');
 
   var userConfig = require('./build.config.js');
 
@@ -19,12 +20,12 @@ module.exports = function(grunt) {
     ],
 
     copy: {
-      appjs: {
-        src: [ '<%= app_files.js %>' ],
-        dest: '<%= build_dir %>/',
-        cwd: '.',
-        expand: true
-      },
+      /* appjs: { */
+      /*   src: [ '<%= app_files.js %>' ], */
+      /*   dest: '<%= build_dir %>/', */
+      /*   cwd: '.', */
+      /*   expand: true */
+      /* }, */
       fonts: {
         src: [ '<%= app_files.fonts %>' ],
         dest: '<%= build_dir %>/assets/fonts',
@@ -54,6 +55,15 @@ module.exports = function(grunt) {
             expand: true
           }
         ]
+      }
+    },
+
+    ngAnnotate: {
+      files: {
+        expand: true,
+        src: ['<%= app_files.js %>'],
+        dest: '<%= build_dir %>',
+        cwd: '.'
       }
     },
 
@@ -88,7 +98,7 @@ module.exports = function(grunt) {
         files: [
           '<%= app_files.js %>'
         ],
-        tasks: ['copy', 'index']
+        tasks: ['ngAnnotate', 'index']
       },
 
       html: {
@@ -139,9 +149,6 @@ module.exports = function(grunt) {
     },
 
     html2js: {
-      /**
-       * These are the templates from `src/app`.
-       */
       app: {
         options: {
           base: 'src/app'
@@ -186,7 +193,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['build', 'concurrent']);
 
   grunt.registerTask('build', [
-    'clean', 'copy', 'html2js', 'browserify', 'sass', 'index'
+    'clean', 'copy', 'ngAnnotate', 'html2js', 'browserify', 'sass', 'index'
   ]);
 
   function filterForExtension(extension, files) {

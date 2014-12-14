@@ -5,27 +5,17 @@
     'templates-app',
     'famous.angular',
     'contenteditable',
+    'unacademic.common',
     'unacademic.paths',
     'unacademic.points',
     'unacademic.sidebar'
   ]);
 
+
   app.value('tracker', {mode: 'learning', path: '', user: ''});
-  app.service('generateId', generateId);
-  
-  function generateId(){
-    function constructId(model){
-      if(model.curator && model.title){
-        var version = model.version.split(".").join("_");
-        return parameterize(model.curator) + "_" + parameterize(model.title);
-      }
-    }
+  app.constant('baseUrl', 'https://cth-curriculum.firebaseio.com/.json');
 
-    function parameterize(string){
-      return string.toLowerCase().split(' ').join("_");
-    }
+  // app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
 
-    return constructId;
-  };
 
 })();

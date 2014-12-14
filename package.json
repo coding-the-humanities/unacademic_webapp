@@ -13,6 +13,7 @@
     "grunt-contrib-less": "^0.11.1",
     "grunt-contrib-watch": "~0.4.0",
     "grunt-html2js": "~0.2.3",
+    "grunt-ng-annotate": "^0.8.0",
     "grunt-nodemon": "~0.1.2",
     "grunt-sass": "^0.16.1",
     "karma": "^0.12.16",

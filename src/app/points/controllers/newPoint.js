@@ -1,7 +1,9 @@
 (function(){
   var app = angular.module('unacademic.points');
 
-  app.controller('NewPoint', function(Point, generateId, $state, tracker, $famous) {
+  app.controller('NewPoint', NewPoint);
+
+  function NewPoint(Point, generateId, $state, tracker, $famous) {
     var vm = this;
     var EventHandler = $famous['famous/core/EventHandler'];
 
@@ -36,5 +38,5 @@
         $state.go('paths.details', {pathId: tracker.parentModel.id});
       });
     }
-  });
+  };
 })();

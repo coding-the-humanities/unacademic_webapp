@@ -1,11 +1,9 @@
 (function(){
   var app = angular.module('unacademic.points');
 
-  app.factory('Point', function(ActiveResource) {
+  app.factory('Point', Point);
 
-    var fireBaseUrl = 'https://cth-curriculum.firebaseio.com/.json'
-    var apiaryUrl = 'http://private-7c8dd-unacademic.apiary-mock.com'
-    var baseUrl = fireBaseUrl;
+  function Point(ActiveResource, baseUrl) {
 
     function Point(data) {
       this.string('id');
@@ -23,7 +21,6 @@
 
       this.isFork = !!data.forked_from;
 
-
       this.validates({
         title: { presence: true },
         curator: { presence: true },
@@ -32,9 +29,12 @@
     };
 
     Point.inherits(ActiveResource.Base);
-
     Point.api.set(baseUrl).format('json')
 
+    if(/mock/.test(baseUrl)) {
+      Path.api.set(baseUrl);
+    }
+
     return Point;
-  });
+  };
 })();

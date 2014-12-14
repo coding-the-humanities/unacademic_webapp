@@ -1,6 +1,7 @@
 (function(){
   var app = angular.module('unacademic.points');
 
+  /*@ngInject*/
   app.config(function($stateProvider) {
     $stateProvider
       .state('points', {
