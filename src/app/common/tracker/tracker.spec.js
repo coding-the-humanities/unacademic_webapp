@@ -13,15 +13,41 @@
     });
 
     describe("current user id", function(){
-      it("is not set by default", function(){
+
+      it("is undefined by default", function(){
         expect(appState.getCurrentUserId()).to.be.undefined;
       });
 
-      it("can be set", function(){
-        var userId = 'John123';
-        expect(appState.setCurrentUserId(userId));
-        expect(appState.getCurrentUserId()).to.equal(userId);
-      });
+      describe("set", function(){
+        var userId;
+        var setUserId;
+        var notification;
+
+        beforeEach(function(){
+          userId = 'John123';
+
+          var getNotified = function(){
+            notification = appState.getCurrentUserId();
+          }
+
+          appState.registerObserverCallback(getNotified);
+          setUserId = appState.setCurrentUserId(userId);
+
+        });
+
+
+        it("returns true", function(){
+          expect(setUserId).to.be.true;
+        });
+
+        it("can be set", function(){
+          expect(appState.getCurrentUserId()).to.equal(userId);
+        });
+
+        it("notifies observers", function(){
+          expect(notification).to.equal(userId);
+        });
+      })
     })
 
     describe("can switch", function(){
@@ -42,15 +68,68 @@
 
     })
 
-    describe("application mode", function(){
+    describe("switch routes", function(){
 
-      describe('getting app mode', function(){
+      var routeChange;
+
+      describe("without an argument", function(){
+
+        beforeEach(function(){
+          routeChange = appState.go();
+        });
+
+        it("returns false", function(){
+          expect(routeChange).to.be.false;
+        });
+
+        it("logs a warning message", function(){
+          expect($log.warn.logs.length).to.equal(1);
+        });
+      });
+
+      describe("with an argument", function(){
+
+        describe("if switchable is false", function(){
+          beforeEach(function(){
+            appState.canSwitch(false)
+            routeChange = appState.go('paths.new');
+          });
+
+          it("returns false", function(){
+            expect(routeChange).to.be.false;
+          });
+
+          it("logs a message", function(){
+            expect($log.warn.logs.length).to.equal(1);
+          });
+        });
+
+        describe("when switchable is true", function(){
+          beforeEach(function(){
+            appState.canSwitch(true)
+            routeChange = appState.go('paths.new');
+          });
+
+          it("returns true", function(){
+            expect(routeChange).to.be.true;
+          });
+
+          it("logs a message", function(){
+            expect($log.log.logs.length).to.equal(1);
+          });
+        });
+      });
+    });
+
+    describe("change modes", function(){
+
+      describe('getMode', function(){
         it('defaults to learning', function(){
           expect(appState.getMode()).to.equal('learning');
         });
       });
 
-      describe("setting app mode", function(){
+      describe("setMode", function(){
         var setMode;
 
         describe("without a current user", function(){

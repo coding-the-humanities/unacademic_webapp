@@ -8,13 +8,16 @@
     var mode = 'learning';
     var switchable = true;
     var currentUserId;
+    var observerCallbacks = [];
 
     return {
       getMode: getMode,
       setMode: setMode,
+      go: go,
       canSwitch: canSwitch,
       getCurrentUserId: getCurrentUserId,
-      setCurrentUserId: setCurrentUserId
+      setCurrentUserId: setCurrentUserId,
+      registerObserverCallback: registerObserverCallback
     }
 
     function getMode(){
@@ -35,15 +38,24 @@
         $log.warn('invalid appmode');
         return false;
       }
-      setPermissions(mode, newMode);
+      setPermission(mode, newMode);
       mode = newMode;
       return true;
     }
 
-    function setPermissions(oldMode, newMode){
-      if(oldMode === 'learning' && newMode === 'curation'){
-        canSwitch(false);
+    function go(path){
+      if(!switchable){
+        $log.warn('not allowed to transition now');
+        return false
       }
+
+      if(!path){
+        $log.warn('you cannot transition without specifying the route');
+        return false;
+      }
+
+      $log.log(path);
+      return true;
     }
 
     function canSwitch(flag){
@@ -59,6 +71,24 @@
 
     function setCurrentUserId(userId){
       currentUserId = userId;
+      notifyObservers();
+      return true;
     }
+
+    function setPermission(oldMode, newMode){
+      if(newMode === 'curation'){
+        switchable = false;
+      }
+    }
+    function registerObserverCallback(callback){
+      observerCallbacks.push(callback);
+    }
+
+    function notifyObservers(){
+      _.each(observerCallbacks, function(callback){
+        callback();
+      });
+    };
+
   };
 })();

@@ -3,12 +3,13 @@
 
   app.controller('Index', Index);
 
-  function Index(paths, coverInfo) {
+  function Index(paths, coverInfo, $q, appState) {
 
     var vm = this;
 
     vm.paths = paths;
-    vm.info = coverInfo;
+    vm.info = coverInfo.get();
+    vm.info.displayProperties = ['summary', 'description'];
 
     vm.actions = {
       'Save': save,
@@ -16,10 +17,17 @@
     };
 
     function save(){
+      return $q(function(resolve, reject){
+        coverInfo.save().then(function(){
+          resolve();
+        })
+      });
     }
 
     function addNewPath(){
-      // $state.go('paths.new');
+      return save().then(function(){
+        appState.go('paths.new')
+      });
     }
   };
 

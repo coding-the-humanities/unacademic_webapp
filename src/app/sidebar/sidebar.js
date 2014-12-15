@@ -1,5 +1,7 @@
 (function(){
-  var app = angular.module('unacademic.sidebar', [])
+  var app = angular.module('unacademic.sidebar', [
+    'unacademic.sidebar.controller'
+  ])
 
   app.directive('sidebar', sidebar);
 
