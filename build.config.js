@@ -12,6 +12,9 @@ module.exports = {
   },
 
   test_files: {
+    polyfills: [
+      'karma/famous-phantomjs-polyfills.js'
+    ],
     js: [
       'vendor/angular-mocks/angular-mocks.js'
     ]

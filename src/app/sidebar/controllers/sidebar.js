@@ -3,7 +3,7 @@
 
   app.controller('Sidebar', Sidebar);
 
-  function Sidebar($scope, tracker){
+  function Sidebar($scope, tracker, appState){
     var sidebar = this;
 
     sidebar.mode = tracker.mode;
@@ -31,6 +31,7 @@
     }
 
     function signIn(){
+      appState.setCurrentUserId('id');
       sidebar.user = "yeehaa";
     }
   }

@@ -1,5 +1,5 @@
 (function(){
-  var app = angular.module('unacademic.common', []);
+  var app = angular.module('unacademic.common');
 
   app.service('generateId', generateId);
 

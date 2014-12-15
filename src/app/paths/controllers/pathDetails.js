@@ -1,7 +1,7 @@
 (function(){
   var app = angular.module('unacademic.paths');
 
-  app.controller('PathDetails', function(path, $scope, tracker, $state, $famous, generateId, $q) {
+  app.controller('PathDetails', function(path, appState, $scope, tracker, $state, $famous, generateId, $q) {
     var vm = this;
     var EventHandler = $famous['famous/core/EventHandler'];
     vm.myEventHandler = new EventHandler();

@@ -87,8 +87,17 @@ module.exports = function(grunt) {
       unit: {
         dir: '<%= build_dir %>',
         src: [
+          '<%= test_files.polyfills %>',
           '<%= vendor_files.js %>',
           '<%= html2js.app.dest %>',
+          '<%= build_dir %>/src/app/app.js',
+          '<%= build_dir %>/src/app/paths/paths.js',
+          '<%= build_dir %>/src/app/points/points.js',
+          '<%= build_dir %>/src/app/sidebar/sidebar.js',
+          '<%= build_dir %>/src/app/**/*.js',
+          '<%= html2js.app.dest %>',
+          '<%= build_dir %>/bundle.js',
+          '<%= build_dir %>/assets/**/*.css',
           '<%= test_files.js %>'
         ]
       }

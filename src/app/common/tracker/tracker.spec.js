@@ -1,0 +1,158 @@
+(function(){
+
+  describe("tracker", function(){
+    var appState;
+    var $log;
+
+    beforeEach(function(){
+      module('unacademic.common.tracker');
+      inject(function(_appState_, _$log_){
+        appState = _appState_;
+        $log = _$log_;
+      });
+    });
+
+    describe("current user id", function(){
+      it("is not set by default", function(){
+        expect(appState.getCurrentUserId()).to.be.undefined;
+      });
+
+      it("can be set", function(){
+        var userId = 'John123';
+        expect(appState.setCurrentUserId(userId));
+        expect(appState.getCurrentUserId()).to.equal(userId);
+      });
+    })
+
+    describe("can switch", function(){
+      it("is set to true by default", function(){
+        expect(appState.canSwitch()).to.be.true;
+      });
+
+      it("can be set to false", function(){
+        appState.canSwitch(false);
+        expect(appState.canSwitch()).to.be.false;
+      })
+
+      it("can be set to false", function(){
+        appState.canSwitch(false);
+        appState.canSwitch(true);
+        expect(appState.canSwitch()).to.be.true;
+      })
+
+    })
+
+    describe("application mode", function(){
+
+      describe('getting app mode', function(){
+        it('defaults to learning', function(){
+          expect(appState.getMode()).to.equal('learning');
+        });
+      });
+
+      describe("setting app mode", function(){
+        var setMode;
+
+        describe("without a current user", function(){
+
+          beforeEach(function(){
+            setMode = appState.setMode('curation');
+          });
+
+          it('does not change state', function(){
+            expect(appState.getMode()).to.equal('learning');
+          });
+
+          it("logs a message", function(){
+            expect($log.warn.logs.length).to.equal(1);
+          });
+        });
+
+        describe("with a current user", function(){
+
+          beforeEach(function(){
+            appState.setCurrentUserId('123');
+          });
+
+          describe("when not switchable", function(){
+            beforeEach(function(){
+              appState.canSwitch(false);
+              setMode = appState.setMode('curation');
+            });
+
+            it("fails to change state", function(){
+              expect(appState.getMode()).to.equal('learning');
+            });
+
+            it("logs a warning message", function(){
+              expect($log.warn.logs.length).to.equal(1);
+            });
+
+            it("returns false", function(){
+              expect(setMode).to.be.false;
+            });
+          });
+
+          describe("when switchable", function(){
+            describe("invalid value", function(){
+
+              beforeEach(function(){
+                setMode = appState.setMode('bla');
+              });
+
+              it("fails to change state", function(){
+                expect(appState.getMode()).to.equal('learning');
+              });
+
+              it("logs a warning message", function(){
+                expect($log.warn.logs.length).to.equal(1);
+              });
+
+              it("returns false", function(){
+                expect(setMode).to.be.false;
+              });
+            });
+
+            describe("valid value", function(){
+              describe("from learning to curation", function(){
+                beforeEach(function(){
+                  setMode = appState.setMode('curation');
+                });
+
+                it("successfully changes state", function(){
+                  expect(appState.getMode()).to.equal('curation');
+                });
+
+                it("returns true", function(){
+                  expect(setMode).to.be.true;
+                });
+
+                it("sets switchable to false", function(){
+                  expect(appState.canSwitch()).to.be.false;
+                });
+              });
+
+              describe("from curation to learning", function(){
+                beforeEach(function(){
+                  setMode = appState.setMode('curation');
+                });
+
+                it("is not allowed without explicit permission", function(){
+                  appState.setMode('learning');
+                  expect(appState.getMode()).to.equal('curation');
+                });
+
+                it("is allowed with explicit permission", function(){
+                  appState.canSwitch(true);
+                  appState.setMode('learning');
+                  expect(appState.getMode()).to.equal('learning');
+                });
+
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+})();
