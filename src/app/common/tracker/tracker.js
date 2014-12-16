@@ -38,8 +38,9 @@
         $log.warn('invalid appmode');
         return false;
       }
-      setPermission(mode, newMode);
       mode = newMode;
+      setPermission(mode, newMode);
+      notifyObservers();
       return true;
     }
 
@@ -80,6 +81,7 @@
         switchable = false;
       }
     }
+
     function registerObserverCallback(callback){
       observerCallbacks.push(callback);
     }
@@ -89,6 +91,5 @@
         callback();
       });
     };
-
   };
 })();

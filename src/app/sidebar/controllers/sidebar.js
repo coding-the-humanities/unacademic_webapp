@@ -7,6 +7,7 @@
     var sidebar = this;
 
     sidebar.signIn = signIn;
+    sidebar.changeMode = changeMode;
 
     var updateState = function(){
       sidebar.mode = appState.getMode();
@@ -17,7 +18,14 @@
     appState.registerObserverCallback(updateState);
 
     function signIn(){
-      appState.setCurrentUserId('yeehaa')
+      appState.setCurrentUserId('yeehaa');
+    }
+
+    function changeMode(){
+      if(sidebar.mode === 'learning'){
+        appState.setMode('curation');
+      }
+      appState.setMode('learning');
     }
   }
 })();

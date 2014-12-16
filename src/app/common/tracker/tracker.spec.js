@@ -32,7 +32,6 @@
 
           appState.registerObserverCallback(getNotified);
           setUserId = appState.setCurrentUserId(userId);
-
         });
 
 
@@ -173,6 +172,7 @@
           });
 
           describe("when switchable", function(){
+
             describe("invalid value", function(){
 
               beforeEach(function(){
@@ -193,8 +193,16 @@
             });
 
             describe("valid value", function(){
+
               describe("from learning to curation", function(){
+                var notification;
+
                 beforeEach(function(){
+                  var getNotified = function(){
+                    notification = appState.getMode();
+                  }
+
+                  appState.registerObserverCallback(getNotified);
                   setMode = appState.setMode('curation');
                 });
 
@@ -206,25 +214,49 @@
                   expect(setMode).to.be.true;
                 });
 
+                it("notifies observers", function(){
+                  expect(notification).to.equal('curation');
+                });
+
                 it("sets switchable to false", function(){
                   expect(appState.canSwitch()).to.be.false;
                 });
               });
 
               describe("from curation to learning", function(){
+
                 beforeEach(function(){
-                  setMode = appState.setMode('curation');
+                  var getNotified = function(){
+                    notification = appState.getMode();
+                  }
+
+                  appState.registerObserverCallback(getNotified);
+                  appState.setMode('curation');
                 });
 
-                it("is not allowed without explicit permission", function(){
-                  appState.setMode('learning');
-                  expect(appState.getMode()).to.equal('curation');
+                describe("without explicit permission", function(){
+                  beforeEach(function(){
+                    appState.setMode('learning');
+                  });
+
+                  it("is not allowed", function(){
+                    expect(appState.getMode()).to.equal('curation');
+                  });
                 });
 
-                it("is allowed with explicit permission", function(){
-                  appState.canSwitch(true);
-                  appState.setMode('learning');
-                  expect(appState.getMode()).to.equal('learning');
+                describe("with explicit permission", function(){
+                  beforeEach(function(){
+                    appState.canSwitch(true);
+                    appState.setMode('learning');
+                  });
+
+                  it("is allowed", function(){
+                    expect(appState.getMode()).to.equal('learning');
+                  });
+
+                  it("notifies observers", function(){
+                    expect(notification).to.equal('learning');
+                  });
                 });
 
               });

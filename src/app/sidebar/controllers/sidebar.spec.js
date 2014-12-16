@@ -34,6 +34,7 @@
     describe("initial state",function(){
 
       describe('user', function(){
+
         it("calls appState to set the current user", function(){
           expect(getUserSpy).to.be.called;
         });
@@ -44,6 +45,7 @@
       });
 
       describe('mode', function(){
+
         it("calls appState to set the current mode", function(){
           expect(getModeSpy).to.be.called;
         });
@@ -60,12 +62,38 @@
         sidebar.signIn();
       });
 
-      it("knows the name of the current user", function(){
+      it("sets the current user id on appState", function(){
         expect(setUserSpy).to.be.called;
       });
     });
 
     describe("mode switching", function(){
     });
+
+    describe("changeMode", function(){
+
+      describe("if mode is learning", function(){
+        beforeEach(function(){
+          sidebar.mode = 'learning';
+          sidebar.changeMode();
+        });
+
+        it("attempts to set the mode on appState", function(){
+          expect(setModeSpy).to.be.calledWith('curation');
+        });
+      });
+
+      describe("if mode is curation", function(){
+        beforeEach(function(){
+          sidebar.mode = 'learning';
+          sidebar.changeMode();
+        });
+
+        it("attempts to set the mode on appState", function(){
+          expect(setModeSpy).to.be.calledWith('learning');
+        });
+      });
+    });
+
   });
 })();
