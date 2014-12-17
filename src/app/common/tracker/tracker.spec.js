@@ -3,6 +3,8 @@
   describe("tracker", function(){
     var appState;
     var $log;
+    var notification;
+    var currentUser;
 
     beforeEach(function(){
 
@@ -10,8 +12,16 @@
           set: function(){}
       }
 
+      var mockCurrentUser = {
+        setId: function(){},
+        getId: function(){}
+      };
+
+      currentUser = sinon.mock(mockCurrentUser);
+
       module('unacademic.common.tracker',  function($provide){
         $provide.value('permission', mockPermission);
+        $provide.value('currentUser', mockCurrentUser);
       });
 
       inject(function(_appState_, _$log_){
@@ -19,61 +29,6 @@
         $log = _$log_;
       });
     });
-
-    describe("current user id", function(){
-
-      it("is undefined by default", function(){
-        expect(appState.getCurrentUserId()).to.be.undefined;
-      });
-
-      describe("set", function(){
-        var userId;
-        var setUserId;
-        var notification;
-
-        beforeEach(function(){
-          userId = 'John123';
-
-          var getNotified = function(){
-            notification = appState.getCurrentUserId();
-          }
-
-          appState.registerObserverCallback(getNotified);
-          setUserId = appState.setCurrentUserId(userId);
-        });
-
-
-        it("returns true", function(){
-          expect(setUserId).to.be.true;
-        });
-
-        it("can be set", function(){
-          expect(appState.getCurrentUserId()).to.equal(userId);
-        });
-
-        it("notifies observers", function(){
-          expect(notification).to.equal(userId);
-        });
-      })
-    })
-
-    describe("can switch", function(){
-      it("is set to true by default", function(){
-        expect(appState.canSwitch()).to.be.true;
-      });
-
-      it("can be set to false", function(){
-        appState.canSwitch(false);
-        expect(appState.canSwitch()).to.be.false;
-      })
-
-      it("can be set to false", function(){
-        appState.canSwitch(false);
-        appState.canSwitch(true);
-        expect(appState.canSwitch()).to.be.true;
-      })
-
-    })
 
     describe("switch routes", function(){
 
@@ -137,12 +92,12 @@
       });
 
       describe("setMode", function(){
-        var setMode;
 
         describe("without a current user", function(){
 
           beforeEach(function(){
-            setMode = appState.setMode('curation');
+            currentUser.expects('getId').once().returns(undefined);
+            appState.setMode('curation');
           });
 
           it('does not change state', function(){
@@ -157,7 +112,7 @@
         describe("with a current user", function(){
 
           beforeEach(function(){
-            appState.setCurrentUserId('123');
+            currentUser.expects('getId').once().returns('123');
           });
 
           describe("when not switchable", function(){

@@ -10,6 +10,8 @@
     }
 
     function set(oldMode, newMode){
+      // flag = BOOL
+      // options = { oldMode: 'string', newmode: 'string'}
       if(newMode === 'curation'){
         return false;
       }

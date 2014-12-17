@@ -1,11 +1,12 @@
 (function(){
   var app = angular.module('unacademic.common.tracker', [
-    'unacademic.common.permission'
+    'unacademic.common.permission',
+    'unacademic.common.currentUser'
   ]);
 
   app.factory('appState', appState);
 
-  function appState($log, permission){
+  function appState($log, permission, currentUser){
 
     // third mode: browsing
     var modes = ['learning', 'curation'];
@@ -16,9 +17,6 @@
     // to permission
     var switchable = true;
 
-    // ==> userPresent + observer
-    var currentUserId;
-
     var observerCallbacks = [];
 
     return {
@@ -26,8 +24,6 @@
       setMode: setMode,
       go: go,
       canSwitch: canSwitch,
-      getCurrentUserId: getCurrentUserId,
-      setCurrentUserId: setCurrentUserId,
       registerObserverCallback: registerObserverCallback
     }
 
@@ -48,12 +44,13 @@
         return false
       }
 
-      if(!getCurrentUserId()){
+      if(!currentUser.getId()){
         $log.warn('no user logged in');
         return false
       }
 
       mode = newMode;
+
       // permission.set({oldMode: oldMode, newMode: newMode})
       canSwitch(permission.set(mode, newMode));
       notifyObservers();
@@ -86,17 +83,6 @@
     }
 
     // seperate module
-
-    function getCurrentUserId(){
-      return currentUserId;
-    }
-
-    function setCurrentUserId(userId){
-      currentUserId = userId;
-      notifyObservers();
-      return true;
-    }
-
 
     function registerObserverCallback(callback){
       observerCallbacks.push(callback);

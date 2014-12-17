@@ -5,7 +5,7 @@
     var $log;
 
     beforeEach(function(){
-      module('unacademic.common.Modepermission');
+      module('unacademic.common.permission');
       inject(function(_permission_, _$log_){
         permission = _permission_;
         $log = _$log_;

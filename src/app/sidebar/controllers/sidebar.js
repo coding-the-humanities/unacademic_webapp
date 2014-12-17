@@ -1,24 +1,33 @@
 (function(){
-  var app = angular.module('unacademic.sidebar.controller', []);
+  var app = angular.module('unacademic.sidebar.controller', [
+    'unacademic.common.tracker',
+    'unacademic.common.currentUser'
+  ]);
 
   app.controller('Sidebar', Sidebar);
 
-  function Sidebar($scope, $q, appState){
+  function Sidebar($scope, $q, appState, currentUser){
     var sidebar = this;
 
     sidebar.signIn = signIn;
     sidebar.changeMode = changeMode;
 
-    var updateState = function(){
+    var updateMode = function(){
       sidebar.mode = appState.getMode();
-      sidebar.user = appState.getCurrentUserId();
     }
 
-    updateState();
-    appState.registerObserverCallback(updateState);
+    var updateUser = function(){
+      sidebar.user = currentUser.getId();
+    }
+
+    updateMode();
+    updateUser();
+
+    appState.registerObserverCallback(updateMode);
+    currentUser.registerObserverCallback(updateUser);
 
     function signIn(){
-      appState.setCurrentUserId('yeehaa');
+      currentUser.setId('yeehaa');
     }
 
     function changeMode(){

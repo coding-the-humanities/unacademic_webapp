@@ -9,15 +9,19 @@
       module('unacademic.sidebar.controller');
 
       var appState = {
-        setCurrentUserId: function(){ return 'yeehaa' },
-        getCurrentUserId: function(){},
         getMode: function(){ return 'learning' },
         setMode: function(){},
         registerObserverCallback: function(){}
       };
 
-      getUserSpy = sinon.spy(appState, 'getCurrentUserId');
-      setUserSpy = sinon.spy(appState, 'setCurrentUserId');
+      var currentUser = {
+        setId: function(){ return 'yeehaa' },
+        getId: function(){},
+        registerObserverCallback: function(){}
+      }
+
+      getUserSpy = sinon.spy(currentUser, 'getId');
+      setUserSpy = sinon.spy(currentUser, 'setId');
       getModeSpy = sinon.spy(appState, 'getMode');
       setModeSpy = sinon.spy(appState, 'setMode');
 
@@ -26,7 +30,8 @@
         $q = _$q_;
         sidebar = $controller('Sidebar', {
           $scope: $scope,
-          appState: appState
+          appState: appState,
+          currentUser: currentUser
         });
       });
     });
@@ -36,7 +41,7 @@
       describe('user', function(){
 
         it("calls appState to set the current user", function(){
-          expect(getUserSpy).to.be.called;
+          expect(getUserSpy).to.be.calledOnce;
         });
 
         it("has no current user", function(){
@@ -47,7 +52,7 @@
       describe('mode', function(){
 
         it("calls appState to set the current mode", function(){
-          expect(getModeSpy).to.be.called;
+          expect(getModeSpy).to.be.calledOnce;
         });
 
         it("is set to learning", function(){
@@ -63,7 +68,7 @@
       });
 
       it("sets the current user id on appState", function(){
-        expect(setUserSpy).to.be.called;
+        expect(setUserSpy).to.be.calledOnce;
       });
     });
 
@@ -79,6 +84,7 @@
         });
 
         it("attempts to set the mode on appState", function(){
+          expect(setModeSpy).to.be.calledTwice;
           expect(setModeSpy).to.be.calledWith('curation');
         });
       });
@@ -90,10 +96,10 @@
         });
 
         it("attempts to set the mode on appState", function(){
+          expect(setModeSpy).to.be.calledTwice;
           expect(setModeSpy).to.be.calledWith('learning');
         });
       });
     });
-
   });
 })();
