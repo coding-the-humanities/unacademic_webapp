@@ -1,13 +1,24 @@
 (function(){
-  var app = angular.module('unacademic.common.tracker', []);
+  var app = angular.module('unacademic.common.tracker', [
+    'unacademic.common.permission'
+  ]);
 
   app.factory('appState', appState);
 
-  function appState($log){
+  function appState($log, permission){
+
+    // third mode: browsing
     var modes = ['learning', 'curation'];
+
+    // default mode: browsing
     var mode = 'learning';
+
+    // to permission
     var switchable = true;
+
+    // ==> userPresent + observer
     var currentUserId;
+
     var observerCallbacks = [];
 
     return {
@@ -25,29 +36,35 @@
     }
 
     function setMode(newMode){
-      if(!switchable){
-        $log.warn('not allowed to switch now');
-        return false
-      }
-      if(!currentUserId){
-        $log.warn('no user logged in');
-        return false
-      }
 
       if(!_.contains(modes, newMode)){
         $log.warn('invalid appmode');
         return false;
       }
+
+      // replace with permission.get()
+      if(!canSwitch()){
+        $log.warn('not allowed to switch now');
+        return false
+      }
+
+      if(!getCurrentUserId()){
+        $log.warn('no user logged in');
+        return false
+      }
+
       mode = newMode;
-      setPermission(mode, newMode);
+      // permission.set({oldMode: oldMode, newMode: newMode})
+      canSwitch(permission.set(mode, newMode));
       notifyObservers();
       return true;
     }
 
     function go(path){
-      if(!switchable){
+      // replace with permission.get()
+      if(!canSwitch()){
         $log.warn('not allowed to transition now');
-        return false
+        return false;
       }
 
       if(!path){
@@ -59,12 +76,16 @@
       return true;
     }
 
+    // to permission.set
     function canSwitch(flag){
       if(flag !== undefined){
         switchable = flag;
       }
+      // permission.get();
       return switchable;
     }
+
+    // seperate module
 
     function getCurrentUserId(){
       return currentUserId;
@@ -76,11 +97,6 @@
       return true;
     }
 
-    function setPermission(oldMode, newMode){
-      if(newMode === 'curation'){
-        switchable = false;
-      }
-    }
 
     function registerObserverCallback(callback){
       observerCallbacks.push(callback);

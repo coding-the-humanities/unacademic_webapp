@@ -5,7 +5,15 @@
     var $log;
 
     beforeEach(function(){
-      module('unacademic.common.tracker');
+
+      var mockPermission = {
+          set: function(){}
+      }
+
+      module('unacademic.common.tracker',  function($provide){
+        $provide.value('permission', mockPermission);
+      });
+
       inject(function(_appState_, _$log_){
         appState = _appState_;
         $log = _$log_;
@@ -194,71 +202,37 @@
 
             describe("valid value", function(){
 
-              describe("from learning to curation", function(){
-                var notification;
 
+              beforeEach(function(){
+                var getNotified = function(){
+                  notification = appState.getMode();
+                }
+
+                appState.registerObserverCallback(getNotified);
+                appState.canSwitch(false);
+                appState.setMode('curation');
+              });
+
+              describe("without explicit permission", function(){
+
+                it("is not allowed", function(){
+                  expect(appState.getMode()).to.equal('learning');
+                });
+              });
+
+              describe("with explicit permission", function(){
                 beforeEach(function(){
-                  var getNotified = function(){
-                    notification = appState.getMode();
-                  }
-
-                  appState.registerObserverCallback(getNotified);
-                  setMode = appState.setMode('curation');
+                  appState.canSwitch(true);
+                  appState.setMode('curation');
                 });
 
-                it("successfully changes state", function(){
+                it("is allowed", function(){
                   expect(appState.getMode()).to.equal('curation');
-                });
-
-                it("returns true", function(){
-                  expect(setMode).to.be.true;
                 });
 
                 it("notifies observers", function(){
                   expect(notification).to.equal('curation');
                 });
-
-                it("sets switchable to false", function(){
-                  expect(appState.canSwitch()).to.be.false;
-                });
-              });
-
-              describe("from curation to learning", function(){
-
-                beforeEach(function(){
-                  var getNotified = function(){
-                    notification = appState.getMode();
-                  }
-
-                  appState.registerObserverCallback(getNotified);
-                  appState.setMode('curation');
-                });
-
-                describe("without explicit permission", function(){
-                  beforeEach(function(){
-                    appState.setMode('learning');
-                  });
-
-                  it("is not allowed", function(){
-                    expect(appState.getMode()).to.equal('curation');
-                  });
-                });
-
-                describe("with explicit permission", function(){
-                  beforeEach(function(){
-                    appState.canSwitch(true);
-                    appState.setMode('learning');
-                  });
-
-                  it("is allowed", function(){
-                    expect(appState.getMode()).to.equal('learning');
-                  });
-
-                  it("notifies observers", function(){
-                    expect(notification).to.equal('learning');
-                  });
-                });
-
               });
             });
           });
