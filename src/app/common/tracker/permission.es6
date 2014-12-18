@@ -4,9 +4,18 @@
   app.factory("permission", permission);
 
   function permission($log) {
-    return get;
+    var modes = ['browsing', 'learning', 'curation'];
+
+    return {
+      get: get
+    }
 
     function get({user, nextMode, currentMode, switchable}) {
+
+      if(!_.contains(modes, nextMode)){
+        $log.warn('invalid appmode');
+        return false;
+      }
 
       if(!user){
         $log.warn('curation and learning mode are only accessible after signing in')

@@ -1,5 +1,5 @@
 (function(){
   var app = angular.module('unacademic.common', [
-    'unacademic.common.tracker'
+    'unacademic.common.appState'
   ]);
 })();

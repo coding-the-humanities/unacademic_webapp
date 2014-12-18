@@ -8,9 +8,9 @@
     beforeEach(function () {
       module('unacademic.sidebar.controller');
 
-      var appState = {
-        getMode: function(){ return 'learning' },
-        setMode: function(){},
+      var mode = {
+        get: function(){ return 'learning' },
+        set: function(){},
         registerObserverCallback: function(){}
       };
 
@@ -22,15 +22,15 @@
 
       getUserSpy = sinon.spy(currentUser, 'getId');
       setUserSpy = sinon.spy(currentUser, 'setId');
-      getModeSpy = sinon.spy(appState, 'getMode');
-      setModeSpy = sinon.spy(appState, 'setMode');
+      getModeSpy = sinon.spy(mode, 'get');
+      setModeSpy = sinon.spy(mode, 'set');
 
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
         sidebar = $controller('Sidebar', {
           $scope: $scope,
-          appState: appState,
+          mode: mode,
           currentUser: currentUser
         });
       });
@@ -40,7 +40,7 @@
 
       describe('user', function(){
 
-        it("calls appState to set the current user", function(){
+        it("calls mode to set the current user", function(){
           expect(getUserSpy).to.be.calledOnce;
         });
 
@@ -51,7 +51,7 @@
 
       describe('mode', function(){
 
-        it("calls appState to set the current mode", function(){
+        it("calls mode to set the current mode", function(){
           expect(getModeSpy).to.be.calledOnce;
         });
 
@@ -67,7 +67,7 @@
         sidebar.signIn();
       });
 
-      it("sets the current user id on appState", function(){
+      it("sets the current user id on mode", function(){
         expect(setUserSpy).to.be.calledOnce;
       });
     });
@@ -83,8 +83,8 @@
           sidebar.changeMode();
         });
 
-        it("attempts to set the mode on appState", function(){
-          expect(setModeSpy).to.be.calledTwice;
+        it("attempts to set the mode on mode", function(){
+          expect(setModeSpy).to.be.calledOnce;
           expect(setModeSpy).to.be.calledWith('curation');
         });
       });
@@ -95,8 +95,8 @@
           sidebar.changeMode();
         });
 
-        it("attempts to set the mode on appState", function(){
-          expect(setModeSpy).to.be.calledTwice;
+        it("attempts to set the mode on mode", function(){
+          expect(setModeSpy).to.be.calledOnce;
           expect(setModeSpy).to.be.calledWith('learning');
         });
       });

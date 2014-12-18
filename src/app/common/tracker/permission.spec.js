@@ -12,6 +12,20 @@
         $log = _$log_;
       });
     });
+    describe("general", function(){
+      it("is not allowed to an invalid app mode", function(){
+
+        state = {
+          user: 'yeehaa',
+          currentMode: 'teaching',
+          nextMode: 'bla',
+        }
+
+        expect(permission.get(state)).to.be.false;
+        expect($log.warn.logs.length).to.equal(1);
+        expect($log.warn.logs[0][0]).to.contain('appmode');
+      });
+    });
 
     describe("browsing mode", function(){
 
@@ -23,7 +37,7 @@
           nextMode: 'learning',
         }
 
-        expect(permission(state)).to.be.false;
+        expect(permission.get(state)).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('signing in');
       });
@@ -36,7 +50,7 @@
           nextMode: 'learning',
         }
 
-        expect(permission(state)).to.be.false;
+        expect(permission.get(state)).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('signing in');
       });
@@ -52,7 +66,7 @@
           nextMode: 'curation',
         }
 
-        expect(permission(state)).to.be.true;
+        expect(permission.get(state)).to.be.true;
       });
 
       it("is not allowed to switch to browsing", function(){
@@ -63,7 +77,7 @@
           nextMode: 'browsing',
         }
 
-        expect(permission(state)).to.be.false;
+        expect(permission.get(state)).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('browsing mode');
       });
@@ -79,7 +93,7 @@
           nextMode: 'learning',
         }
 
-        expect(permission(state)).to.be.false;
+        expect(permission.get(state)).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('prevent mode switch');
       });
@@ -93,7 +107,7 @@
           switchable: true
         }
 
-        expect(permission(state)).to.be.true;
+        expect(permission.get(state)).to.be.true;
       });
 
       it("is not allowed to switch to browsing", function(){
@@ -105,7 +119,7 @@
           switchable: true
         }
 
-        expect(permission(state)).to.be.false;
+        expect(permission.get(state)).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('browsing mode');
       });
