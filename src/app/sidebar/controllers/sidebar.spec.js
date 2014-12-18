@@ -91,7 +91,7 @@
 
       describe("if mode is curation", function(){
         beforeEach(function(){
-          sidebar.mode = 'learning';
+          sidebar.mode = 'curation';
           sidebar.changeMode();
         });
 

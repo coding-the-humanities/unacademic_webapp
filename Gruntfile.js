@@ -9,6 +9,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-ng-annotate');
+  grunt.loadNpmTasks('grunt-6to5');
 
   var userConfig = require('./build.config.js');
 
@@ -67,6 +68,17 @@ module.exports = function(grunt) {
       }
     },
 
+    '6to5': {
+      dist: {
+        files: [{
+          expand: true,
+          ext: '.js',
+          src: [ '<%= app_files.es6 %>' ],
+          dest: '.'
+        }]
+      }
+    },
+
     index: {
       build: {
         dir: '<%= build_dir %>',
@@ -103,6 +115,14 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+
+      es6: {
+        files: [
+          '<%= app_files.es6 %>'
+        ],
+        tasks: ['6to5']
+      },
+
       jssrc: {
         files: [
           '<%= app_files.js %>'
@@ -202,7 +222,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['build', 'concurrent']);
 
   grunt.registerTask('build', [
-    'clean', 'copy', 'ngAnnotate', 'html2js', 'browserify', 'sass', 'index'
+    'clean', 'copy', '6to5', 'ngAnnotate', 'html2js', 'browserify', 'sass', 'index'
   ]);
 
   function filterForExtension(extension, files) {

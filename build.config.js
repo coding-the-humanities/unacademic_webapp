@@ -3,12 +3,13 @@ module.exports = {
   build_dir: 'build',
 
   app_files: {
-    js: [ 'src/app/**/*.js', '!src/app/**/*.spec.js' ],
-    atpl: [ 'src/app/**/*.html', '!src/app/index.html'],
-    html: [ 'src/index.html' ],
-    fonts: ['src/assets/fonts/**/*'],
-    css: ['src/assets/css/famous-angular.css'],
-    images: ['**/*']
+    es6:    [ 'src/app/**/*.es6'],
+    js:     [ 'src/app/**/*.js', '!src/app/**/*.spec.js' ],
+    atpl:   [ 'src/app/**/*.html', '!src/app/index.html'],
+    html:   [ 'src/index.html' ],
+    fonts:  [ 'src/assets/fonts/**/*'],
+    css:    [ 'src/assets/css/famous-angular.css'],
+    images: [ '**/*']
   },
 
   test_files: {

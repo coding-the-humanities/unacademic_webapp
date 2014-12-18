@@ -4,24 +4,24 @@
     var appState;
     var $log;
     var notification;
-    var currentUser;
+    var mockUser;
 
     beforeEach(function(){
 
-      var mockPermission = {
+      var permission = {
           set: function(){}
       }
 
-      var mockCurrentUser = {
+      var currentUser = {
         setId: function(){},
         getId: function(){}
       };
 
-      currentUser = sinon.mock(mockCurrentUser);
+      mockUser = sinon.mock(currentUser);
 
       module('unacademic.common.tracker',  function($provide){
-        $provide.value('permission', mockPermission);
-        $provide.value('currentUser', mockCurrentUser);
+        $provide.value('permission', permission);
+        $provide.value('currentUser', currentUser);
       });
 
       inject(function(_appState_, _$log_){
@@ -85,7 +85,7 @@
 
     describe("change modes", function(){
 
-      describe('getMode', function(){
+      describe('defaults', function(){
         it('defaults to learning', function(){
           expect(appState.getMode()).to.equal('learning');
         });
@@ -96,7 +96,7 @@
         describe("without a current user", function(){
 
           beforeEach(function(){
-            currentUser.expects('getId').once().returns(undefined);
+            mockUser.expects('getId').once().returns(undefined);
             appState.setMode('curation');
           });
 
@@ -112,7 +112,7 @@
         describe("with a current user", function(){
 
           beforeEach(function(){
-            currentUser.expects('getId').once().returns('123');
+            mockUser.expects('getId').once().returns('123');
           });
 
           describe("when not switchable", function(){

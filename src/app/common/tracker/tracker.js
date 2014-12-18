@@ -7,16 +7,9 @@
   app.factory('appState', appState);
 
   function appState($log, permission, currentUser){
-
-    // third mode: browsing
-    var modes = ['learning', 'curation'];
-
-    // default mode: browsing
-    var mode = 'learning';
-
-    // to permission
-    var switchable = true;
-
+    var modes = ['browsing', 'learning', 'curation'];
+    var mode = 'browsing';
+    var switchable = false;
     var observerCallbacks = [];
 
     return {
@@ -32,57 +25,59 @@
     }
 
     function setMode(newMode){
+      var state = {
+        currentMode: mode,
+        nextMode: newMode,
+        user: currentUser.getId(),
+        switchable: switchable
+      }
 
       if(!_.contains(modes, newMode)){
         $log.warn('invalid appmode');
         return false;
       }
 
-      // replace with permission.get()
-      if(!canSwitch()){
-        $log.warn('not allowed to switch now');
-        return false
-      }
 
-      if(!currentUser.getId()){
-        $log.warn('no user logged in');
+      if(!permission(state)){
         return false
       }
 
       mode = newMode;
-
-      // permission.set({oldMode: oldMode, newMode: newMode})
-      canSwitch(permission.set(mode, newMode));
       notifyObservers();
       return true;
     }
 
     function go(path){
-      // replace with permission.get()
-      if(!canSwitch()){
-        $log.warn('not allowed to transition now');
-        return false;
-      }
 
       if(!path){
         $log.warn('you cannot transition without specifying the route');
         return false;
       }
 
+      if(!canSwitch()){
+        $log.warn('not allowed to transition now');
+        return false;
+      }
+
+
       $log.log(path);
       return true;
     }
 
-    // to permission.set
     function canSwitch(flag){
+
+      var state = {
+        currentMode: mode,
+        user: currentUser.getId(),
+        switchable: switchable
+      }
+
       if(flag !== undefined){
         switchable = flag;
       }
-      // permission.get();
+
       return switchable;
     }
-
-    // seperate module
 
     function registerObserverCallback(callback){
       observerCallbacks.push(callback);

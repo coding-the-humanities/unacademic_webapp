@@ -1,20 +1,38 @@
-(function(){
-  var app = angular.module('unacademic.common.permission', []);
+"use strict";
 
-  app.factory('permission', permission);
+(function () {
+  var app = angular.module("unacademic.common.permission", []);
 
-  function permission(){
+  app.factory("permission", permission);
 
-    return {
-      set: set
-    }
+  function permission($log) {
+    return get;
 
-    function set(oldMode, newMode){
-      // flag = BOOL
-      // options = { oldMode: 'string', newmode: 'string'}
-      if(newMode === 'curation'){
+    function get(_ref) {
+      var user = _ref.user;
+      var nextMode = _ref.nextMode;
+      var currentMode = _ref.currentMode;
+      var switchable = _ref.switchable;
+
+
+      if (!user) {
+        $log.warn("curation and learning mode are only accessible after signing in");
         return false;
       }
+
+      if (nextMode === "browsing") {
+        $log.warn("browsing mode is not available for logged in users");
+        return false;
+      }
+
+      if (currentMode === "curation" && nextMode === "learning") {
+        if (!switchable) {
+          $log.warn("unsaved changes that prevent mode switch...");
+          return false;
+        }
+        return true;
+      }
+
       return true;
     }
   }

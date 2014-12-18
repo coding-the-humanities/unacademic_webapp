@@ -20,7 +20,7 @@
 
   app.value('tracker', {mode: 'learning', path: '', user: ''});
 
-  app.factory('coverInfo', function($q, $log){
+  app.factory('coverInfo', function($q, $log, appState){
     return {
       save: save,
       get: get
@@ -28,6 +28,7 @@
 
     function save(){
       return $q(function(resolve, reject){
+        appState.canSwitch(true);
         $log.log("data is saved");
         resolve();
       });

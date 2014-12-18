@@ -32,9 +32,9 @@
 
     function changeMode(){
       if(sidebar.mode === 'learning'){
-        appState.setMode('curation');
+        return appState.setMode('curation');
       }
-      appState.setMode('learning');
+      return appState.setMode('learning');
     }
   }
 })();
