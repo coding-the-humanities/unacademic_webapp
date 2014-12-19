@@ -3,7 +3,6 @@
   describe("mode", function(){
     var mode;
     var $log;
-    var mockAppState;
     var mockPermission;
 
     beforeEach(function(){
@@ -12,16 +11,10 @@
         get: function(){}
       };
 
-      var appState = {
-        check: function(){}
-      };
-
-      mockAppState = sinon.mock(appState);
       mockPermission = sinon.mock(permission);
 
       module('unacademic.common.mode',  function($provide){
         $provide.value('permission', permission);
-        $provide.value('appState', appState);
       });
 
       inject(function(_mode_, _$log_){
@@ -46,7 +39,6 @@
 
           beforeEach(function(){
             mockPermission.expects('get').once().returns(true);
-            mockAppState.expects('check').once();
 
             var getNotified = function(){
               notification = mode.get();
@@ -75,7 +67,6 @@
 
           beforeEach(function(){
             mockPermission.expects('get').once().returns(false);
-            mockAppState.expects('check').once();
 
             var getNotified = function(){
               notification = mode.get();

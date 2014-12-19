@@ -18,7 +18,7 @@
 
   var description = "Welcome to UnAcademic. We understand that learning is personal. Therefore everything in our interface is fully customizable. Including this landing page. Start your journey by sliding the curation button below.";
 
-  app.factory('coverInfo', function($q, $log, appState){
+  app.factory('coverInfo', function($q, $log){
     return {
       save: save,
       get: get
@@ -26,7 +26,6 @@
 
     function save(){
       return $q(function(resolve, reject){
-        appState.canSwitch(true);
         $log.log("data is saved");
         resolve();
       });

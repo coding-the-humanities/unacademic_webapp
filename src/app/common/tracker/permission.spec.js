@@ -1,27 +1,41 @@
 (function(){
 
-  describe("tracker", function(){
+  describe("permission", function(){
     var permission;
     var $log;
-    var state;
+    var mockAppState;
 
     beforeEach(function(){
-      module('unacademic.common.permission');
+
+      var appState = {
+        get: function(){}
+      };
+
+      mockAppState = sinon.mock(appState);
+
+      module('unacademic.common.permission',  function($provide){
+        $provide.value('appState', appState);
+      });
+
       inject(function(_permission_, _$log_){
         permission = _permission_;
         $log = _$log_;
       });
     });
-    describe("general", function(){
-      it("is not allowed to an invalid app mode", function(){
 
-        state = {
+    describe("general", function(){
+
+      beforeEach(function(){
+        var state = {
           user: 'yeehaa',
-          currentMode: 'teaching',
-          nextMode: 'bla',
+          mode: 'learning'
         }
 
-        expect(permission.get(state)).to.be.false;
+        mockAppState.expects('get').returns(state);
+      });
+
+      it("is not allowed to an invalid app mode", function(){
+        expect(permission.get({nextMode: 'bla'})).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('appmode');
       });
@@ -29,28 +43,23 @@
 
     describe("browsing mode", function(){
 
-      it("is not allowed to switch to learning", function(){
-
-        state = {
+      beforeEach(function(){
+        var state = {
           user: '',
-          currentMode: 'browsing',
-          nextMode: 'learning',
+          mode: 'browsing'
         }
 
-        expect(permission.get(state)).to.be.false;
+        mockAppState.expects('get').returns(state);
+      });
+
+      it("is not allowed to switch to learning", function(){
+        expect(permission.get({nextMode: 'learning'})).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('signing in');
       });
 
       it("is not allowed to switch to curation", function(){
-
-        state = {
-          user: '',
-          currentMode: 'browsing',
-          nextMode: 'learning',
-        }
-
-        expect(permission.get(state)).to.be.false;
+        expect(permission.get({nextMode: 'curation'})).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('signing in');
       });
@@ -58,26 +67,23 @@
 
     describe("learning mode", function(){
 
-      it("is allowed to switch to curation", function(){
-
-        state = {
+      beforeEach(function(){
+        var state = {
           user: 'yeehaa',
-          currentMode: 'browsing',
-          nextMode: 'curation',
+          mode: 'learning'
         }
 
-        expect(permission.get(state)).to.be.true;
+        mockAppState.expects('get').returns(state);
+      });
+
+      it("is allowed to switch to curation", function(){
+        expect(permission.get({nextMode: 'curation'})).to.be.true;
+        expect($log.log.logs.length).to.equal(1);
+        expect($log.log.logs[0][0]).to.contain('learning to curation');
       });
 
       it("is not allowed to switch to browsing", function(){
-
-        state = {
-          user: 'yeehaa',
-          currentMode: 'learning',
-          nextMode: 'browsing',
-        }
-
-        expect(permission.get(state)).to.be.false;
+        expect(permission.get({nextMode: 'browsing'})).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('browsing mode');
       });
@@ -87,39 +93,44 @@
 
       it("is not allowed to switch to learning without explicit permission", function(){
 
-        state = {
+        var state = {
           user: 'yeehaa',
-          currentMode: 'curation',
-          nextMode: 'learning',
+          mode: 'curation'
         }
 
-        expect(permission.get(state)).to.be.false;
+        mockAppState.expects('get').returns(state);
+
+        expect(permission.get({nextMode: 'learning'})).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('prevent mode switch');
       });
 
       it("is allowed to switch to learning with explicit permission", function(){
 
-        state = {
+        var state = {
           user: 'yeehaa',
-          currentMode: 'curation',
-          nextMode: 'learning',
+          mode: 'curation',
           switchable: true
         }
 
-        expect(permission.get(state)).to.be.true;
+        mockAppState.expects('get').returns(state);
+
+        expect(permission.get({nextMode: 'learning'})).to.be.true;
+        expect($log.log.logs.length).to.equal(1);
+        expect($log.log.logs[0][0]).to.contain('curation to learning');
       });
 
       it("is not allowed to switch to browsing", function(){
 
-        state = {
+        var state = {
           user: 'yeehaa',
-          currentMode: 'learning',
-          nextMode: 'browsing',
+          mode: 'learning',
           switchable: true
         }
 
-        expect(permission.get(state)).to.be.false;
+        mockAppState.expects('get').returns(state);
+
+        expect(permission.get({nextMode: 'browsing'})).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('browsing mode');
       });

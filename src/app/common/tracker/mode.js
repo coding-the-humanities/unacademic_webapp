@@ -1,12 +1,10 @@
 (function(){
   var app = angular.module('unacademic.common.mode', [
-    'unacademic.common.permission',
-    'unacademic.common.appState'
   ]);
 
   app.factory('mode', mode);
 
-  function mode($log, permission, appState){
+  function mode($log, permission){
     var mode = 'browsing';
     var switchable = false;
     var observerCallbacks = [];
@@ -39,8 +37,10 @@
       return switchable;
     }
 
-    function getPermission(newMode){
-      var state = appState.check(newMode);
+    function getPermission(nextMode){
+      var state = {
+        nextMode: nextMode
+      };
 
       if(!permission.get(state)){
         return false
