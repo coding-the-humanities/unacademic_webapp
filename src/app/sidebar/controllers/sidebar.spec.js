@@ -3,34 +3,37 @@
   describe("Sidebar", function(){
     var sidebar;
     var $scope;
-    var setUserSpy;
+    var appStateMock;
+    var setCurrentUserSpy;
 
     beforeEach(function () {
       module('unacademic.sidebar.controller');
 
-      var mode = {
-        get: function(){ return 'learning' },
+      var appState = {
+        get: function(){},
         set: function(){},
         registerObserverCallback: function(){}
       };
 
       var currentUser = {
-        setId: function(){ return 'yeehaa' },
-        getId: function(){},
-        registerObserverCallback: function(){}
+        setId: function(){}
+      };
+
+      appStateMock= sinon.mock(appState);
+
+      var state = {
+        user: undefined,
+        mode: 'browsing'
       }
 
-      getUserSpy = sinon.spy(currentUser, 'getId');
-      setUserSpy = sinon.spy(currentUser, 'setId');
-      getModeSpy = sinon.spy(mode, 'get');
-      setModeSpy = sinon.spy(mode, 'set');
+      appStateMock.expects('get').once().returns(state);
 
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
         sidebar = $controller('Sidebar', {
           $scope: $scope,
-          mode: mode,
+          appState: appState,
           currentUser: currentUser
         });
       });
@@ -38,42 +41,27 @@
 
     describe("initial state",function(){
 
-      describe('user', function(){
-
-        it("calls mode to set the current user", function(){
-          expect(getUserSpy).to.be.calledOnce;
-        });
-
-        it("has no current user", function(){
-          expect(sidebar.user).to.be.undefined;
-        });
+      it("registers the observers", function(){
+        appStateMock.expects('registerObserverCallback').once();
       });
 
-      describe('mode', function(){
+      it("calls appState to get the currentUser and mode", function(){
+      });
 
-        it("calls mode to set the current mode", function(){
-          expect(getModeSpy).to.be.calledOnce;
-        });
-
-        it("is set to learning", function(){
-          expect(sidebar.mode).to.equal('learning');
-        });
+      it("sets the results", function(){
+        expect(sidebar.user).to.be.undefined;
+        expect(sidebar.mode).to.equal('browsing')
       });
     });
+
 
     describe("signIn", function(){
-
-      beforeEach(function(){
-        sidebar.signIn();
-      });
-
       it("sets the current user id on mode", function(){
-        expect(setUserSpy).to.be.calledOnce;
+        sidebar.signIn();
+        appStateMock.expects('set').once();
       });
     });
 
-    describe("mode switching", function(){
-    });
 
     describe("changeMode", function(){
 
@@ -84,8 +72,7 @@
         });
 
         it("attempts to set the mode on mode", function(){
-          expect(setModeSpy).to.be.calledOnce;
-          expect(setModeSpy).to.be.calledWith('curation');
+          appStateMock.expects('set').once();
         });
       });
 
@@ -96,8 +83,7 @@
         });
 
         it("attempts to set the mode on mode", function(){
-          expect(setModeSpy).to.be.calledOnce;
-          expect(setModeSpy).to.be.calledWith('learning');
+          appStateMock.expects('set').once();
         });
       });
     });

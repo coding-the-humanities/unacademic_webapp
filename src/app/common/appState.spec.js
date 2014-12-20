@@ -64,6 +64,12 @@
     });
 
     describe("set", function(){
+      var notificationSpy;
+
+      beforeEach(function(){
+        notificationSpy = sinon.spy();
+        appState.registerObserverCallback(notificationSpy);
+      });
 
       describe("with no permission", function(){
 
@@ -74,6 +80,10 @@
 
         it("returns false", function(){
           expect(setState).to.be.false;
+        });
+
+        it("does not notify observers", function(){
+          expect(notificationSpy).not.called;
         });
       });
 
@@ -86,12 +96,13 @@
           beforeEach(function(){
 
             var state = {
-              mode: 'learning',
+              mode: undefined,
+              nextMode: 'learning',
               user: 'yeehaa'
             }
 
             permissionMock.expects('get').withArgs(state).once().returns(true);
-            setState = appState.set({user: 'yeehaa', newMode: 'learning'});
+            setState = appState.set({user: 'yeehaa', nextMode: 'learning'});
           });
 
           it("returns true", function(){
@@ -102,6 +113,10 @@
             expect(setCurrentUserSpy).calledWith('yeehaa');
             expect(setModeSpy).calledWith('learning');
           });
+
+          it("notifies observers", function(){
+            expect(notificationSpy).calledOnce;
+          });
         });
 
         describe("with a id", function(){
@@ -109,6 +124,7 @@
           beforeEach(function(){
             var state = {
               mode: undefined,
+              nextMode: undefined,
               user: 'yeehaa'
             }
 
@@ -123,28 +139,38 @@
           it("sets the value", function(){
             expect(setCurrentUserSpy).calledWith('yeehaa');
           });
+
+          it("notifies observers", function(){
+            expect(notificationSpy).calledOnce;
+          });
         });
 
         describe("users", function(){
+
           describe("without an id", function(){
 
             beforeEach(function(){
 
               var state = {
                 mode: undefined,
-                user: ''
+                nextMode: undefined,
+                user: undefined
               }
 
               permissionMock.expects('get').withArgs(state).once().returns(true);
               setState = appState.set({user: ''});
             });
 
-            it("returns true", function(){
+            it("returns false", function(){
               expect(setState).to.be.false;
             });
 
             it("does not set the value", function(){
               expect(setCurrentUserSpy).not.called;
+            });
+
+            it("does not notify observers", function(){
+              expect(notificationSpy).not.called;
             });
           });
 
@@ -153,6 +179,7 @@
             beforeEach(function(){
               var state = {
                 mode: undefined,
+                nextMode: undefined,
                 user: 'yeehaa'
               }
 
@@ -164,8 +191,8 @@
               expect(setState).to.be.true;
             });
 
-            it("sets the value", function(){
-              expect(setCurrentUserSpy).calledWith('yeehaa');
+            it("notifies observers", function(){
+              expect(notificationSpy).calledOnce;
             });
           });
         });
@@ -176,20 +203,25 @@
 
             beforeEach(function(){
               var state = {
-                mode: '',
+                mode: undefined,
+                nextMode: '',
                 user: undefined
               }
 
               permissionMock.expects('get').withArgs(state).once().returns(true);
-              setState = appState.set({newMode: ''});
+              setState = appState.set({nextMode: ''});
             });
 
-            it("returns true", function(){
+            it("returns false", function(){
               expect(setState).to.be.false;
             });
 
             it("does not set the value", function(){
               expect(setModeSpy).not.called;
+            });
+
+            it("does not notify observers", function(){
+              expect(notificationSpy).not.called;
             });
           });
 
@@ -197,12 +229,13 @@
 
             beforeEach(function(){
               var state = {
-                mode: 'learning',
+                mode: undefined,
+                nextMode: 'learning',
                 user: undefined
               }
 
               permissionMock.expects('get').withArgs(state).once().returns(true);
-              setState = appState.set({newMode: 'learning'});
+              setState = appState.set({nextMode: 'learning'});
             });
 
             it("returns true", function(){
@@ -211,6 +244,10 @@
 
             it("sets the value", function(){
               expect(setModeSpy).calledWith('learning');
+            });
+
+            it("notifies observers", function(){
+              expect(notificationSpy).calledOnce;
             });
           });
         });

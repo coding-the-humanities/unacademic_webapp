@@ -27,12 +27,6 @@
 
         beforeEach(function(){
           userId = 'John123';
-
-          var getNotified = function(){
-            notification = currentUser.getId();
-          }
-
-          currentUser.registerObserverCallback(getNotified);
           setUserId = currentUser.setId(userId);
         });
 
@@ -43,10 +37,6 @@
 
         it("can be set", function(){
           expect(currentUser.getId()).to.equal(userId);
-        });
-
-        it("notifies observers", function(){
-          expect(notification).to.equal(userId);
         });
       })
     })

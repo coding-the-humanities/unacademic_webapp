@@ -6,28 +6,39 @@
   app.factory("appState", appState);
 
   function appState($log, currentUser, mode, permission) {
+    var observerCallbacks = [];
+
     return {
       get: get,
-      set: set
+      set: set,
+      registerObserverCallback: registerObserverCallback
     };
 
     function set(_ref) {
       var user = _ref.user;
-      var newMode = _ref.newMode;
+      var nextMode = _ref.nextMode;
       var changed = false;
       var state = get();
       var switchable;
 
-      state.user = user;
-      state.mode = newMode;
+      if (user) {
+        state.user = user;
+      }
+
+      if (nextMode) {
+        state.nextMode = nextMode;
+      }
+
+      state.nextMode = nextMode;
+
       switchable = permission.get(state);
 
       if (!switchable) {
         return false;
       }
 
-      if (newMode) {
-        mode.set(newMode);
+      if (nextMode) {
+        mode.set(nextMode);
         changed = true;
       }
 
@@ -36,7 +47,12 @@
         changed = true;
       }
 
-      return changed;
+      if (!changed) {
+        return false;
+      }
+
+      notifyObservers();
+      return true;
     }
 
     function get() {
@@ -48,5 +64,15 @@
       $log.log(state);
       return state;
     }
+
+    function registerObserverCallback(callback) {
+      observerCallbacks.push(callback);
+    }
+
+    function notifyObservers() {
+      _.each(observerCallbacks, function (callback) {
+        callback();
+      });
+    };
   };
 })();
