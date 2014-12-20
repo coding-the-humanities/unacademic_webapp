@@ -11,24 +11,24 @@
       get: get
     }
 
-    function get({nextMode, mode, user}) {
+    function get(currentState, nextState) {
 
-      if(!_.contains(modes, nextMode)){
+      if(!_.contains(modes, nextState.mode)){
         $log.warn('invalid appmode');
         return false;
       }
 
-      if(!user){
+      if(!nextState.user){
         $log.warn('curation and learning mode are only accessible after signing in')
         return false;
       }
 
-      if(nextMode === 'browsing'){
+      if(nextState.mode === 'browsing'){
         $log.warn('browsing mode is not available for logged in users')
         return false;
       }
 
-      $log.log(`switched from ${mode} to ${nextMode}`);
+      $log.log(`switched from ${currentState.mode} to ${nextState.mode}`);
       return true;
     }
   }

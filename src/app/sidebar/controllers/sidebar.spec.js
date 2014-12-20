@@ -45,15 +45,11 @@
         appStateMock.expects('registerObserverCallback').once();
       });
 
-      it("calls appState to get the currentUser and mode", function(){
-      });
-
       it("sets the results", function(){
         expect(sidebar.user).to.be.undefined;
         expect(sidebar.mode).to.equal('browsing')
       });
     });
-
 
     describe("signIn", function(){
       it("sets the current user id on mode", function(){

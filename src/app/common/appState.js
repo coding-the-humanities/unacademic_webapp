@@ -5,7 +5,7 @@
 
   app.factory("appState", appState);
 
-  function appState($log, currentUser, mode, permission) {
+  function appState($log, currentUser, mode, permission, $state) {
     var observerCallbacks = [];
 
     return {
@@ -14,55 +14,64 @@
       registerObserverCallback: registerObserverCallback
     };
 
+    function get() {
+      var state = {
+        mode: mode.get(),
+        user: currentUser.getId(),
+        name: $state.current.name
+      };
+
+      return state;
+    }
+
     function set(_ref) {
       var user = _ref.user;
-      var nextMode = _ref.nextMode;
+      var path = _ref.path;
+      var nextMode = _ref.mode;
+      var switchable = false;
       var changed = false;
-      var state = get();
-      var switchable;
 
-      if (user) {
-        state.user = user;
-      }
+      var currentState = get();
+      var nextState = createNextState(currentState, user, nextMode);
 
-      if (nextMode) {
-        state.nextMode = nextMode;
-      }
-
-      state.nextMode = nextMode;
-
-      switchable = permission.get(state);
+      switchable = permission.get(currentState, nextState);
 
       if (!switchable) {
         return false;
       }
 
-      if (nextMode) {
-        mode.set(nextMode);
-        changed = true;
-      }
-
-      if (user) {
-        currentUser.setId(user);
-        changed = true;
-      }
+      changed = setServicesState(nextState);
 
       if (!changed) {
         return false;
       }
 
-      notifyObservers();
+      $log.log(nextState);
       return true;
     }
 
-    function get() {
-      var state = {
-        mode: mode.get(),
-        user: currentUser.getId()
-      };
+    function createNextState(state, user, nextMode) {
+      if (user) {
+        state.user = user;
+      }
 
-      $log.log(state);
+      if (nextMode) {
+        state.mode = nextMode;
+      }
+
       return state;
+    }
+
+    function setServicesState(_ref2) {
+      var user = _ref2.user;
+      var nextMode = _ref2.mode;
+      var modified = false;
+
+      mode.set(nextMode);
+      currentUser.setId(user);
+      notifyObservers();
+
+      return modified;
     }
 
     function registerObserverCallback(callback) {

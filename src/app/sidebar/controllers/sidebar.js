@@ -22,14 +22,20 @@
     appState.registerObserverCallback(updateAppState);
 
     function signIn(){
-      appState.set({user: 'yeehaa', nextMode: 'learning'})
-    }
+
+      appState.set({
+        user: 'yeehaa',
+        mode: 'learning',
+        path: 'user.paths'
+      });
+
+    };
 
     function changeMode(){
       if(sidebar.mode === 'learning'){
-        return appState.set({nextMode: 'curation'});
+        return appState.set({mode: 'curation'});
       }
-      return appState.set({nextMode: 'learning'});
+      return appState.set({mode: 'learning'});
     }
   }
 })();

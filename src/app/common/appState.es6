@@ -7,7 +7,7 @@
 
   app.factory('appState', appState);
 
-  function appState($log, currentUser, mode, permission){
+  function appState($log, currentUser, mode, permission, $state){
     var observerCallbacks = [];
 
     return {
@@ -16,53 +16,60 @@
       registerObserverCallback: registerObserverCallback
     }
 
-    function set({user, nextMode}){
+    function get(){
+      var state = {
+        mode: mode.get(),
+        user: currentUser.getId(),
+        name: $state.current.name
+      }
+
+      return state;
+    }
+
+    function set({user, path, mode:nextMode}){
+      var switchable = false;
       var changed = false;
-      var state = get();
-      var switchable;
+
+      var currentState = get();
+      var nextState = createNextState(currentState, user, nextMode);
+
+      switchable = permission.get(currentState, nextState);
+
+      if(!switchable){
+        return false;
+      }
+
+      changed = setServicesState(nextState);
+
+      if(!changed){
+        return false;
+      }
+
+      $log.log(nextState);
+      return true;
+    }
+
+    function createNextState(state, user, nextMode){
 
       if(user){
         state.user = user;
       }
 
       if(nextMode){
-        state.nextMode = nextMode;
+        state.mode = nextMode;
       }
 
-      state.nextMode = nextMode;
-
-      switchable = permission.get(state);
-
-      if(!switchable){
-        return false;
-      }
-
-      if(nextMode){
-        mode.set(nextMode);
-        changed = true;
-      }
-
-      if(user){
-        currentUser.setId(user);
-        changed = true;
-      }
-
-      if(!changed){
-        return false;
-      }
-
-      notifyObservers();
-      return true;
+      return state;
     }
 
-    function get(){
-      var state = {
-        mode: mode.get(),
-        user: currentUser.getId()
-      }
+    function setServicesState({user, mode:nextMode}){
+      var modified = false;
 
-      $log.log(state);
-      return state;
+      mode.set(nextMode);
+      currentUser.setId(user);
+      notifyObservers();
+
+      return modified;
     }
 
     function registerObserverCallback(callback){
