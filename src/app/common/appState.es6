@@ -22,34 +22,37 @@
         user: currentUser.getId(),
         name: $state.current.name
       }
-
       return state;
     }
 
-    function set({user, path, mode:nextMode}){
-      var switchable = false;
+    function set({user, path, mode:nextMode, name}){
+      var approvedChanges;
       var changed = false;
 
       var currentState = get();
-      var nextState = createNextState(currentState, user, nextMode);
+      var nextState = createNextState(currentState, user, nextMode, name);
 
-      switchable = permission.get(currentState, nextState);
+      approvedChanges = permission.get(currentState, nextState);
 
-      if(!switchable){
+      if(_.isEmpty(approvedChanges)){
         return false;
       }
 
-      changed = setServicesState(nextState);
+      setServicesState(approvedChanges);
 
-      if(!changed){
-        return false;
-      }
+      _.each(approvedChanges, function(value, key){
+        $log.info(`switched from ${currentState[key]} to ${nextState[key]}`);
+      });
 
-      $log.log(nextState);
+      notifyObservers();
+
+      var state = get();
+      $log.log(state);
       return true;
     }
 
-    function createNextState(state, user, nextMode){
+    function createNextState(currentState, user, nextMode, name){
+      var state = _.clone(currentState);
 
       if(user){
         state.user = user;
@@ -59,17 +62,26 @@
         state.mode = nextMode;
       }
 
+      if(name){
+        state.name = name;
+      }
+
       return state;
     }
 
-    function setServicesState({user, mode:nextMode}){
-      var modified = false;
+    function setServicesState({user, name, mode:nextMode}){
 
-      mode.set(nextMode);
-      currentUser.setId(user);
-      notifyObservers();
+      if(user){
+        currentUser.setId(user);
+      }
 
-      return modified;
+      if(name){
+        $state.go(name)
+      }
+
+      if(nextMode){
+        mode.set(nextMode);
+      }
     }
 
     function registerObserverCallback(callback){

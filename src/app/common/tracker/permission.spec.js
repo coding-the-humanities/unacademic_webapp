@@ -23,12 +23,14 @@
 
         currentState = {
           user: 'yeehaa',
-          mode: 'learning'
+          mode: 'learning',
+          name: '123'
         }
 
         nextState = {
           user: 'yeehaa',
-          mode: 'bla'
+          mode: 'bla',
+          name: '123'
         }
 
         isAllowed = permission.get(currentState, nextState);
@@ -47,7 +49,8 @@
 
         currentState = {
           user: '',
-          mode: 'browsing'
+          mode: 'browsing',
+          name: '123'
         }
 
       });
@@ -56,7 +59,8 @@
 
         nextState = {
           user: '',
-          mode: 'learning'
+          mode: 'learning',
+          name: '123'
         }
 
         isAllowed = permission.get(currentState, nextState);
@@ -69,13 +73,26 @@
 
         nextState = {
           user: '',
-          mode: 'curation'
+          mode: 'curation',
+          name: '123'
         }
 
         isAllowed = permission.get(currentState, nextState);
         expect(isAllowed).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('signing in');
+      });
+
+      it("is allowed to switch routes", function(){
+
+        nextState = {
+          user: '',
+          mode: 'browsing',
+          name: '345'
+        }
+
+        isAllowed = permission.get(currentState, nextState);
+        expect(isAllowed).to.eql({name: '345'});
       });
     });
 
@@ -85,7 +102,8 @@
 
         currentState = {
           user: 'yeehaa',
-          mode: 'learning'
+          mode: 'learning',
+          name: '123'
         }
 
       });
@@ -94,20 +112,20 @@
 
         nextState = {
           user: 'yeehaa',
-          mode: 'curation'
+          mode: 'curation',
+          name: '123'
         }
 
         isAllowed = permission.get(currentState, nextState);
-        expect(isAllowed).to.be.true;
-        expect($log.log.logs.length).to.equal(1);
-        expect($log.log.logs[0][0]).to.contain('learning to curation');
+        expect(isAllowed).to.eql({mode: 'curation'});
       });
 
       it("is not allowed to switch to browsing", function(){
 
         nextState = {
           user: 'yeehaa',
-          mode: 'browsing'
+          mode: 'browsing',
+          name: '123'
         }
 
         isAllowed = permission.get(currentState, nextState);
@@ -123,7 +141,8 @@
 
         currentState = {
           user: 'yeehaa',
-          mode: 'curation'
+          mode: 'curation',
+          name: '123'
         }
       });
 
@@ -131,20 +150,20 @@
 
         nextState = {
           user: 'yeehaa',
-          mode: 'learning'
+          mode: 'learning',
+          name: '123'
         }
 
         isAllowed = permission.get(currentState, nextState);
-        expect(isAllowed).to.be.true;
-        expect($log.log.logs.length).to.equal(1);
-        expect($log.log.logs[0][0]).to.contain('curation to learning');
+        expect(isAllowed).to.eql({mode: 'learning'});
       });
 
       it("is not allowed to switch to browsing", function(){
 
         nextState = {
           user: 'yeehaa',
-          mode: 'browsing'
+          mode: 'browsing',
+          name: '123'
         }
 
         isAllowed = permission.get(currentState, nextState);

@@ -25,10 +25,10 @@
       saveInfoSpy = sinon.spy(coverInfo, 'save');
 
       appState = {
-        go: function(){ return; }
+        set: function(){ return; }
       }
 
-      changeRouteSpy = sinon.spy(appState, 'go');
+      changeRouteSpy = sinon.spy(appState, 'set');
 
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
@@ -80,9 +80,8 @@
       });
 
       it("delegates to appState to change the route", function(){
-        expect(changeRouteSpy).to.have.been.calledWith('paths.new')
+        expect(changeRouteSpy).to.have.been.calledWith({name: 'paths.new'});
       });
     });
-
   });
 })();

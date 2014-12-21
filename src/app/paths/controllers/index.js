@@ -19,6 +19,7 @@
     function save(){
       return $q(function(resolve, reject){
         coverInfo.save().then(function(){
+          appState.set({mode: 'learning'});
           resolve();
         })
       });
@@ -26,7 +27,7 @@
 
     function addNewPath(){
       return save().then(function(){
-        appState.go('paths.new')
+        appState.set({name: 'paths.new'})
       });
     }
   };

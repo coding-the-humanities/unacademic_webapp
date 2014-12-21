@@ -26,7 +26,6 @@
       appState.set({
         user: 'yeehaa',
         mode: 'learning',
-        path: 'user.paths'
       });
 
     };
