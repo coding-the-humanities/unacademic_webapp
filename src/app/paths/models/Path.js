@@ -3,7 +3,7 @@
 
   app.factory('Path', Path);
 
-  function Path(ActiveResource, baseUrl) {
+  function Path(baseUrl) {
 
     function Path(data) {
       this.string('id');

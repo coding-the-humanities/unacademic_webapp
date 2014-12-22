@@ -25,9 +25,7 @@ module.exports = {
     js: [
       'vendor/lodash/dist/lodash.js',
       'vendor/angular/angular.js',
-      'vendor/active-support/lib/active-support.js',
-      'vendor/async//lib/async.js',
-      'vendor/ngActiveResource/dist/ng-active-resource.js',
+      'vendor/restangular/dist/restangular.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/famous/dist/famous-global.js',
       'vendor/famous-angular/dist/famous-angular.js',

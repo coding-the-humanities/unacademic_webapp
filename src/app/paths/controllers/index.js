@@ -3,31 +3,35 @@
 
   app.controller('Index', Index);
 
-  function Index(paths, coverInfo, $q, appState) {
+  function Index(CoverInfo, $q, appState) {
 
     var vm = this;
 
-    vm.paths = paths;
-    vm.info = coverInfo.get();
-    vm.info.displayProperties = ['summary', 'description'];
+    vm.paths = [];
 
     vm.actions = {
       'Save': save,
       'Add New Path': addNewPath
     };
 
+    window.ci = CoverInfo;
+
+    CoverInfo.get().then(function(data){
+      vm.info = data;
+      vm.info.displayProperties = ["summary", "description"];
+    });
+
     function save(){
       return $q(function(resolve, reject){
-        coverInfo.save().then(function(){
-          appState.set({mode: 'learning'});
+        CoverInfo.save(vm.info).then(function(){
           resolve();
-        })
+        });
       });
     }
 
     function addNewPath(){
       return save().then(function(){
-        appState.set({name: 'paths.new'})
+        appState.set({name: 'paths.new'});
       });
     }
   };

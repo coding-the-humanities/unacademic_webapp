@@ -14,29 +14,25 @@
       })
 
 
+
       .state('paths.index', {
         url: '/index',
         controller: 'Index',
         controllerAs: 'index',
-        templateUrl: 'paths/views/index.html',
-        resolve: {
-          paths: function(Path){
-            return Path.all();
-          }
-        }
+        templateUrl: 'paths/views/index.html'
       })
 
-      .state('paths.new', {
-        url: '/new',
-        controller: 'PathDetails',
-        controllerAs: 'newPath',
-        templateUrl: 'paths/views/newPath.html',
-        resolve: {
-          path: function(Path, $stateParams){
-            return Path.new();
-          }
-        },
-      })
+      // .state('paths.new', {
+      //   url: '/new',
+      //   controller: 'PathDetails',
+      //   controllerAs: 'newPath',
+      //   templateUrl: 'paths/views/newPath.html',
+      //   resolve: {
+      //     path: function(Path, $stateParams){
+      //       return Path.new();
+      //     }
+      //   },
+      // })
 
       // .state('paths.details', {
       //   url: '/:pathId',

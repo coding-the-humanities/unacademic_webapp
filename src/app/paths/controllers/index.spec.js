@@ -14,15 +14,23 @@
     beforeEach(function () {
       module('unacademic.paths.controllers.index');
 
-      coverInfo = {
-        get: function(){ return {}; },
-        save: function(){
-          return $q.when('hi');
+      var ci = {
+        info: {
+          displayProperties: 'hi'
         }
       };
 
-      getInfoSpy = sinon.spy(coverInfo, 'get');
-      saveInfoSpy = sinon.spy(coverInfo, 'save');
+      CoverInfo = {
+        get: function(){
+          return $q.when(ci);
+        },
+        save: function(){
+          return $q.when();
+        }
+      };
+
+      getInfoSpy = sinon.spy(CoverInfo, 'get');
+      saveInfoSpy = sinon.spy(CoverInfo, 'save');
 
       appState = {
         set: function(){ return; }
@@ -35,13 +43,18 @@
         $q = _$q_;
         index = $controller('Index', {
           paths: [],
-          coverInfo: coverInfo,
+          CoverInfo: CoverInfo,
           appState: appState
         });
       });
     });
 
     describe("general", function(){
+
+      beforeEach(function(){
+        $scope.$apply();
+      });
+
       it("calls cover info to get the data", function(){
         expect(getInfoSpy).to.have.been.called;
       });
