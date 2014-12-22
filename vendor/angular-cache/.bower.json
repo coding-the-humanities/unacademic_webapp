@@ -44,6 +44,5 @@
   },
   "_source": "git://github.com/jmdobry/angular-cache.git",
   "_target": "~3.2.4",
-  "_originalSource": "angular-cache",
-  "_direct": true
+  "_originalSource": "angular-cache"
 }
