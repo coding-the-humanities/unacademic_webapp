@@ -14,16 +14,21 @@
       'Add New Path': addNewPath
     };
 
-    window.ci = CoverInfo;
+    updateInfo('general');
+    appState.registerObserverCallback(updateInfo);
 
-    CoverInfo.get().then(function(data){
-      vm.info = data;
-      vm.info.displayProperties = ["summary", "description"];
-    });
+    function updateInfo(id){
+      var id = id || appState.get().user;
+      CoverInfo.get(id).then(function(data){
+        vm.info = data;
+        vm.info.displayProperties = ["summary", "description"];
+      })
+    }
 
     function save(){
+      var id = appState.get().user;
       return $q(function(resolve, reject){
-        CoverInfo.save(vm.info).then(function(){
+        CoverInfo.save(vm.info, id).then(function(data){
           resolve();
         });
       });

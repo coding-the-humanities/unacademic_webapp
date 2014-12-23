@@ -2,47 +2,48 @@
 
   describe("Index", function(){
     var index;
-    var coverInfo;
-    var appState;
-    var $q;
     var $scope;
 
     var getInfoSpy;
     var saveInfoSpy;
-    var changeRouteSpy;
+    var setAppStateSpy;
+    var getAppStateSpy;
+    var appStateObserverSpy;
 
     beforeEach(function () {
       module('unacademic.paths.controllers.index');
 
-      var ci = {
+      var coverInfo = {
         info: {
-          displayProperties: 'hi'
+          displayProperties: ['summary']
         }
       };
 
-      CoverInfo = {
+      var CoverInfo = {
         get: function(){
-          return $q.when(ci);
+          return $q.when(coverInfo);
         },
         save: function(){
           return $q.when();
         }
       };
 
-      getInfoSpy = sinon.spy(CoverInfo, 'get');
-      saveInfoSpy = sinon.spy(CoverInfo, 'save');
-
-      appState = {
-        set: function(){ return; }
+      var appState = {
+        set: function(){ return; },
+        get: function(){ return { user: ''} },
+        registerObserverCallback: function(){ return; }
       }
 
-      changeRouteSpy = sinon.spy(appState, 'set');
+      getInfoSpy = sinon.spy(CoverInfo, 'get');
+      saveInfoSpy = sinon.spy(CoverInfo, 'save');
+      setAppStateSpy = sinon.spy(appState, 'set');
+      getAppStateSpy = sinon.spy(appState, 'get');
+      appStateObserverSpy = sinon.spy(appState, 'registerObserverCallback');
 
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
         index = $controller('Index', {
-          paths: [],
           CoverInfo: CoverInfo,
           appState: appState
         });
@@ -55,8 +56,17 @@
         $scope.$apply();
       });
 
+      it("registers the appState observer callback", function(){
+        expect(appStateObserverSpy).to.have.been.calledOnce;
+      });
+
+      it("calls appState  to get the user id", function(){
+        expect(getAppStateSpy).not.to.have.been.called;
+      });
+
       it("calls cover info to get the data", function(){
-        expect(getInfoSpy).to.have.been.called;
+        expect(getInfoSpy).to.have.been.calledOnce;
+        expect(getInfoSpy).to.have.been.calledWith('general');
       });
 
       it("sets the display properties", function(){
@@ -93,7 +103,7 @@
       });
 
       it("delegates to appState to change the route", function(){
-        expect(changeRouteSpy).to.have.been.calledWith({name: 'paths.new'});
+        expect(setAppStateSpy).to.have.been.calledWith({name: 'paths.new'});
       });
     });
   });
