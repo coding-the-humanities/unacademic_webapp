@@ -13,9 +13,9 @@
 
 
   app.value('tracker', {mode: 'learning', path: '', user: ''});
-  app.constant('baseUrl', 'https://cth-curriculum.firebaseio.com/.json');
+  //app.constant('baseUrl', 'https://cth-curriculum.firebaseio.com/.json');
 
-  // app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
+  app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
 
 
 })();
