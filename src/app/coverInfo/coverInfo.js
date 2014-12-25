@@ -1,76 +1,88 @@
-(function(){
-  var app = angular.module('unacademic.models', [
-  ]);
+"use strict";
+
+var _classProps = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+(function () {
+  var app = angular.module("unacademic.models", []);
 
   var description = "Welcome to UnAcademic. We understand that learning is personal. Therefore everything in our interface is fully customizable. Including this landing page. Start your journey by sliding the curation button below.";
 
-  app.factory('CoverInfo', function($q, baseUrl, $http){
+  app.factory("CoverInfo", function (baseUrl, $http, $q, appState) {
+    var $http = $http;
 
+    var Model = (function () {
+      var Model = function Model(options) {
+        this.title = options.title;
+        this.curator = appState.get().user;
+        this.summary = options.summary;
+        this.description = options.description;
+      };
 
-    return {
-      get: get,
-      save: save,
-      seed: seed
-    };
+      Model.prototype.save = function () {
+        Model._save(this);
+      };
 
-    function save(coverInfo, id){
-      var url = baseUrl + '/coverInfo/' + id + '.json';
-      return $http.put(url, coverInfo);
-    }
+      Model.get = function (userId) {
+        return $http.get(baseUrl + "/coverInfo/" + userId + ".json").then(Model.extractData);
+      };
 
-    function get(id){
-      return $http.get(baseUrl + '/coverInfo/' + id + '.json')
-               .then(extractData);
-    }
+      Model.extractData = function (response) {
+        return $q(function (resolve, reject) {
+          var coverInfo = new Model(response.data);
+          resolve(coverInfo);
+        });
+      };
 
-    function extractData(response){
-      return $q(function(resolve, reject){
-        resolve(response.data);
+      Model._save = function (coverInfo) {
+        return $http.put(coverInfo.url, coverInfo);
+      };
+
+      Model.schema = function () {
+        return {
+          type: "object",
+          properties: {
+            title: {
+              type: "string",
+              required: true,
+              minLength: 5,
+              maxLength: 25
+
+            },
+            summary: {
+              type: "string"
+            },
+            description: {
+              type: "string"
+            }
+          }
+        };
+      };
+
+      Model.seed = function () {
+        var coverInfo = {
+          title: "ReAcademic",
+          summary: "Learning by Dwelling",
+          description: description,
+          paths: ["hello"]
+        };
+
+        return Model.save(coverInfo, "general");
+      };
+
+      _classProps(Model, null, {
+        url: {
+          get: function () {
+            return baseUrl + "/coverInfo/" + this.curator + ".json";
+          }
+        }
       });
-    }
 
-    function seed(){
-      var coverInfo = {
-        title: "ReAcademic",
-        summary: 'Learning by Dwelling',
-        description: description,
-        paths: ['hello']
-      }
+      return Model;
+    })();
 
-      return save(coverInfo, 'general');
-    }
-
-    //
-    // seed().then(function(){
-    //   console.log('db seeded');
-    // });;
-
-
-    // function getPaths(data){
-    //   var promises = createPathPromises(data);
-    //   return $q(function(resolve, reject){
-    //     $q.all(promises).then(function(response){
-    //       data.paths = response;
-    //       resolve(data);
-    //     });
-    //   });
-    // }
-
-    // function getPath(path){
-    //   return $q(function(resolve, reject){
-    //     $http.get(baseUrl + '/paths/' + path + '.json')
-    //     .then(extractData)
-    //     .then(function(data){
-    //       resolve(data);
-    //     });
-    //   });
-    // };
-
-    // function createPathPromises(data){
-    //   return _.map(data.paths, function(path){
-    //     return getPath(path);
-    //   });
-    // }
-
+    return Model;
   });
 })();

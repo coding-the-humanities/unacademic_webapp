@@ -25,11 +25,16 @@ module.exports = {
     js: [
       'vendor/lodash/dist/lodash.js',
       'vendor/angular/angular.js',
-      'vendor/restangular/dist/restangular.js',
+      'vendor/angular-sanitize/angular-sanitize.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
+      'vendor/restangular/dist/restangular.js',
+      'vendor/tv4/tv4.js',
+      'vendor/objectpath/lib/ObjectPath.js',
+      'vendor/angular-schema-form/dist/schema-form.js',
       'vendor/famous/dist/famous-global.js',
       'vendor/famous-angular/dist/famous-angular.js',
-      'vendor/angular-contenteditable/angular-contenteditable.js'
+      'vendor/angular-contenteditable/angular-contenteditable.js',
+      'vendor/angular-schema-form/dist/bootstrap-decorator.min.js'
     ]
   }
 };

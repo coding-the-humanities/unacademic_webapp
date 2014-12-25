@@ -2,7 +2,7 @@
   var app = angular.module('unacademic', [
     'ui.router',
     'templates-app',
-    'famous.angular',
+    'schemaForm',
     'contenteditable',
     'unacademic.common',
     'unacademic.models',

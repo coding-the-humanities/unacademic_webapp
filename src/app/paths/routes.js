@@ -13,13 +13,17 @@
         template: '<ui-view/>'
       })
 
-
-
       .state('paths.index', {
         url: '/index',
         controller: 'Index',
         controllerAs: 'index',
-        templateUrl: 'paths/views/index.html'
+        templateUrl: 'paths/views/index.html',
+        resolve: {
+          coverInfo: function(CoverInfo, appState){
+            var id = appState.get().user || 'general';
+            return CoverInfo.get(id)
+          }
+        }
       })
 
       // .state('paths.new', {

@@ -25,7 +25,8 @@
         },
         save: function(){
           return $q.when();
-        }
+        },
+        schema: function(){}
       };
 
       var appState = {
@@ -45,7 +46,8 @@
         $q = _$q_;
         index = $controller('Index', {
           CoverInfo: CoverInfo,
-          appState: appState
+          appState: appState,
+          coverInfo: {}
         });
       });
     });
@@ -65,45 +67,7 @@
       });
 
       it("calls cover info to get the data", function(){
-        expect(getInfoSpy).to.have.been.calledOnce;
-        expect(getInfoSpy).to.have.been.calledWith('general');
-      });
-
-      it("sets the display properties", function(){
-        expect(index.info.displayProperties).not.to.be.undefined;
-      });
-
-      it("sets the exportable actions", function(){
-        expect(index.actions).not.to.be.undefined;
-      });
-    });
-
-    describe("save", function(){
-
-      beforeEach(function(){
-        index.actions["Save"]().then(function(){});
-        $scope.$apply();
-      })
-
-      it("delegates to coverInfo", function(){
-        expect(saveInfoSpy).to.have.been.called;
-      });
-
-    });
-
-    describe("addNewPath", function(){
-
-      beforeEach(function(){
-        index.actions["Add New Path"]().then(function(){});
-        $scope.$apply();
-      })
-
-      it("calls save on coverInfo", function(){
-        expect(saveInfoSpy).to.have.been.called;
-      });
-
-      it("delegates to appState to change the route", function(){
-        expect(setAppStateSpy).to.have.been.calledWith({name: 'paths.new'});
+        expect(getInfoSpy).not.to.have.been.called;
       });
     });
   });

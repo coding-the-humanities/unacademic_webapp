@@ -1,32 +1,21 @@
 <div class="sidebar">
 
-  <div ng-show="sidebar.mode === 'learning' || !sidebar.user" 
-       class="metabox">
+  <div ng-show="sidebar.mode === 'learning' || sidebar.mode === 'browsing'" class="metabox">
 
     <h1>{{sidebar.model.title}}</h1>
 
-    <p ng-repeat="property in sidebar.model.displayProperties">
-      <strong>{{property}}: </strong>
-      {{sidebar.model[property]}}
+    <p ng-repeat="property in sidebar.props.learning">
+      <strong>{{property}}: </strong>{{sidebar.model[property]}}
     </p>
-
   </div>
 
-  <div ng-show="sidebar.mode === 'curation' && sidebar.user" 
-       class="metabox">
-
-    <h1 contenteditable="true" 
-        ng-class="{'error' : sidebar.model.$errors.title}" 
-        ng-model="sidebar.model.title">
-    </h1>
-
-    <div ng-repeat="property in sidebar.model.displayProperties">
-      <span>{{property}}: </span>
-      <p contenteditable="true" 
-         ng-class="{'error' : sidebar.model.$errors[property]}" 
-         ng-model="sidebar.model[property]"></p>
-    </div>
-
+  <div ng-show="sidebar.mode === 'curation'" class="metabox">
+    <ng-form name="sidebar.form"
+          sf-schema="sidebar.props.schema"
+          sf-form="sidebar.props.curation"
+          sf-model="sidebar.model"
+          sf-options="{ formDefaults: { ngModelOptions: { updateOn: 'blur' } }}">
+    </ng-form>
   </div>
 
   <div class="toolbox">
@@ -36,26 +25,17 @@
     </div>
 
     <div ng-show="sidebar.user">
-      <button ng-show="sidebar.mode === 'curation'" 
-              ng-repeat="(key, value) in sidebar.actions" 
-              ng-click="sidebar.actions[key]()">
-        {{key}}
-      </button>
-
       <button ng-click="sidebar.changeMode()">
         {{sidebar.mode}}
       </button>
 
       <!-- <label class="label-switch"> -->
-      <!--   <input type="checkbox" --> 
+      <!--   <input type="checkbox" -->
       <!--          ng-model="sidebar.mode" -->
       <!--          ng-true-value="'curation'" -->
       <!--          ng-false-value="'learning'"/> -->
       <!--   <div class="checkbox"></div> -->
       <!-- </label> -->
     </div>
-
   </div>
-
 </div>
-

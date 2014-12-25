@@ -25,7 +25,8 @@
       return state;
     }
 
-    function set({user, path, mode:nextMode, name}){
+    function set({user, path, mode:nextMode, name, ready}){
+      console.log(ready);
       var approvedChanges;
       var changed = false;
 

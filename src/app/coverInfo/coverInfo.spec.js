@@ -5,19 +5,22 @@
     var $q;
     var $rootScope;
     var $httpBackend;
+    var appState;
+    var CoverInfoModel;
 
     beforeEach(function(){
       module('unacademic.models',  function($provide){
         $provide.value('baseUrl', '');
         $provide.value('currentUser', currentUser);
+        $provide.value('appState', currentUser);
       });
 
 
-      inject(function(_CoverInfo_, _$httpBackend_, _$rootScope_, _$q_){
+      inject(function(_CoverInfo_, _$httpBackend_, _$q_, _CoverInfoModel_){
         CoverInfo = _CoverInfo_;
         $httpBackend = _$httpBackend_;
-        $rootScope = _$rootScope_;
         $q = _$q_;
+        CoverInfoModel = _CoverInfoModel_;
       });
     });
 
@@ -25,11 +28,15 @@
       var coverInfo;
       var id;
 
+      var data = {
+        title: 'yeehaa'
+      }
+
       beforeEach(function(){
         id = 'general';
         $httpBackend
           .when('GET', '/coverInfo/' + id + '.json')
-          .respond('yeehaa');
+          .respond(data);
 
         CoverInfo.get(id).then(function(data){
           coverInfo = data;
@@ -43,12 +50,17 @@
         $httpBackend.verifyNoOutstandingRequest();
       });
 
-      it("gets the current user", function(){
-        expect(coverInfo).to.equal('yeehaa');
+      it("returns an instance of CoverInfo", function(){
+        console.log(CoverInfoModel);
+        expect(coverInfo).to.be.an.instanceOf(CoverInfoModel);
+      });
+
+      it("gets the info", function(){
+        expect(coverInfo.title).to.equal('yeehaa');
       });
     });
 
-    describe("save", function(){
+    xdescribe("save", function(){
 
       beforeEach(function(){
         var id = 'yeehaa';

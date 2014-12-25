@@ -11,7 +11,7 @@
       replace: true,
       scope: {
         model: '=',
-        actions: '='
+        props: '='
       },
       bindToController: true,
       controllerAs: 'sidebar',

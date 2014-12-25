@@ -19,6 +19,18 @@
 
     updateAppState();
 
+    $scope.$watch('sidebar.model', function(newVal, oldVal){
+      var form = sidebar.form;
+      if(!form.$submitted && form.$dirty){
+        if(form.$valid){
+          appState.set({ready: false});
+          // implement promise here!
+          newVal.save(newVal);
+          appState.set({ready: true});
+        }
+      }
+    }, true);
+
     appState.registerObserverCallback(updateAppState);
 
     function signIn(){
