@@ -6,21 +6,26 @@
     var $rootScope;
     var $httpBackend;
     var appState;
-    var CoverInfoModel;
 
     beforeEach(function(){
+      appState = {
+        get: function(){
+          return {
+            user: '123'
+          }
+        }
+      }
+
       module('unacademic.models',  function($provide){
         $provide.value('baseUrl', '');
-        $provide.value('currentUser', currentUser);
-        $provide.value('appState', currentUser);
+        $provide.value('appState', appState);
       });
 
 
-      inject(function(_CoverInfo_, _$httpBackend_, _$q_, _CoverInfoModel_){
+      inject(function(_CoverInfo_, _$httpBackend_, _$q_){
         CoverInfo = _CoverInfo_;
         $httpBackend = _$httpBackend_;
         $q = _$q_;
-        CoverInfoModel = _CoverInfoModel_;
       });
     });
 
@@ -51,8 +56,7 @@
       });
 
       it("returns an instance of CoverInfo", function(){
-        console.log(CoverInfoModel);
-        expect(coverInfo).to.be.an.instanceOf(CoverInfoModel);
+        expect(coverInfo).to.be.an.instanceOf(CoverInfo);
       });
 
       it("gets the info", function(){

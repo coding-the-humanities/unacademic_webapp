@@ -29,7 +29,6 @@
       var nextMode = _ref.mode;
       var name = _ref.name;
       var ready = _ref.ready;
-      console.log(ready);
       var approvedChanges;
       var changed = false;
 
