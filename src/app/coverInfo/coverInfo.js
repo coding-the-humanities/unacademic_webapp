@@ -1,46 +1,47 @@
 "use strict";
 
-var _classProps = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
 (function () {
-  var app = angular.module("unacademic.models", []);
+  var app = angular.module("unacademic.models", ["unacademic.DS"]);
 
   var description = "Welcome to UnAcademic. We understand that learning is personal. Therefore everything in our interface is fully customizable. Including this landing page. Start your journey by sliding the curation button below.";
 
-  app.factory("CoverInfo", function (baseUrl, $http, $q, appState) {
+  app.factory("CoverInfo", function (baseUrl, $http, $q, DS, appState) {
     var $http = $http;
 
-    var Model = (function () {
-      var Model = function Model(options) {
-        this.title = options.title;
+    var CoverInfo = (function () {
+      var CoverInfo = function CoverInfo(_ref) {
+        var title = _ref.title;
+        var summary = _ref.summary;
+        var description = _ref.description;
+        this.title = title;
         this.curator = appState.get().user;
-        this.summary = options.summary;
-        this.description = options.description;
+        this.summary = summary;
+        this.description = description;
       };
 
-      Model.prototype.save = function () {
-        Model._save(this);
+      CoverInfo.prototype.save = function () {
+        DS.save(this);
       };
 
-      Model.get = function (userId) {
-        return $http.get(baseUrl + "/coverInfo/" + userId + ".json").then(Model.extractData);
+      CoverInfo.get = function (userId) {
+        return DS.get("CoverInfo", userId).then(CoverInfo.createInstance);
       };
 
-      Model.extractData = function (response) {
+      CoverInfo.createInstance = function (data) {
+        var coverInfo;
+
         return $q(function (resolve, reject) {
-          var coverInfo = new Model(response.data);
+          if (data) {
+            coverInfo = new CoverInfo(data);
+          } else {
+            coverInfo = new CoverInfo(CoverInfo.seed());
+          }
+
           resolve(coverInfo);
         });
       };
 
-      Model._save = function (coverInfo) {
-        return $http.put(coverInfo.url, coverInfo);
-      };
-
-      Model.schema = function () {
+      CoverInfo.schema = function () {
         return {
           type: "object",
           properties: {
@@ -61,28 +62,18 @@ var _classProps = function (child, staticProps, instanceProps) {
         };
       };
 
-      Model.seed = function () {
-        var coverInfo = {
+      CoverInfo.seed = function () {
+        return {
           title: "ReAcademic",
           summary: "Learning by Dwelling",
           description: description,
           paths: ["hello"]
         };
-
-        return Model.save(coverInfo, "general");
       };
 
-      _classProps(Model, null, {
-        url: {
-          get: function () {
-            return baseUrl + "/coverInfo/" + this.curator + ".json";
-          }
-        }
-      });
-
-      return Model;
+      return CoverInfo;
     })();
 
-    return Model;
+    return CoverInfo;
   });
 })();

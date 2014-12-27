@@ -20,7 +20,7 @@
     
     function save(instance){
       var url = generateUrl(instance.constructor.name, instance.curator);
-      return $http.put(url);
+      return $http.put(url, instance);
     }
 
     function extractData(response){
@@ -32,7 +32,8 @@
     
     function generateUrl(modelName, userId){
       var resourceName = generateResourceName(modelName);
-      return baseUrl + '/' + resourceName + '/' + userId + '.json';
+      var url = baseUrl + '/' + resourceName + '/' + userId + '.json';
+      return url;
     }
     
     function generateResourceName(modelName){

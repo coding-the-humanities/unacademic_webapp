@@ -54,9 +54,11 @@
 
       it("saves the info", function(){
         var instance = new CoverInfo(userId);
+
         DS.save(instance).then(function(data){
           expect(data.status).to.equal(200);
         });
+
         $httpBackend.flush();
       });
 

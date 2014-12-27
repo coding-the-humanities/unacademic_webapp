@@ -4,6 +4,7 @@
     'templates-app',
     'schemaForm',
     'contenteditable',
+    'unacademic.DS',
     'unacademic.common',
     'unacademic.models',
     'unacademic.paths',
