@@ -1,13 +1,13 @@
 (function(){
 
-  describe("DS", function(){
-    var DS;
+  describe("DataStore", function(){
+    var DataStore;
     var $httpBackend;
     var userId;
     var url;
 
     beforeEach(function(){
-      module('unacademic.DS',  function($provide){
+      module('unacademic.DataStore',  function($provide){
         $provide.value('baseUrl', '');
       });
 
@@ -17,8 +17,8 @@
 
       url = '/' + resourceName + '/' + userId + '.json';
 
-      inject(function(_DS_, _$httpBackend_, _$q_){
-        DS = _DS_;
+      inject(function(_DataStore_, _$httpBackend_, _$q_){
+        DataStore = _DataStore_;
         $httpBackend = _$httpBackend_;
         $q = _$q_;
       });
@@ -38,7 +38,7 @@
       });
 
       it("gets the info", function(){
-        DS.get('CoverInfo', userId).then(function(data){
+        DataStore.get('CoverInfo', userId).then(function(data){
           expect(data.user).to.equal(userId);
         });
 
@@ -55,7 +55,7 @@
       it("saves the info", function(){
         var instance = new CoverInfo(userId);
 
-        DS.save(instance).then(function(data){
+        DataStore.save(instance).then(function(data){
           expect(data.status).to.equal(200);
         });
 

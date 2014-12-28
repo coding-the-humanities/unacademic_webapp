@@ -1,13 +1,13 @@
 (function(){
 
 
-  var app = angular.module('unacademic.DS', [
+  var app = angular.module('unacademic.DataStore', [
   ]);
 
-  app.factory('DS', DS);
+  app.factory('DataStore', DataStore);
 
 
-  function DS(baseUrl, $http, $q){
+  function DataStore(baseUrl, $http, $q){
     return {
       get: get,
       save: save

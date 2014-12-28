@@ -4,7 +4,6 @@
     'templates-app',
     'schemaForm',
     'contenteditable',
-    'unacademic.DS',
     'unacademic.common',
     'unacademic.models',
     'unacademic.paths',
@@ -19,6 +18,6 @@
 
   app.constant('baseUrl', 'https://cth-curriculum.firebaseio.com/');
 
-  // app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
+  //app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
 
 })();

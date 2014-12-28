@@ -85,6 +85,7 @@ module.exports = function(grunt) {
         src: [
           '<%= vendor_files.js %>',
           '<%= build_dir %>/src/app/app.js',
+          '<%= build_dir %>/src/app/models/models.js',
           '<%= build_dir %>/src/app/paths/paths.js',
           '<%= build_dir %>/src/app/points/points.js',
           '<%= build_dir %>/src/app/sidebar/sidebar.js',
@@ -103,6 +104,7 @@ module.exports = function(grunt) {
           '<%= vendor_files.js %>',
           '<%= html2js.app.dest %>',
           '<%= build_dir %>/src/app/app.js',
+          '<%= build_dir %>/src/app/models/models.js',
           '<%= build_dir %>/src/app/paths/paths.js',
           '<%= build_dir %>/src/app/points/points.js',
           '<%= build_dir %>/src/app/sidebar/sidebar.js',

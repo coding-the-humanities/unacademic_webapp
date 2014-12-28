@@ -10,7 +10,7 @@
     vm.paths = [];
 
     vm.props = {
-      schema: CoverInfo.schema(),
+      schema: CoverInfo.schema,
       learning: ['summary', 'description'],
       curation: [
         {
