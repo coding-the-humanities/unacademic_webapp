@@ -1,8 +1,7 @@
 (function(){
 
-  var app = angular.module('unacademic.models.coverInfo', []);
-
-  app.factory('CoverInfo', CoverInfoInit);
+  angular.module('unacademic.models.coverInfo', [])
+         .factory('CoverInfo', CoverInfoInit);
 
   function CoverInfoInit(BaseClass, schema, initData){
 
