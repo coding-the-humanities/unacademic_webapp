@@ -1,9 +1,10 @@
 "use strict";
 
 (function () {
-  var app = angular.module("unacademic.DataStore", []);
+  "use strict";
 
-  app.factory("DataStore", DataStore);
+
+  angular.module("unacademic.DataStore", []).factory("DataStore", DataStore);
 
 
   function DataStore(baseUrl, $http, $q) {
@@ -31,7 +32,7 @@
 
     function generateUrl(modelName, userId) {
       var resourceName = generateResourceName(modelName);
-      var url = baseUrl + "/" + resourceName + "/" + userId + ".json";
+      var url = "" + baseUrl + "/" + resourceName + "/" + userId + ".json";
       return url;
     }
 

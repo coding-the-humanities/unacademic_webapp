@@ -1,38 +1,36 @@
-(function(){
-  var app = angular.module('unacademic.common.appState', [
-    'unacademic.common.currentUser',
-    'unacademic.common.mode',
-    'unacademic.common.permission'
-  ]);
+(() => {
 
-  app.factory('appState', appState);
+  'use strict';
 
-  function appState($log, currentUser, mode, permission, $state){
-    var observerCallbacks = [];
+  angular.module('unacademic.common.dispatcher', [])
+         .factory('dispatcher', dispatcher);
+
+  function dispatcher($log, lock, currentUser, mode, permission, $state){
+    let observerCallbacks = [];
 
     return {
-      get: get,
-      set: set,
+      getState: get,
+      setState: set,
       registerObserverCallback: registerObserverCallback
     }
 
     function get(){
-      var state = {
+      return {
         mode: mode.get(),
         user: currentUser.getId(),
-        name: $state.current.name
+        name: $state.current.name,
+        lock: lock.getState()
       }
-      return state;
     }
 
-    function set({user, path, mode:nextMode, name, ready}){
-      var approvedChanges;
-      var changed = false;
+    function set({user, path, mode:nextMode, name, lock:lockState}){
+      let approvedChanges;
+      let changed = false;
 
-      var currentState = get();
-      var nextState = createNextState(currentState, user, nextMode, name);
+      let currentState = get();
+      let nextState = createNextState(currentState, user, nextMode, name, lockState);
 
-      approvedChanges = permission.get(currentState, nextState);
+      approvedChanges = permission.get(nextState, currentState);
 
       if(_.isEmpty(approvedChanges)){
         return false;
@@ -46,13 +44,13 @@
 
       notifyObservers();
 
-      var state = get();
+      let state = get();
       $log.log(state);
       return true;
     }
 
-    function createNextState(currentState, user, nextMode, name){
-      var state = _.clone(currentState);
+    function createNextState(currentState, user, nextMode, name, lockState){
+      let state = _.clone(currentState);
 
       if(user){
         state.user = user;
@@ -66,11 +64,14 @@
         state.name = name;
       }
 
+      if(lockState){
+        state.lock = lockState;
+      }
+
       return state;
     }
 
-    function setServicesState({user, name, mode:nextMode}){
-
+    function setServicesState({user, name, mode:nextMode, lock:lockState}){
       if(user){
         currentUser.setId(user);
       }
@@ -81,6 +82,10 @@
 
       if(nextMode){
         mode.set(nextMode);
+      }
+
+      if(lockState){
+        lock.setState(lockState);
       }
     }
 

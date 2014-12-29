@@ -1,41 +1,49 @@
 (function(){
-  var app = angular.module('unacademic.sidebar.controller', [
-    'unacademic.common.appState',
-  ]);
+  'use strict';
 
-  app.controller('Sidebar', Sidebar);
+  angular.module('unacademic.sidebar.controller', [])
+         .controller('Sidebar', Sidebar);
 
-  function Sidebar($scope, appState, currentUser){
+  function Sidebar($scope, dispatcher){
+
     var sidebar = this;
 
     sidebar.signIn = signIn;
     sidebar.changeMode = changeMode;
 
-    var updateAppState = function(){
-      var state = appState.get();
+    initialize();
+
+    $scope.$watch('sidebar.model', function(newVal, oldVal){
+      var form = sidebar.form;
+
+      if(form.$dirty){
+        dispatcher.setState({lock: 'closed'});
+      }
+
+      if(form.$valid){
+        form.$setPristine();
+        newVal.save(newVal).then(function(){
+          dispatcher.setState({lock: 'open'});
+        });
+      }
+
+    }, true);
+
+    function initialize(){
+      updateAppState();
+      dispatcher.registerObserverCallback(updateAppState);
+    }
+
+
+    function updateAppState(){
+      var state = dispatcher.getState();
       sidebar.user = state.user;
       sidebar.mode = state.mode;
     }
 
-    updateAppState();
-
-    $scope.$watch('sidebar.model', function(newVal, oldVal){
-      var form = sidebar.form;
-      if(!form.$submitted && form.$dirty){
-        if(form.$valid){
-          appState.set({ready: false});
-          // implement promise here!
-          newVal.save(newVal);
-          appState.set({ready: true});
-        }
-      }
-    }, true);
-
-    appState.registerObserverCallback(updateAppState);
-
     function signIn(){
 
-      appState.set({
+      dispatcher.setState({
         user: 'yeehaa',
         mode: 'learning',
       });
@@ -44,9 +52,9 @@
 
     function changeMode(){
       if(sidebar.mode === 'learning'){
-        return appState.set({mode: 'curation'});
+        return dispatcher.setState({mode: 'curation'});
       }
-      return appState.set({mode: 'learning'});
+      return dispatcher.setState({mode: 'learning'});
     }
   }
 })();

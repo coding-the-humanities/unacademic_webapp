@@ -1,6 +1,8 @@
 "use strict";
 
 (function () {
+  "use strict";
+
   angular.module("unacademic.models.baseClass", []).factory("BaseClass", initBaseClass);
 
   function initBaseClass($http, $q, DataStore) {
@@ -8,18 +10,18 @@
       var BaseClass = function BaseClass(data) {
         var _this = this;
         var schema = this.constructor.schema;
-        var keys = _.keys(schema.properties);
-        _.each(keys, function (key) {
-          _this[key] = data[key];
+        var props = _.keys(schema.properties);
+        _.each(props, function (prop) {
+          _this[prop] = data[prop];
         });
       };
 
       BaseClass.prototype.save = function () {
-        DataStore.save(this);
+        return DataStore.save(this);
       };
 
       BaseClass.get = function (userId) {
-        var extractData = _.bind(this.extractData, this);
+        var extractData = _.bind(_extractData, this);
 
         return DataStore.get(this.name, userId).then(extractData);
       };
@@ -34,7 +36,7 @@
       return BaseClass;
     })();
 
-    BaseClass.extractData = function (data) {
+    function _extractData(data) {
       if (data) {
         return new this(data);
       }

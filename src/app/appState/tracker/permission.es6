@@ -11,7 +11,7 @@
       get: get
     }
 
-    function get(currentState, nextState) {
+    function get(nextState, currentState) {
 
       var valid = checkPermissions(currentState, nextState);
 
@@ -22,11 +22,21 @@
       var intersection =  _.omit(nextState, function(value, key){
         return currentState[key] === value;
       });
+      
+
+      if(intersection.lock === 'closed'){
+        return {lock: 'closed'};
+      }
 
       return intersection;
     }
 
     function checkPermissions(currentState, nextState){
+
+      if(currentState.lock === 'closed' && nextState.lock !== 'open'){
+        $log.warn('app is locked');
+        return false;
+      }
 
       if(!_.contains(modes, nextState.mode)){
         $log.warn('invalid appmode');

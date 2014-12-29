@@ -19,8 +19,8 @@
         controllerAs: 'index',
         templateUrl: 'paths/views/index.html',
         resolve: {
-          coverInfo: function(CoverInfo, appState){
-            var id = appState.get().user || 'general';
+          coverInfo: function(CoverInfo, dispatcher){
+            var id = dispatcher.getState().user || 'general';
             return CoverInfo.get(id)
           }
         }

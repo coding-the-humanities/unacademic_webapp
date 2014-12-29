@@ -1,10 +1,10 @@
-(function(){
+(() => {
+
+  'use strict';
 
 
-  var app = angular.module('unacademic.DataStore', [
-  ]);
-
-  app.factory('DataStore', DataStore);
+  angular.module('unacademic.DataStore', [])
+         .factory('DataStore', DataStore);
 
 
   function DataStore(baseUrl, $http, $q){
@@ -14,25 +14,25 @@
     };
     
     function get(modelName, userId){
-      var url = generateUrl(modelName, userId);
+      let url = generateUrl(modelName, userId);
       return $http.get(url).then(extractData);
     }
     
     function save(instance){
-      var url = generateUrl(instance.constructor.name, instance.curator);
+      let url = generateUrl(instance.constructor.name, instance.curator);
       return $http.put(url, instance);
     }
 
     function extractData(response){
       return $q(function(resolve, reject){
-        var data = response.data;
+        let data = response.data;
         resolve(data);
       });
     }
     
     function generateUrl(modelName, userId){
-      var resourceName = generateResourceName(modelName);
-      var url = baseUrl + '/' + resourceName + '/' + userId + '.json';
+      let resourceName = generateResourceName(modelName);
+      let url = `${baseUrl}/${resourceName}/${userId}.json`;
       return url;
     }
     

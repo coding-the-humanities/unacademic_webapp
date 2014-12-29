@@ -19,27 +19,102 @@
 
     describe("general", function(){
 
-      beforeEach(function(){
+      describe("invalid app mode", function(){
+        beforeEach(function(){
 
-        currentState = {
-          user: 'yeehaa',
-          mode: 'learning',
-          name: '123'
-        }
+          currentState = {
+            user: 'yeehaa',
+            mode: 'learning',
+            name: '123'
+          }
 
-        nextState = {
-          user: 'yeehaa',
-          mode: 'bla',
-          name: '123'
-        }
+          nextState = {
+            user: 'yeehaa',
+            mode: 'bla',
+            name: '123'
+          }
 
-        isAllowed = permission.get(currentState, nextState);
+          isAllowed = permission.get(nextState, currentState);
+        });
+
+        it("is not allowed to switch", function(){
+          expect(isAllowed).to.be.false;
+          expect($log.warn.logs.length).to.equal(1);
+          expect($log.warn.logs[0][0]).to.contain('appmode');
+        });
+      });
+    });
+
+    describe("lock", function(){
+      describe("it is closed", function(){
+        beforeEach(function(){
+
+          currentState = {
+            lock: 'closed',
+            mode: 'learning',
+            user: 'yeehaa'
+          }
+
+          nextState = {
+            lock: undefined,
+            mode: 'curation',
+            user: 'yeehaa'
+          }
+
+          isAllowed = permission.get(nextState, currentState);
+        });
+
+        it("is not allowed to switch", function(){
+          expect(isAllowed).to.be.false;
+          expect($log.warn.logs.length).to.equal(1);
+          expect($log.warn.logs[0][0]).to.contain('locked');
+        });
       });
 
-      it("is not allowed to an invalid app mode", function(){
-        expect(isAllowed).to.be.false;
-        expect($log.warn.logs.length).to.equal(1);
-        expect($log.warn.logs[0][0]).to.contain('appmode');
+      describe("it gets closed", function(){
+        beforeEach(function(){
+
+          currentState = {
+            lock: 'open',
+            mode: 'learning',
+            user: 'yeehaa'
+          }
+
+          nextState = {
+            lock: 'closed',
+            mode: 'curation',
+            user: 'yeehaa'
+          }
+
+          isAllowed = permission.get(nextState, currentState);
+        });
+
+        it("only returns the state of the lock", function(){
+          expect(isAllowed).to.eql({lock: 'closed'});
+        });
+      });
+
+      describe("it gets opened", function(){
+        beforeEach(function(){
+
+          currentState = {
+            lock: 'closed',
+            mode: 'learning',
+            user: 'yeehaa'
+          }
+
+          nextState = {
+            lock: 'open',
+            mode: 'curation',
+            user: 'yeehaa'
+          }
+
+          isAllowed = permission.get(nextState, currentState);
+        });
+
+        it("only returns all changes", function(){
+          expect(isAllowed).to.eql({lock: 'open', mode: 'curation'});
+        });
       });
     });
 
@@ -63,7 +138,7 @@
           name: '123'
         }
 
-        isAllowed = permission.get(currentState, nextState);
+        isAllowed = permission.get(nextState, currentState);
         expect(isAllowed).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('signing in');
@@ -77,7 +152,7 @@
           name: '123'
         }
 
-        isAllowed = permission.get(currentState, nextState);
+        isAllowed = permission.get(nextState, currentState);
         expect(isAllowed).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('signing in');
@@ -91,7 +166,7 @@
           name: '345'
         }
 
-        isAllowed = permission.get(currentState, nextState);
+        isAllowed = permission.get(nextState, currentState);
         expect(isAllowed).to.eql({name: '345'});
       });
     });
@@ -116,7 +191,7 @@
           name: '123'
         }
 
-        isAllowed = permission.get(currentState, nextState);
+        isAllowed = permission.get(nextState, currentState);
         expect(isAllowed).to.eql({mode: 'curation'});
       });
 
@@ -128,7 +203,7 @@
           name: '123'
         }
 
-        isAllowed = permission.get(currentState, nextState);
+        isAllowed = permission.get(nextState, currentState);
         expect(isAllowed).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('browsing mode');
@@ -154,7 +229,7 @@
           name: '123'
         }
 
-        isAllowed = permission.get(currentState, nextState);
+        isAllowed = permission.get(nextState, currentState);
         expect(isAllowed).to.eql({mode: 'learning'});
       });
 
@@ -166,7 +241,7 @@
           name: '123'
         }
 
-        isAllowed = permission.get(currentState, nextState);
+        isAllowed = permission.get(nextState, currentState);
         expect(isAllowed).to.be.false;
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('browsing mode');

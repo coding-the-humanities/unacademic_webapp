@@ -1,9 +1,8 @@
 (function(){
-  var app = angular.module('unacademic.paths.controllers.index', []);
+  angular.module('unacademic.paths.controllers.index', [])
+         .controller('Index', Index);
 
-  app.controller('Index', Index);
-
-  function Index(CoverInfo, $q, appState, coverInfo) {
+  function Index(CoverInfo, $q, dispatcher, coverInfo) {
 
     var vm = this;
 
@@ -30,10 +29,10 @@
     };
     vm.info = coverInfo;
 
-    appState.registerObserverCallback(updateInfo);
+    dispatcher.registerObserverCallback(updateInfo);
 
     function updateInfo(id){
-      var id = id || appState.get().user;
+      var id = id || dispatcher.getState().user;
       CoverInfo.get(id).then(function(data){
         vm.info = data;
       })

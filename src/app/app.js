@@ -5,10 +5,10 @@
     'schemaForm',
     'contenteditable',
     'unacademic.common',
+    'unacademic.sidebar',
     'unacademic.models',
     'unacademic.paths',
-    'unacademic.points',
-    'unacademic.sidebar'
+    'unacademic.points'
   ]);
 
   /*@ngInject*/

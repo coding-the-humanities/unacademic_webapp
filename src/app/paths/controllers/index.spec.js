@@ -8,7 +8,7 @@
     var saveInfoSpy;
     var setAppStateSpy;
     var getAppStateSpy;
-    var appStateObserverSpy;
+    var dispatcherObserverSpy;
 
     beforeEach(function () {
       module('unacademic.paths.controllers.index');
@@ -29,7 +29,7 @@
         schema: function(){}
       };
 
-      var appState = {
+      var dispatcher = {
         set: function(){ return; },
         get: function(){ return { user: ''} },
         registerObserverCallback: function(){ return; }
@@ -37,16 +37,16 @@
 
       getInfoSpy = sinon.spy(CoverInfo, 'get');
       saveInfoSpy = sinon.spy(CoverInfo, 'save');
-      setAppStateSpy = sinon.spy(appState, 'set');
-      getAppStateSpy = sinon.spy(appState, 'get');
-      appStateObserverSpy = sinon.spy(appState, 'registerObserverCallback');
+      setAppStateSpy = sinon.spy(dispatcher, 'set');
+      getAppStateSpy = sinon.spy(dispatcher, 'get');
+      dispatcherObserverSpy = sinon.spy(dispatcher, 'registerObserverCallback');
 
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
         index = $controller('Index', {
           CoverInfo: CoverInfo,
-          appState: appState,
+          dispatcher: dispatcher,
           coverInfo: {}
         });
       });
@@ -58,11 +58,11 @@
         $scope.$apply();
       });
 
-      it("registers the appState observer callback", function(){
-        expect(appStateObserverSpy).to.have.been.calledOnce;
+      it("registers the dispatcher observer callback", function(){
+        expect(dispatcherObserverSpy).to.have.been.calledOnce;
       });
 
-      it("calls appState  to get the user id", function(){
+      it("calls dispatcher  to get the user id", function(){
         expect(getAppStateSpy).not.to.have.been.called;
       });
 
