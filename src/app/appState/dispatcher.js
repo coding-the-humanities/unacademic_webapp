@@ -16,11 +16,12 @@
     };
 
     function get() {
-      return {
+      var state = {
         mode: mode.get(),
         user: currentUser.getId(),
         name: $state.current.name,
         queue: queue.get() };
+      return state;
     }
 
     function set(_ref) {
@@ -89,7 +90,7 @@
     }
 
     function setQueue(options) {
-      queue.set(options);
+      return queue.set(options);
     }
 
     function registerObserverCallback(callback) {

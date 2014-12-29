@@ -127,10 +127,14 @@
           form.$dirty = true;
           form.$valid = false;
           dispatcherMock.expects('queue')
-            .withArgs({add: 'object_hello_world'})
-            .once();
+            .withArgs({register: 'object'})
+            .once()
+            .returns('object_123')
           dispatcherMock.expects('queue')
-            .withArgs({remove: 'object_hello_world'})
+            .withArgs({add: 'object_123'})
+            .once()
+          dispatcherMock.expects('queue')
+            .withArgs({remove: 'object_123'})
             .never();
           $scope.$digest();
         });
@@ -151,10 +155,14 @@
           form.$dirty = true;
           form.$valid = true;
           dispatcherMock.expects('queue')
-            .withArgs({add: 'object_hello_world'})
-            .once();
+            .withArgs({register: 'object'})
+            .once()
+            .returns('object_123')
           dispatcherMock.expects('queue')
-            .withArgs({remove: 'object_hello_world'})
+            .withArgs({add: 'object_123'})
+            .once()
+          dispatcherMock.expects('queue')
+            .withArgs({remove: 'object_123'})
             .once();
           $scope.$digest();
         });

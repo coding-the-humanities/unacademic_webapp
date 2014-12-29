@@ -4,6 +4,7 @@
   angular.module("unacademic.common.queue", []).factory("queue", queue);
 
   function queue($log) {
+    var count = 0;
     var queue = new Set();
 
     return {
@@ -17,22 +18,27 @@
     function set(_ref) {
       var add = _ref.add;
       var remove = _ref.remove;
+      var register = _ref.register;
 
 
-      if (add && remove) {
-        $log.warn("it is not possible to add and remove at the same time");
-        return false;
+      if (register) {
+        var modelId = "" + register + "_" + count;
+        count += 1;
+        return modelId;
       }
+
 
       if (add) {
         queue.add(add);
+        return true;
       }
 
       if (remove) {
         queue["delete"](remove);
+        return true;
       }
 
-      return true;
+      return false;
     }
   };
 })();

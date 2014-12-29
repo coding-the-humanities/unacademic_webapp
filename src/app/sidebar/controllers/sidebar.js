@@ -7,6 +7,7 @@
   function Sidebar($scope, dispatcher){
 
     var sidebar = this;
+    var modelId;
 
     initialize();
 
@@ -28,9 +29,13 @@
 
     function saveFormData(newVal, oldVal){
       var form = sidebar.form;
-      var modelId = createModelId(newVal);
+      var modelName = newVal.constructor.name.toLowerCase();
+
 
       if(form.$dirty){
+        if(!modelId){
+          modelId = dispatcher.queue({register: modelName});
+        }
         dispatcher.queue({add: modelId});
       }
 
@@ -40,14 +45,6 @@
           dispatcher.queue({remove: modelId});
         });
       }
-    }
-
-    function createModelId(model){
-      var modelName = model.constructor.name;
-      var title = model.title;
-      var tempModelId  = modelName + " " + title;
-      var modelId = tempModelId.split(" ").join("_").toLowerCase();
-      return modelId;
     }
 
     function signIn(){

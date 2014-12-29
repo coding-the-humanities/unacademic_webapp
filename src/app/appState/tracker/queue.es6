@@ -4,6 +4,7 @@
 
   function queue($log){
 
+    var count = 0;
     var queue = new Set();
 
     return {
@@ -15,22 +16,26 @@
       return queue;
     }
 
-    function set({add, remove}){
-
-      if(add && remove){
-        $log.warn('it is not possible to add and remove at the same time');
-        return false;
+    function set({add, remove, register}){
+     
+      if(register){
+        var modelId = `${register}_${count}`;
+        count += 1;
+        return modelId;
       }
+
 
       if(add){
         queue.add(add);
+        return true;
       }
 
       if(remove){
         queue.delete(remove);
+        return true;
       }
 
-      return true;
+      return false;
     }
   };
 })();

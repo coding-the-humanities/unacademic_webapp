@@ -23,9 +23,27 @@
       describe("set", function(){
         var returnValue;
 
+        describe("registering models", function(){
+          describe("first one", function(){
+            beforeEach(function(){
+              returnValue = queue.set({register: 'object'});
+            });
+
+            it("returns an id", function(){
+              expect(returnValue).to.equal('object_0');
+            });
+
+            it("increments the count", function(){
+              returnValue = queue.set({register: 'object'});
+              expect(returnValue).to.equal('object_1');
+            });
+
+          });
+        })
+
         describe("adding models", function(){
           beforeEach(function(){
-            returnValue = queue.set({add: '123'});
+            returnValue = queue.set({add: 'object_123'});
           });
 
           it("should return true", function(){
@@ -52,14 +70,6 @@
             expect(queue.get().size).to.equal(1);
           });
         });
-
-        it("is not possible to add and remove at the same time", function(){
-          returnValue = queue.set({add: '123', remove: '345'});
-          expect($log.warn.logs.length).to.equal(1);
-          expect($log.warn.logs[0][0]).to.contain('add and remove');
-          expect(returnValue).to.be.false;
-        });
-
       })
     })
   });

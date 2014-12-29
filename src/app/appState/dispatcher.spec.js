@@ -10,8 +10,8 @@
     var getModeSpy;
     var setModeSpy;
 
-    var getQueueSpy;
-    var setQueueSpy;
+    var getQueueStub;
+    var setQueueStub;
 
     var getPathSpy;
 
@@ -51,8 +51,8 @@
       getModeSpy = sinon.spy(mode, 'get');
       setModeSpy = sinon.spy(mode, 'set');
 
-      getQueueSpy = sinon.stub(queue, 'get').returns([]);
-      setQueueSpy = sinon.spy(queue, 'set');
+      getQueueStub = sinon.stub(queue, 'get').returns([]);
+      setQueueStub = sinon.stub(queue, 'set').returns('123');
 
       setNameSpy = sinon.spy($state, 'go')
 
@@ -96,7 +96,7 @@
       });
 
       it("current state of the queue", function(){
-        expect(getQueueSpy).calledOnce;
+        expect(getQueueStub).calledOnce;
       });
     });
 
@@ -222,8 +222,9 @@
 
     describe("queue", function(){
       it("delegates to the queue service", function(){
-        dispatcher.queue();
-        expect(setQueueSpy).calledOnce;
+        var returnValue = dispatcher.queue();
+        expect(setQueueStub).calledOnce;
+        expect(returnValue).to.equal('123');
       });
     });
   });
