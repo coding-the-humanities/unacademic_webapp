@@ -5,12 +5,13 @@
   angular.module('unacademic.common.dispatcher', [])
          .factory('dispatcher', dispatcher);
 
-  function dispatcher($log, lock, currentUser, mode, permission, $state){
+  function dispatcher($log, queue, currentUser, mode, permission, $state){
     let observerCallbacks = [];
 
     return {
       getState: get,
       setState: set,
+      queue: setQueue,
       registerObserverCallback: registerObserverCallback
     }
 
@@ -19,16 +20,16 @@
         mode: mode.get(),
         user: currentUser.getId(),
         name: $state.current.name,
-        lock: lock.getState()
+        queue: queue.get(),
       }
     }
 
-    function set({user, path, mode:nextMode, name, lock:lockState}){
+    function set({user, path, mode:nextMode, name}){
       let approvedChanges;
       let changed = false;
 
       let currentState = get();
-      let nextState = createNextState(currentState, user, nextMode, name, lockState);
+      let nextState = createNextState(currentState, user, nextMode, name);
 
       approvedChanges = permission.get(nextState, currentState);
 
@@ -49,7 +50,7 @@
       return true;
     }
 
-    function createNextState(currentState, user, nextMode, name, lockState){
+    function createNextState(currentState, user, nextMode, name){
       let state = _.clone(currentState);
 
       if(user){
@@ -64,14 +65,10 @@
         state.name = name;
       }
 
-      if(lockState){
-        state.lock = lockState;
-      }
-
       return state;
     }
 
-    function setServicesState({user, name, mode:nextMode, lock:lockState}){
+    function setServicesState({user, name, mode:nextMode}){
       if(user){
         currentUser.setId(user);
       }
@@ -83,10 +80,10 @@
       if(nextMode){
         mode.set(nextMode);
       }
+    }
 
-      if(lockState){
-        lock.setState(lockState);
-      }
+    function setQueue(options){
+      queue.set(options);
     }
 
     function registerObserverCallback(callback){

@@ -10,8 +10,8 @@
     var getModeSpy;
     var setModeSpy;
 
-    var getLockStateSpy;
-    var setLockStateSpy;
+    var getQueueSpy;
+    var setQueueSpy;
 
     var getPathSpy;
 
@@ -24,10 +24,10 @@
         set: function(){}
       };
 
-      var lock = {
-        getState: function(){},
-        setState: function(){}
-      };
+      var queue = {
+        get: function(){},
+        set: function(){}
+      }
 
       var currentUser = {
         setId: function(){},
@@ -51,8 +51,8 @@
       getModeSpy = sinon.spy(mode, 'get');
       setModeSpy = sinon.spy(mode, 'set');
 
-      getLockStateSpy = sinon.spy(lock, 'getState');
-      setLockStateSpy = sinon.spy(lock, 'setState');
+      getQueueSpy = sinon.stub(queue, 'get').returns([]);
+      setQueueSpy = sinon.spy(queue, 'set');
 
       setNameSpy = sinon.spy($state, 'go')
 
@@ -61,7 +61,7 @@
       module('unacademic.common.dispatcher',  function($provide){
         $provide.value('permission', permission);
         $provide.value('mode', mode);
-        $provide.value('lock', lock);
+        $provide.value('queue', queue);
         $provide.value('currentUser', currentUser);
         $provide.value('$state', $state);
       });
@@ -95,8 +95,8 @@
         expect(state.name).to.equal('123');
       });
 
-      it("current state of the locked", function(){
-        expect(getLockStateSpy).calledOnce;
+      it("current state of the queue", function(){
+        expect(getQueueSpy).calledOnce;
       });
     });
 
@@ -127,8 +127,8 @@
 
         it("does not set any value", function(){
           expect(setCurrentUserSpy).not.called;
+          expect(setNameSpy).not.called;
           expect(setModeSpy).not.called;
-          expect(setLockStateSpy).not.called;
         });
 
         it("does not log state", function(){
@@ -145,10 +145,10 @@
           }
 
           var proposedState = {
-            lock: undefined,
             mode: 'learning',
             name: '123',
-            user: undefined
+            user: undefined,
+            queue: []
           }
 
           permissionMock.expects('get')
@@ -166,7 +166,6 @@
           expect(setCurrentUserSpy).not.called;
           expect(setNameSpy).not.called;
           expect(setModeSpy).calledWith('learning');
-          expect(setLockStateSpy).not.called;
         });
 
         it("notifies observers", function(){
@@ -185,14 +184,13 @@
             mode: 'learning',
             name: '123',
             user: 'yeehaa',
-            lock: 'locked' 
           }
 
           var proposedState = {
-            lock: 'locked',
             mode: 'learning',
             name: '123',
-            user: 'yeehaa'
+            user: 'yeehaa',
+            queue: []
           }
 
           permissionMock.expects('get')
@@ -210,7 +208,6 @@
           expect(setCurrentUserSpy).calledWith('yeehaa');
           expect(setModeSpy).calledWith('learning');
           expect(setNameSpy).calledWith('123');
-          expect(setLockStateSpy).calledWith('locked');
         });
 
         it("notifies observers", function(){
@@ -222,5 +219,13 @@
         });
       });
     });
+
+    describe("queue", function(){
+      it("delegates to the queue service", function(){
+        dispatcher.queue();
+        expect(setQueueSpy).calledOnce;
+      });
+    });
   });
+
 })();

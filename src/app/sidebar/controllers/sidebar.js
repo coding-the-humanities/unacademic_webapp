@@ -8,37 +8,46 @@
 
     var sidebar = this;
 
-    sidebar.signIn = signIn;
-    sidebar.changeMode = changeMode;
-
     initialize();
 
-    $scope.$watch('sidebar.model', function(newVal, oldVal){
-      var form = sidebar.form;
-
-      if(form.$dirty){
-        dispatcher.setState({lock: 'closed'});
-      }
-
-      if(form.$valid){
-        form.$setPristine();
-        newVal.save(newVal).then(function(){
-          dispatcher.setState({lock: 'open'});
-        });
-      }
-
-    }, true);
-
     function initialize(){
-      updateAppState();
-      dispatcher.registerObserverCallback(updateAppState);
-    }
+      sidebar.signIn = signIn;
+      sidebar.changeMode = changeMode;
 
+      updateAppState();
+
+      dispatcher.registerObserverCallback(updateAppState);
+      $scope.$watch('sidebar.model', saveFormData, true);
+    }
 
     function updateAppState(){
       var state = dispatcher.getState();
       sidebar.user = state.user;
       sidebar.mode = state.mode;
+    }
+
+    function saveFormData(newVal, oldVal){
+      var form = sidebar.form;
+      var modelId = createModelId(newVal);
+
+      if(form.$dirty){
+        dispatcher.queue({add: modelId});
+      }
+
+      if(form.$valid){
+        form.$setPristine();
+        newVal.save(newVal).then(function(){
+          dispatcher.queue({remove: modelId});
+        });
+      }
+    }
+
+    function createModelId(model){
+      var modelName = model.constructor.name;
+      var title = model.title;
+      var tempModelId  = modelName + " " + title;
+      var modelId = tempModelId.split(" ").join("_").toLowerCase();
+      return modelId;
     }
 
     function signIn(){
@@ -47,7 +56,6 @@
         user: 'yeehaa',
         mode: 'learning',
       });
-
     };
 
     function changeMode(){

@@ -3,7 +3,7 @@
     'unacademic.common.dispatcher',
     'unacademic.common.currentUser',
     'unacademic.common.mode',
-    'unacademic.common.lock',
+    'unacademic.common.queue',
     'unacademic.common.permission'
   ]);
 })();

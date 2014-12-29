@@ -23,6 +23,7 @@
         return currentState[key] === value;
       });
 
+      delete intersection.queue;
 
       if (intersection.lock === "closed") {
         return { lock: "closed" };
@@ -32,7 +33,7 @@
     }
 
     function checkPermissions(currentState, nextState) {
-      if (currentState.lock === "closed" && nextState.lock !== "open") {
+      if (nextState.queue.size > 0) {
         $log.warn("app is locked");
         return false;
       }

@@ -24,6 +24,7 @@ module.exports = {
   vendor_files: {
     js: [
       'vendor/lodash/dist/lodash.js',
+      'vendor/es6-collections/es6-collections.js',
       'vendor/angular/angular.js',
       'vendor/angular-sanitize/angular-sanitize.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',

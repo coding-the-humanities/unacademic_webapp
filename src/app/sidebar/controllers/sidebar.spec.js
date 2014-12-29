@@ -11,6 +11,7 @@
       var dispatcher = {
         getState: function(){},
         setState: function(){},
+        queue: function(){},
         registerObserverCallback: function(){}
       };
 
@@ -86,7 +87,8 @@
         var model = {
           save: function(){
             return $q.when();
-          }
+          },
+          title: 'hello world'
         };
 
         form = {
@@ -104,7 +106,7 @@
       describe("when the form is dirty and invalid", function(){
 
         beforeEach(function(){
-          dispatcherMock.expects('setState').never();
+          dispatcherMock.expects('queue').never();
           form.$dirty = false;
           form.$valid = false;
           $scope.$digest();
@@ -124,8 +126,12 @@
         beforeEach(function(){
           form.$dirty = true;
           form.$valid = false;
-          dispatcherMock.expects('setState').withArgs({lock: 'closed'}).once();
-          dispatcherMock.expects('setState').withArgs({lock: 'open'}).never();
+          dispatcherMock.expects('queue')
+            .withArgs({add: 'object_hello_world'})
+            .once();
+          dispatcherMock.expects('queue')
+            .withArgs({remove: 'object_hello_world'})
+            .never();
           $scope.$digest();
         });
 
@@ -144,8 +150,12 @@
         beforeEach(function(){
           form.$dirty = true;
           form.$valid = true;
-          dispatcherMock.expects('setState').withArgs({lock: 'closed'}).once();
-          dispatcherMock.expects('setState').withArgs({lock: 'open'}).once();
+          dispatcherMock.expects('queue')
+            .withArgs({add: 'object_hello_world'})
+            .once();
+          dispatcherMock.expects('queue')
+            .withArgs({remove: 'object_hello_world'})
+            .once();
           $scope.$digest();
         });
 
