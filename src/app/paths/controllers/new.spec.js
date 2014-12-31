@@ -62,15 +62,15 @@
     });
 
 
-    xdescribe("add new path", function(){
-      var addNewPath;
+    describe("add new objective", function(){
+      var addNewObjective;
 
       beforeEach(function(){
-        addNewPath = index.props.curation[3].onClick;
-        addNewPath();
+        addNewObjective = newPath.props.curation[3].onClick;
+        addNewObjective();
       });
 
-      it("can create new paths", function(){
+      xit("can create new objectives", function(){
         expect(setAppStateSpy).called;
       });
     });

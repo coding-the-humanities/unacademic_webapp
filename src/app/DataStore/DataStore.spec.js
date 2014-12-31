@@ -9,7 +9,8 @@
 
     beforeEach(function(){
       var utilities = {
-        generateUrl: function(){}
+        generateUrl: function(){},
+        generateUID: function(){}
       };
 
       generateUrlStub = sinon.stub(utilities, 'generateUrl').returns('/bla.com');

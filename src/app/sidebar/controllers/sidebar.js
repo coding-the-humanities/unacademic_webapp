@@ -54,7 +54,7 @@
 
       if(form.$valid){
         form.$setPristine();
-        newVal.save(newVal).then(function(){
+        newVal.save(newVal).then(function(data){
           dispatcher.queue({remove: modelId});
         });
       }

@@ -9,7 +9,7 @@
     var vm = this;
 
     vm.props = {
-      schema: Path.schema,
+     schema: Path.schema,
       learning: [
         'summary', 
         'description'
@@ -27,9 +27,9 @@
         },
         { 
           type: 'button',
-          title: 'Add New Path',
+          title: 'Add New Objective',
           onClick: function(){
-            addNewPath();
+            addNewObjective();
           }
         }
       ]
@@ -38,6 +38,10 @@
     vm.info = path;
 
     dispatcher.registerObserverCallback(updateInfo);
+
+    function addNewObjective(){
+      alert('not yet');
+    }
 
     function updateInfo(){
       var id = dispatcher.getState().user;

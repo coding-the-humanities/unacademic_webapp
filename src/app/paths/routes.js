@@ -23,6 +23,10 @@
             var id = dispatcher.getState().user || 'general';
             return CoverInfo.get(id)
           },
+          paths: function(Path, dispatcher){
+            var id = dispatcher.getState().user || 'general';
+            return Path.getAll(id)
+          },
         }
       })
 
@@ -32,11 +36,12 @@
         controllerAs: 'vm',
         templateUrl: 'paths/views/index.html',
         resolve: {
-          path: function($q, Path, dispatcher, $state){
+          path: function($q, Path, dispatcher, utilities, $state){
             return $q(function(resolve, reject){
-              var id = dispatcher.getState().user;
-              if(id){
-                var path = new Path({curator: id});
+              var userId = dispatcher.getState().user;
+              var id = utilities.generateUID().toString();
+              if(userId){
+                var path = new Path({curator: userId, id: id});
                 resolve(path);
               } else {
                 reject();

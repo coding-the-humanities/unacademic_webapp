@@ -1,15 +1,15 @@
 (function(){
 
-  angular.module('unacademic.models.path')
-         .factory('schema', schema);
+  angular.module('unacademic.models.path.schema', [])
+         .factory('pathSchema', pathSchema);
 
-  function schema(){
+  function pathSchema(){
 
     return {
       type: 'object',
       properties: {
         id: {
-          type: 'number',
+          type: 'string',
           required: true
         },
         title: {
@@ -24,13 +24,14 @@
           required: true
         },
         summary: {
-          type: 'string'
+          type: 'string',
+          required: true
         },
         description: {
-          type: 'string'
+          type: 'string',
+          required: true
         }
       }
     };
   }
-   
 })();

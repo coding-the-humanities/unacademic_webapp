@@ -45,7 +45,8 @@
           CoverInfo: CoverInfo,
           Path: Path,
           dispatcher: dispatcher,
-          coverInfo: {}
+          coverInfo: {},
+          paths: []
         });
       });
     });

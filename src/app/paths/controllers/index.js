@@ -4,7 +4,7 @@
   angular.module('unacademic.paths.controllers.index', [])
          .controller('Index', Index);
 
-  function Index(CoverInfo, Path, $q, dispatcher, coverInfo) {
+  function Index(CoverInfo, Path, $q, dispatcher, coverInfo, paths) {
 
     var vm = this;
 
@@ -36,6 +36,7 @@
     };
 
     vm.info = coverInfo;
+    vm.paths = paths;
 
     dispatcher.registerObserverCallback(updateInfo);
 
@@ -45,12 +46,16 @@
 
     function updateInfo(){
       var id = dispatcher.getState().user;
-      CoverInfo.get(id).then(function(data){
-        vm.info = data;
-      });
-      // Path.get(id).then(function(data){
-      //   vm.paths = [data];
-      // })
+      var promises = [
+        CoverInfo.get(id),
+        Path.getAll(id)
+      ]
+
+      $q.all(promises).then(function(data){
+        vm.info = data[0];
+        console.log(data[1]);
+        vm.paths = data[1];
+      })
     }
   };
 })();

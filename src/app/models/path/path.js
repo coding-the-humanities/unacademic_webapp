@@ -13,9 +13,9 @@ var _extends = function (child, parent) {
 };
 
 (function () {
-  angular.module("unacademic.models.path", []).factory("Path", PathInit);
+  angular.module("unacademic.models.path", ["unacademic.models.path.initData", "unacademic.models.path.schema"]).factory("Path", PathInit);
 
-  function PathInit(BaseClass, schema, initData) {
+  function PathInit(BaseClass, pathSchema, pathInitData) {
     var Path = (function (BaseClass) {
       var Path = function Path() {
         BaseClass.apply(this, arguments);
@@ -26,7 +26,7 @@ var _extends = function (child, parent) {
       return Path;
     })(BaseClass);
 
-    Path.initialize({ schema: schema, initData: initData });
+    Path.initialize({ schema: pathSchema, initData: pathInitData });
 
     return Path;
   };

@@ -1,13 +1,15 @@
 (() => {
 
-  angular.module('unacademic.models.path', [])
-         .factory('Path', PathInit);
+  angular.module('unacademic.models.path', [
+    'unacademic.models.path.initData',
+    'unacademic.models.path.schema',
+  ]).factory('Path', PathInit);
 
-  function PathInit(BaseClass, schema, initData){
+  function PathInit(BaseClass, pathSchema, pathInitData){
 
     class Path extends BaseClass {}
 
-    Path.initialize({schema: schema, initData: initData});
+    Path.initialize({schema: pathSchema, initData: pathInitData});
 
     return Path;
   };

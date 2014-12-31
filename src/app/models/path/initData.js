@@ -1,13 +1,15 @@
 (function(){
 
-  angular.module('unacademic.models.path')
-        .factory('initData', initData);
+  angular.module('unacademic.models.path.initData', [])
+        .factory('pathInitData', pathInitData);
 
 
-  function initData(dispatcher){
-    var description = "Welcome to UnAcademic. We understand that learning is personal. Therefore everything in our interface is fully customizable. Including this landing page. Start your journey by sliding the curation button below.";
+  function pathInitData(dispatcher){
+
+    var description = "Hello World"; 
 
     return {
+      id: "info",
       title: "Coding the Humanities",
       curator: dispatcher.getState().user,
       summary: 'Research through Coding',
@@ -15,5 +17,4 @@
       points: ['hello']
     };
   }
-   
 })();
