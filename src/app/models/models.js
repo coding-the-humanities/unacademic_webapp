@@ -4,6 +4,7 @@
   angular.module('unacademic.models', [
     'unacademic.DataStore',
     'unacademic.models.baseClass',
+    'unacademic.models.path',
     'unacademic.models.coverInfo'
   ]);
 

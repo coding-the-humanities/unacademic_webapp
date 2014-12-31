@@ -21,6 +21,20 @@
       $scope.$watch('sidebar.model', saveFormData, true);
     }
 
+    function signIn(){
+      dispatcher.setState({
+        user: 'yeehaa',
+        mode: 'learning',
+      });
+    };
+
+    function changeMode(){
+      if(sidebar.mode === 'learning'){
+        return dispatcher.setState({mode: 'curation'});
+      }
+      return dispatcher.setState({mode: 'learning'});
+    }
+
     function updateAppState(){
       var state = dispatcher.getState();
       sidebar.user = state.user;
@@ -30,7 +44,6 @@
     function saveFormData(newVal, oldVal){
       var form = sidebar.form;
       var modelName = newVal.constructor.name.toLowerCase();
-
 
       if(form.$dirty){
         if(!modelId){
@@ -45,21 +58,6 @@
           dispatcher.queue({remove: modelId});
         });
       }
-    }
-
-    function signIn(){
-
-      dispatcher.setState({
-        user: 'yeehaa',
-        mode: 'learning',
-      });
-    };
-
-    function changeMode(){
-      if(sidebar.mode === 'learning'){
-        return dispatcher.setState({mode: 'curation'});
-      }
-      return dispatcher.setState({mode: 'learning'});
     }
   }
 })();

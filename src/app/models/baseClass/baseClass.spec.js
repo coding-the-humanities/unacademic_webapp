@@ -1,6 +1,6 @@
 (function(){
 
-  describe("CoverInfo", function(){
+  describe("BaseClass", function(){
     var BaseClass;
     var $q;
     var $rootScope;
@@ -91,11 +91,16 @@
 
     describe("save", function(){
 
-      it("delegates to the DataStore", function(){
+
+      it("sets the id and delegates to the DataStore", function(){
         var promise = $q.when();
         var instance = new BaseClass({title: 'Mock Title'});
+        var instanceWithCurator = new BaseClass({title: 'Mock Title', curator: '123'});
 
-        MockDataStore.expects('save').once().returns(promise);
+        MockDataStore.expects('save')
+          .withArgs(instanceWithCurator)
+          .once()
+          .returns(promise);
         instance.save();
         $rootScope.$apply();
 
@@ -108,7 +113,7 @@
       schema: {
         properties: {
           title: {},
-          author: {} 
+          curator: {} 
         }
       },
       initData: {

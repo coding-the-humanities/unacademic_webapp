@@ -5,7 +5,7 @@
 
   angular.module("unacademic.models.baseClass", []).factory("BaseClass", initBaseClass);
 
-  function initBaseClass($http, $q, DataStore) {
+  function initBaseClass($http, $q, DataStore, dispatcher) {
     var BaseClass = (function () {
       var BaseClass = function BaseClass(data) {
         var _this = this;
@@ -17,6 +17,9 @@
       };
 
       BaseClass.prototype.save = function () {
+        if (!this.curator) {
+          this.curator = "123";
+        }
         return DataStore.save(this);
       };
 

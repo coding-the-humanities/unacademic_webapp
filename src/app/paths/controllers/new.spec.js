@@ -1,7 +1,7 @@
 (function(){
 
-  describe("Index", function(){
-    var index;
+  describe("New", function(){
+    var newPath;
     var $scope;
 
     var getCoverInfoSpy;
@@ -10,22 +10,19 @@
     var dispatcherObserverSpy;
 
     beforeEach(function () {
-      module('unacademic.paths.controllers.index');
+      module('unacademic.paths.controllers.new');
 
-      var coverInfo = {
-        info: {
+      var pathInfo = {
+        path: {
           displayProperties: ['summary']
         }
       };
 
-      var CoverInfo = {
+      var Path = {
         get: function(){
-          return $q.when(coverInfo);
+          return $q.when(path);
         },
       };
-
-      Path = {
-      }
 
       var dispatcher = {
         setState: function(){ return; },
@@ -33,7 +30,7 @@
         registerObserverCallback: function(){ return; }
       }
 
-      getCoverInfoSpy = sinon.spy(CoverInfo, 'get');
+      getPathSpy = sinon.spy(Path, 'get');
       getAppStateSpy = sinon.spy(dispatcher, 'getState');
       setAppStateSpy = sinon.spy(dispatcher, 'setState');
       dispatcherObserverSpy = sinon.spy(dispatcher, 'registerObserverCallback');
@@ -41,11 +38,10 @@
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
-        index = $controller('Index', {
-          CoverInfo: CoverInfo,
+        newPath = $controller('New', {
           Path: Path,
           dispatcher: dispatcher,
-          coverInfo: {}
+          path: {}
         });
       });
     });
@@ -60,12 +56,13 @@
         expect(getAppStateSpy).not.to.have.been.called;
       });
 
-      it("does not calls cover info to get the data", function(){
-        expect(getCoverInfoSpy).not.to.have.been.called;
+      it("does not calls path to get the data", function(){
+        expect(getPathSpy).not.to.have.been.called;
       });
     });
 
-    describe("add new path", function(){
+
+    xdescribe("add new path", function(){
       var addNewPath;
 
       beforeEach(function(){

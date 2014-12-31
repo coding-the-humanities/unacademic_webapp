@@ -4,18 +4,22 @@
     var DataStore;
     var $httpBackend;
     var userId;
-    var url;
+    var generateUrlStub;
+
 
     beforeEach(function(){
+      var utilities = {
+        generateUrl: function(){}
+      };
+
+      generateUrlStub = sinon.stub(utilities, 'generateUrl').returns('/bla.com');
+
       module('unacademic.DataStore',  function($provide){
         $provide.value('baseUrl', '');
+        $provide.value('utilities', utilities);
       });
 
-      var resourceName = 'coverInfo';
-
       userId = 'general'
-
-      url = '/' + resourceName + '/' + userId + '.json';
 
       inject(function(_DataStore_, _$httpBackend_, _$q_){
         DataStore = _DataStore_;
@@ -25,6 +29,8 @@
     });
 
     afterEach(function() {
+      $httpBackend.flush();
+      expect(generateUrlStub).calledWith('CoverInfo', 'general');
       $httpBackend.verifyNoOutstandingExpectation();
       $httpBackend.verifyNoOutstandingRequest();
     });
@@ -33,38 +39,34 @@
     describe("get", function(){
 
       beforeEach(function(){
-        var data = { user: userId };
-        $httpBackend.when('GET', url).respond(data);
+        $httpBackend.when('GET', '/bla.com').respond({status: 200});
       });
 
       it("gets the info", function(){
         DataStore.get('CoverInfo', userId).then(function(data){
-          expect(data.user).to.equal(userId);
+          expect(data.status).to.equal(200);
         });
-
-        $httpBackend.flush();
       });
     });
 
     describe("save", function(){
 
       beforeEach(function(){
-        $httpBackend.when('PUT', url).respond(200);
+        $httpBackend.when('PUT', '/bla.com').respond(200);
       });
 
       it("saves the info", function(){
         var instance = new CoverInfo(userId);
 
         DataStore.save(instance).then(function(data){
+          expect(generateUrlStub).called;
           expect(data.status).to.equal(200);
         });
-
-        $httpBackend.flush();
       });
-
-      CoverInfo = function CoverInfo(userId){
-        this.curator = userId;
-      }
     });
   })
+
+  function CoverInfo(userId){
+    this.curator = userId;
+  }
 })();

@@ -18,6 +18,14 @@
 
   app.constant('baseUrl', 'https://cth-curriculum.firebaseio.com/');
 
+  app.run(function($state, $rootScope) {
+    $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+      event.preventDefault();
+      $state.go('paths.index'); 
+    });
+  });
+
   //app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
+
 
 })();

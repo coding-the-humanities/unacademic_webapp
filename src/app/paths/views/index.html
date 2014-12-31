@@ -1,9 +1,9 @@
-<sidebar mode="index.mode" 
-         form="index.form"
-         props = "index.props"
-         model="index.info">
+<sidebar mode="vm.mode" 
+         form="vm.form"
+         props = "vm.props"
+         model="vm.info">
 </sidebar>
 
-<div class="cards" ng-repeat="path in index.paths">
+<div class="cards" ng-repeat="path in vm.paths">
   <card ui-sref="paths.details({pathId: path.id})" card="path"></card>
 </div>

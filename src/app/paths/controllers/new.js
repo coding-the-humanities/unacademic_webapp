@@ -1,15 +1,15 @@
 (function(){
   'use strict';
 
-  angular.module('unacademic.paths.controllers.index', [])
-         .controller('Index', Index);
+  angular.module('unacademic.paths.controllers.new', [])
+         .controller('New', New);
 
-  function Index(CoverInfo, Path, $q, dispatcher, coverInfo) {
+  function New(Path, $q, dispatcher, path) {
 
     var vm = this;
 
     vm.props = {
-      schema: CoverInfo.schema,
+      schema: Path.schema,
       learning: [
         'summary', 
         'description'
@@ -35,22 +35,15 @@
       ]
     };
 
-    vm.info = coverInfo;
+    vm.info = path;
 
     dispatcher.registerObserverCallback(updateInfo);
 
-    function addNewPath(){
-      dispatcher.setState({name: 'paths.new'});
-    }
-
     function updateInfo(){
       var id = dispatcher.getState().user;
-      CoverInfo.get(id).then(function(data){
+      Path.get(id).then(function(data){
         vm.info = data;
-      });
-      // Path.get(id).then(function(data){
-      //   vm.paths = [data];
-      // })
+      })
     }
   };
 })();

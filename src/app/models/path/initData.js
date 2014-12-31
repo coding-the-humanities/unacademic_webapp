@@ -1,20 +1,18 @@
 (function(){
 
-  var app = angular.module('unacademic.models.coverInfo');
-
-  app.factory('initData', initData);
+  angular.module('unacademic.models.path')
+        .factory('initData', initData);
 
 
   function initData(dispatcher){
     var description = "Welcome to UnAcademic. We understand that learning is personal. Therefore everything in our interface is fully customizable. Including this landing page. Start your journey by sliding the curation button below.";
 
     return {
-      id: "info",
-      title: "UnAcademic",
+      title: "Coding the Humanities",
       curator: dispatcher.getState().user,
-      summary: 'Learning by Dwelling',
+      summary: 'Research through Coding',
       description: description,
-      paths: ['hello']
+      points: ['hello']
     };
   }
    
