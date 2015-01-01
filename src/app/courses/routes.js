@@ -1,5 +1,5 @@
 (function(){
-  var app = angular.module('unacademic.paths');
+  var app = angular.module('unacademic.courses');
 
 
   /*@ngInject*/
@@ -7,42 +7,42 @@
   app.config(function($stateProvider) {
     $stateProvider
 
-      .state('paths', {
-        url: '/paths',
+      .state('courses', {
+        url: '/courses',
         abstract: true,
         template: '<ui-view/>'
       })
 
-      .state('paths.index', {
+      .state('courses.index', {
         url: '/index',
         controller: 'Index',
         controllerAs: 'vm',
-        templateUrl: 'paths/views/index.html',
+        templateUrl: 'courses/views/index.html',
         resolve: {
           coverInfo: function(CoverInfo, dispatcher){
             var id = dispatcher.getState().user || 'general';
             return CoverInfo.get(id)
           },
-          paths: function(Path, dispatcher){
+          courses: function(Course, dispatcher){
             var id = dispatcher.getState().user || 'general';
-            return Path.getAll(id)
+            return Course.getAll(id)
           },
         }
       })
 
-      .state('paths.new', {
-        url: '/new',
+      .state('courses.details', {
+        url: '/details',
         controller: 'New',
         controllerAs: 'vm',
-        templateUrl: 'paths/views/index.html',
+        templateUrl: 'courses/views/index.html',
         resolve: {
-          path: function($q, Path, dispatcher, utilities, $state){
+          course: function($q, Course, dispatcher, utilities, $state){
             return $q(function(resolve, reject){
               var userId = dispatcher.getState().user;
               var id = utilities.generateUID().toString();
               if(userId){
-                var path = new Path({curator: userId, id: id});
-                resolve(path);
+                var course = new Course({curator: userId, id: id});
+                resolve(course);
               } else {
                 reject();
               }
@@ -53,12 +53,12 @@
 
       // .state('paths.details', {
       //   url: '/:pathId',
-      //   controller: 'PathDetails',
+      //   controller: 'CourseDetails',
       //   controllerAs: 'pathDetails',
       //   templateUrl: 'paths/views/pathDetails.html',
       //   resolve: {
-      //     path: function(Path, $stateParams){
-      //       return Path.find($stateParams.pathId);
+      //     path: function(Course, $stateParams){
+      //       return Course.find($stateParams.pathId);
       //     }
       //   },
       // })

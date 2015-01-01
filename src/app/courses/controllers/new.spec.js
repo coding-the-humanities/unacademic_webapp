@@ -1,7 +1,7 @@
 (function(){
 
   describe("New", function(){
-    var newPath;
+    var newCourse;
     var $scope;
 
     var getCoverInfoSpy;
@@ -10,17 +10,17 @@
     var dispatcherObserverSpy;
 
     beforeEach(function () {
-      module('unacademic.paths.controllers.new');
+      module('unacademic.courses.controllers.new');
 
-      var pathInfo = {
-        path: {
+      var courseInfo = {
+        course: {
           displayProperties: ['summary']
         }
       };
 
-      var Path = {
+      var Course = {
         get: function(){
-          return $q.when(path);
+          return $q.when(course);
         },
       };
 
@@ -30,7 +30,7 @@
         registerObserverCallback: function(){ return; }
       }
 
-      getPathSpy = sinon.spy(Path, 'get');
+      getCourseSpy = sinon.spy(Course, 'get');
       getAppStateSpy = sinon.spy(dispatcher, 'getState');
       setAppStateSpy = sinon.spy(dispatcher, 'setState');
       dispatcherObserverSpy = sinon.spy(dispatcher, 'registerObserverCallback');
@@ -38,10 +38,10 @@
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
-        newPath = $controller('New', {
-          Path: Path,
+        newCourse = $controller('New', {
+          Course: Course,
           dispatcher: dispatcher,
-          path: {}
+          course: {}
         });
       });
     });
@@ -56,8 +56,8 @@
         expect(getAppStateSpy).not.to.have.been.called;
       });
 
-      it("does not calls path to get the data", function(){
-        expect(getPathSpy).not.to.have.been.called;
+      it("does not calls course to get the data", function(){
+        expect(getCourseSpy).not.to.have.been.called;
       });
     });
 
@@ -66,7 +66,7 @@
       var addNewObjective;
 
       beforeEach(function(){
-        addNewObjective = newPath.props.curation[3].onClick;
+        addNewObjective = newCourse.props.curation[3].onClick;
         addNewObjective();
       });
 

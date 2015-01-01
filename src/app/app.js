@@ -7,13 +7,12 @@
     'unacademic.common',
     'unacademic.sidebar',
     'unacademic.models',
-    'unacademic.paths',
-    'unacademic.points'
+    'unacademic.courses'
   ]);
 
   /*@ngInject*/
   app.config(function($urlRouterProvider) {
-    $urlRouterProvider.otherwise('/paths/index');
+    $urlRouterProvider.otherwise('/courses/index');
   });
 
   app.constant('baseUrl', 'https://cth-curriculum.firebaseio.com/');
@@ -21,7 +20,7 @@
   app.run(function($state, $rootScope) {
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
       event.preventDefault();
-      $state.go('paths.index'); 
+      $state.go('courses.index'); 
     });
   });
 

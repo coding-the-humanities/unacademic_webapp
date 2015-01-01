@@ -4,6 +4,6 @@
          model="vm.info">
 </sidebar>
 
-<div class="cards" ng-repeat="path in vm.paths">
-  <card ui-sref="paths.details({pathId: path.id})" card="path"></card>
+<div class="cards" ng-repeat="course in vm.courses">
+  <card ng-click="vm.goTo(course)" card="course"></card>
 </div>

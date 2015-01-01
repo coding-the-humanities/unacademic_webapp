@@ -1,15 +1,15 @@
 (function(){
   'use strict';
 
-  angular.module('unacademic.paths.controllers.new', [])
+  angular.module('unacademic.courses.controllers.new', [])
          .controller('New', New);
 
-  function New(Path, $q, dispatcher, path) {
+  function New(Course, $q, dispatcher, course) {
 
     var vm = this;
 
     vm.props = {
-     schema: Path.schema,
+     schema: Course.schema,
       learning: [
         'summary', 
         'description'
@@ -35,7 +35,7 @@
       ]
     };
 
-    vm.info = path;
+    vm.info = course;
 
     dispatcher.registerObserverCallback(updateInfo);
 
@@ -45,7 +45,7 @@
 
     function updateInfo(){
       var id = dispatcher.getState().user;
-      Path.get(id).then(function(data){
+      Course.get(id).then(function(data){
         vm.info = data;
       })
     }

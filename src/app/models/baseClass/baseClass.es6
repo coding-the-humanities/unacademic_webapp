@@ -72,7 +72,6 @@
 
     function _extractData(data){
       if(data){
-        console.log(data.curator);
         return new this(data);
       }
       return new this(this.initData);

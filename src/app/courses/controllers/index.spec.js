@@ -10,7 +10,7 @@
     var dispatcherObserverSpy;
 
     beforeEach(function () {
-      module('unacademic.paths.controllers.index');
+      module('unacademic.courses.controllers.index');
 
       var coverInfo = {
         info: {
@@ -24,7 +24,10 @@
         },
       };
 
-      Path = {
+      Course = function(){
+        return {
+          id: '123'
+        }
       }
 
       var dispatcher = {
@@ -43,10 +46,10 @@
         $q = _$q_;
         index = $controller('Index', {
           CoverInfo: CoverInfo,
-          Path: Path,
+          Course: Course,
           dispatcher: dispatcher,
           coverInfo: {},
-          paths: []
+          courses: []
         });
       });
     });
@@ -66,16 +69,28 @@
       });
     });
 
-    describe("add new path", function(){
-      var addNewPath;
+    describe("move to an existing course", function(){
+      var addNewCourse;
 
       beforeEach(function(){
-        addNewPath = index.props.curation[3].onClick;
-        addNewPath();
+        index.goTo({id: '123'});
       });
 
-      it("can create new paths", function(){
-        expect(setAppStateSpy).called;
+      it("can create new courses", function(){
+        expect(setAppStateSpy).calledWith({name: 'courses.details', params: '123'});
+      });
+    });
+
+    describe("add new course", function(){
+      var addNewCourse;
+
+      beforeEach(function(){
+        addNewCourse = index.props.curation[3].onClick;
+        addNewCourse();
+      });
+
+      it("can create new courses", function(){
+        expect(setAppStateSpy).calledWith({mode: 'curation', name: 'courses.details', params: '123'});
       });
     });
   });

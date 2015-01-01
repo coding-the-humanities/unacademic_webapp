@@ -1,10 +1,10 @@
 (function(){
 
-  angular.module('unacademic.models.path.initData', [])
-        .factory('pathInitData', pathInitData);
+  angular.module('unacademic.models.course.initData', [])
+        .factory('courseInitData', courseInitData);
 
 
-  function pathInitData(dispatcher){
+  function courseInitData(dispatcher){
 
     var description = "Hello World"; 
 

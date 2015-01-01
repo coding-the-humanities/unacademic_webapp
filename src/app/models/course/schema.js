@@ -1,9 +1,9 @@
 (function(){
 
-  angular.module('unacademic.models.path.schema', [])
-         .factory('pathSchema', pathSchema);
+  angular.module('unacademic.models.course.schema', [])
+         .factory('courseSchema', courseSchema);
 
-  function pathSchema(){
+  function courseSchema(){
 
     return {
       type: 'object',

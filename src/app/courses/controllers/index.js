@@ -1,10 +1,10 @@
 (function(){
   'use strict';
 
-  angular.module('unacademic.paths.controllers.index', [])
+  angular.module('unacademic.courses.controllers.index', [])
          .controller('Index', Index);
 
-  function Index(CoverInfo, Path, $q, dispatcher, coverInfo, paths) {
+  function Index(CoverInfo, Course, $q, dispatcher, coverInfo, courses) {
 
     var vm = this;
 
@@ -27,34 +27,42 @@
         },
         { 
           type: 'button',
-          title: 'Add New Path',
+          title: 'Add New Course',
           onClick: function(){
-            addNewPath();
+            addNewCourse();
           }
         }
       ]
     };
 
     vm.info = coverInfo;
-    vm.paths = paths;
+    vm.courses = courses;
+
+    vm.goTo = goTo;
+
 
     dispatcher.registerObserverCallback(updateInfo);
 
-    function addNewPath(){
-      dispatcher.setState({name: 'paths.new'});
+    function goTo(course){
+      var id = course.id;
+      dispatcher.setState({name: 'courses.details', params: id});
+    }
+
+    function addNewCourse(){
+      var course = new Course({id: '123'});
+      dispatcher.setState({mode: 'curation', name: 'courses.details', params: course.id});
     }
 
     function updateInfo(){
       var id = dispatcher.getState().user;
       var promises = [
         CoverInfo.get(id),
-        Path.getAll(id)
+        Course.getAll(id)
       ]
 
       $q.all(promises).then(function(data){
         vm.info = data[0];
-        console.log(data[1]);
-        vm.paths = data[1];
+        vm.courses = data[1];
       })
     }
   };
