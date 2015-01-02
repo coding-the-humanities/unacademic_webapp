@@ -7,7 +7,6 @@
     var MockDataStore;
     var DataStore;
     var getStateStub;
-    // add getAppState stub on dispatcher
 
     before(function(){
       initData = initialize();
@@ -21,12 +20,17 @@
         getState: function(){}
       };
 
+      var utilities = {
+        generateUID: function(){}
+      };
+
       getStateStub = sinon.stub(dispatcher, 'getState').returns({user: '123'});
 
       module('unacademic.models.baseClass',  function($provide){
         $provide.value('baseUrl', '');
         $provide.value('dispatcher', dispatcher);
         $provide.value('DataStore', DataStore);
+        $provide.value('utilities', utilities);
       });
 
       inject(function(_BaseClass_, _$rootScope_, _$q_){
@@ -49,11 +53,11 @@
       beforeEach(function(){
 
         MockDataStore.expects('get')
-        .withArgs('BaseClass', 'general')
+        .withArgs('BaseClass', 'general', '123')
         .once()
         .returns($q.when({title: 'Mock Title'}));
 
-      BaseClass.get('general').then(function(data){
+      BaseClass.get('general', '123').then(function(data){
         response = data;
       });
 
@@ -61,7 +65,7 @@
       });
 
 
-      it("returns an instance of CoverInfo", function(){
+      it("returns an instance of BaseClass", function(){
         expect(response).to.be.an.instanceOf(BaseClass);
       });
 

@@ -5,7 +5,7 @@
   angular.module('unacademic.common.dispatcher', [])
          .factory('dispatcher', dispatcher);
 
-  function dispatcher($log, queue, currentUser, mode, permission, $state){
+  function dispatcher($log, queue, currentUser, mode, permission, $state, $stateParams){
     let observerCallbacks = [];
 
     return {
@@ -16,21 +16,27 @@
     }
 
     function get(){
+      let params = $stateParams;
+      let keys = _.keys(params);
+      let resource = params[keys[0]];
+
       let state = {
         mode: mode.get(),
         user: currentUser.getId(),
         name: $state.current.name,
+        resource: resource,
         queue: queue.get(),
       }
       return state;
     }
 
-    function set({user, path, mode:nextMode, name}){
+    function set({user, path, mode:nextMode, name, resource}){
+   
       let approvedChanges;
       let changed = false;
 
       let currentState = get();
-      let nextState = createNextState(currentState, user, nextMode, name);
+      let nextState = createNextState(currentState, user, nextMode, name, resource);
 
       approvedChanges = permission.get(nextState, currentState);
 
@@ -51,7 +57,8 @@
       return true;
     }
 
-    function createNextState(currentState, user, nextMode, name){
+    // Tests are missing things
+    function createNextState(currentState, user, nextMode, name, resource){
       let state = _.clone(currentState);
 
       if(user){
@@ -66,17 +73,36 @@
         state.name = name;
       }
 
+      if(resource){
+        state.resource = resource;
+      }
+
       return state;
     }
 
-    function setServicesState({user, name, mode:nextMode}){
+    function setServicesState({user, name, mode:nextMode, resource}){
+      let params;
+
       if(user){
         currentUser.setId(user);
       }
 
-      if(name){
-        $state.go(name)
+      // build wrapper around $state ....
+      if(resource){
+        console.log(resource);
+        let routeName = name || get().name;
+        let modelName = routeName.replace(/s\..+/, '') + "Id"
+        console.log(routeName);
+
+        params = {
+          [modelName]: "" + resource
+        }
       }
+
+      if(name){
+        $state.go(name, params)
+      }
+      // ...
 
       if(nextMode){
         mode.set(nextMode);

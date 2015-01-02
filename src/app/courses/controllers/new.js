@@ -44,8 +44,10 @@
     }
 
     function updateInfo(){
-      var id = dispatcher.getState().user;
-      Course.get(id).then(function(data){
+      var state = dispatcher.getState();
+      var userId = state.user;
+      var id = state.resource;
+      Course.get(userId, id).then(function(data){
         vm.info = data;
       })
     }

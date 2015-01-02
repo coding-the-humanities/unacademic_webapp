@@ -81,21 +81,26 @@
     describe("watch the model", function(){
       var saveModelSpy;
       var setPristineSpy;
+      var setSubmittedSpy;
       var form;
 
       beforeEach(function(){
+
         var model = {
           save: function(){
             return $q.when();
           },
-          title: 'hello world'
+          title: 'hello world',
+          id: '123'
         };
 
         form = {
-          $setPristine: function(){}
+          $setPristine: function(){},
+          $setSubmitted: function(){}
         };
 
         setPristineSpy = sinon.spy(form, '$setPristine');
+        setSubmittedSpy = sinon.spy(form, '$setSubmitted');
         saveModelSpy = sinon.spy(model, 'save');
         sidebar.form = form;
 
@@ -173,6 +178,24 @@
 
         it("sets the form to not dirty", function(){
           expect(setPristineSpy).to.be.calledOnce;
+        });
+
+        it("sets the form to persisted", function(){
+          expect(setSubmittedSpy).to.be.calledOnce;
+        });
+      });
+
+      describe("when the form is valid and persisted", function(){
+        beforeEach(function(){
+          form.$submitted = true;
+          form.$dirty = false;
+          dispatcherMock.expects('setState')
+            .withArgs({params: '123'})
+            .once()
+        });
+
+        it("updates the state params", function(){
+          $scope.$digest();
         });
       });
     });

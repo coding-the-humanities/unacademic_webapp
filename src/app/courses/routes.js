@@ -19,50 +19,24 @@
         controllerAs: 'vm',
         templateUrl: 'courses/views/index.html',
         resolve: {
-          coverInfo: function(CoverInfo, dispatcher){
-            var id = dispatcher.getState().user || 'general';
-            return CoverInfo.get(id)
-          },
-          courses: function(Course, dispatcher){
-            var id = dispatcher.getState().user || 'general';
-            return Course.getAll(id)
+          data: function(resolvers){
+            return resolvers.index();
           },
         }
       })
 
       .state('courses.details', {
-        url: '/details',
+        url: '/details/:courseId',
         controller: 'New',
         controllerAs: 'vm',
         templateUrl: 'courses/views/index.html',
         resolve: {
-          course: function($q, Course, dispatcher, utilities, $state){
-            return $q(function(resolve, reject){
-              var userId = dispatcher.getState().user;
-              var id = utilities.generateUID().toString();
-              if(userId){
-                var course = new Course({curator: userId, id: id});
-                resolve(course);
-              } else {
-                reject();
-              }
-            });
+          course: function(resolvers, $stateParams){
+            var courseId = $stateParams.courseId;
+            return resolvers.details(courseId);
           }
         }
       })
-
-      // .state('paths.details', {
-      //   url: '/:pathId',
-      //   controller: 'CourseDetails',
-      //   controllerAs: 'pathDetails',
-      //   templateUrl: 'paths/views/pathDetails.html',
-      //   resolve: {
-      //     path: function(Course, $stateParams){
-      //       return Course.find($stateParams.pathId);
-      //     }
-      //   },
-      // })
-
   });
 
 })();

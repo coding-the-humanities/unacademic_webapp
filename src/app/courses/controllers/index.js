@@ -4,7 +4,7 @@
   angular.module('unacademic.courses.controllers.index', [])
          .controller('Index', Index);
 
-  function Index(CoverInfo, Course, $q, dispatcher, coverInfo, courses) {
+  function Index(CoverInfo, Course, $q, dispatcher, data) {
 
     var vm = this;
 
@@ -35,8 +35,8 @@
       ]
     };
 
-    vm.info = coverInfo;
-    vm.courses = courses;
+    vm.info = data.coverInfo;
+    vm.courses = data.courses;
 
     vm.goTo = goTo;
 
@@ -44,20 +44,31 @@
     dispatcher.registerObserverCallback(updateInfo);
 
     function goTo(course){
-      var id = course.id;
-      dispatcher.setState({name: 'courses.details', params: id});
+      var id;
+
+      if(course){
+        id = course.id;
+      } else {
+        id = 'new';
+      }
+
+      dispatcher.setState({
+        mode: 'curation', 
+        name: 'courses.details', 
+        resource: id 
+      });
+
     }
 
     function addNewCourse(){
-      var course = new Course({id: '123'});
-      dispatcher.setState({mode: 'curation', name: 'courses.details', params: course.id});
+      goTo();
     }
 
     function updateInfo(){
-      var id = dispatcher.getState().user;
+      var userId = dispatcher.getState().user;
       var promises = [
-        CoverInfo.get(id),
-        Course.getAll(id)
+        CoverInfo.get(userId, 'info'),
+        Course.getAll(userId)
       ]
 
       $q.all(promises).then(function(data){

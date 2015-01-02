@@ -9,7 +9,6 @@
     var description = "Hello World"; 
 
     return {
-      id: "info",
       title: "Coding the Humanities",
       curator: dispatcher.getState().user,
       summary: 'Research through Coding',

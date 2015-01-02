@@ -12,7 +12,6 @@
     }
 
     function get(nextState, currentState) {
-
       var valid = checkPermissions(currentState, nextState);
 
       if(!valid){

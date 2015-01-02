@@ -45,6 +45,12 @@
       var form = sidebar.form;
       var modelName = newVal.constructor.name.toLowerCase();
 
+      if(!form.$dirty && form.$submitted){
+        console.log(oldVal.id === newVal.id);
+        var resource = newVal.id;
+        dispatcher.setState({resource: resource});
+      }
+
       if(form.$dirty){
         if(!modelId){
           modelId = dispatcher.queue({register: modelName});
@@ -52,9 +58,11 @@
         dispatcher.queue({add: modelId});
       }
 
+
       if(form.$valid){
         form.$setPristine();
         newVal.save(newVal).then(function(data){
+          form.$setSubmitted();
           dispatcher.queue({remove: modelId});
         });
       }

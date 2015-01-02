@@ -48,8 +48,7 @@
           CoverInfo: CoverInfo,
           Course: Course,
           dispatcher: dispatcher,
-          coverInfo: {},
-          courses: []
+          data: {}
         });
       });
     });
@@ -77,7 +76,11 @@
       });
 
       it("can create new courses", function(){
-        expect(setAppStateSpy).calledWith({name: 'courses.details', params: '123'});
+        expect(setAppStateSpy).calledWith({
+          mode: 'curation',
+          name: 'courses.details', 
+          resource: '123'
+        });
       });
     });
 
@@ -90,7 +93,11 @@
       });
 
       it("can create new courses", function(){
-        expect(setAppStateSpy).calledWith({mode: 'curation', name: 'courses.details', params: '123'});
+        expect(setAppStateSpy).calledWith({
+          mode: 'curation',
+          name: 'courses.details', 
+          resource: 'new'
+        });
       });
     });
   });

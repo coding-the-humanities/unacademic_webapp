@@ -5,7 +5,7 @@
 
   angular.module("unacademic.common.dispatcher", []).factory("dispatcher", dispatcher);
 
-  function dispatcher($log, queue, currentUser, mode, permission, $state) {
+  function dispatcher($log, queue, currentUser, mode, permission, $state, $stateParams) {
     var observerCallbacks = [];
 
     return {
@@ -16,10 +16,15 @@
     };
 
     function get() {
+      var params = $stateParams;
+      var keys = _.keys(params);
+      var resource = params[keys[0]];
+
       var state = {
         mode: mode.get(),
         user: currentUser.getId(),
         name: $state.current.name,
+        resource: resource,
         queue: queue.get() };
       return state;
     }
@@ -29,11 +34,14 @@
       var path = _ref.path;
       var nextMode = _ref.mode;
       var name = _ref.name;
+      var resource = _ref.resource;
+
+
       var approvedChanges;
       var changed = false;
 
       var currentState = get();
-      var nextState = createNextState(currentState, user, nextMode, name);
+      var nextState = createNextState(currentState, user, nextMode, name, resource);
 
       approvedChanges = permission.get(nextState, currentState);
 
@@ -54,7 +62,8 @@
       return true;
     }
 
-    function createNextState(currentState, user, nextMode, name) {
+    // Tests are missing things
+    function createNextState(currentState, user, nextMode, name, resource) {
       var state = _.clone(currentState);
 
       if (user) {
@@ -69,6 +78,10 @@
         state.name = name;
       }
 
+      if (resource) {
+        state.resource = resource;
+      }
+
       return state;
     }
 
@@ -76,13 +89,32 @@
       var user = _ref2.user;
       var name = _ref2.name;
       var nextMode = _ref2.mode;
+      var resource = _ref2.resource;
+      var params;
+
       if (user) {
         currentUser.setId(user);
       }
 
-      if (name) {
-        $state.go(name);
+      // build wrapper around $state ....
+      if (resource) {
+        (function () {
+          console.log(resource);
+          var routeName = name || get().name;
+          var modelName = routeName.replace(/s\..+/, "") + "Id";
+          console.log(routeName);
+
+          params = (function (_params) {
+            _params[modelName] = "" + resource;
+            return _params;
+          })({});
+        })();
       }
+
+      if (name) {
+        $state.go(name, params);
+      }
+      // ...
 
       if (nextMode) {
         mode.set(nextMode);

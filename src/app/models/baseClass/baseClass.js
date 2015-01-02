@@ -5,27 +5,29 @@
 
   angular.module("unacademic.models.baseClass", []).factory("BaseClass", initBaseClass);
 
-  function initBaseClass($http, $q, DataStore, dispatcher) {
+  function initBaseClass($http, $q, DataStore, utilities, dispatcher) {
     var BaseClass = (function () {
       var BaseClass = function BaseClass(data) {
         var _this = this;
-
+        var instance = data || {};
 
         var schema = this.constructor.schema;
         var props = _.keys(schema.properties);
+
+        if (!instance.id) {
+          instance.id = utilities.generateUID();
+        }
         _.each(props, function (prop) {
-          _this[prop] = data[prop];
+          _this[prop] = instance[prop];
         });
 
-        if (!this.curator) {
+        if (!this.curator || this.curator === "general") {
           this.curator = dispatcher.getState().user;
         }
       };
 
       BaseClass.prototype.save = function () {
         var _this2 = this;
-
-
         var schema = this.constructor.schema;
         var props = _.keys(schema.properties);
 
@@ -49,10 +51,10 @@
         return DataStore.get(this.name, userId).then(extractObjects);
       };
 
-      BaseClass.get = function (userId) {
+      BaseClass.get = function (userId, id) {
         var extractData = _.bind(_extractData, this);
 
-        return DataStore.get(this.name, userId).then(extractData);
+        return DataStore.get(this.name, userId, id).then(extractData);
       };
 
       BaseClass.initialize = function (_ref) {
@@ -64,11 +66,6 @@
 
       return BaseClass;
     })();
-
-    function getAllProps() {
-      var schema = this.constructor.schema;
-      var props = _.keys(schema.properties);
-    }
 
     function _extractObjects(data) {
       var _this3 = this;

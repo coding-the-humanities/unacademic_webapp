@@ -40,10 +40,14 @@
 
       $state = {
         current: {
-          name: '123'
+          name: undefined
         },
         go: function(){}
       };
+
+      $stateParams = {
+        courseId: '123'
+      }
 
       getCurrentUserSpy = sinon.spy(currentUser, 'getId');
       setCurrentUserSpy = sinon.spy(currentUser, 'setId');
@@ -64,6 +68,7 @@
         $provide.value('queue', queue);
         $provide.value('currentUser', currentUser);
         $provide.value('$state', $state);
+        $provide.value('$stateParams', $stateParams);
       });
 
       inject(function(_dispatcher_, _$log_){
@@ -91,8 +96,12 @@
         expect(getModeSpy).calledOnce;
       });
 
-      it("gets the current path url", function(){
-        expect(state.name).to.equal('123');
+      it("gets the current state name", function(){
+        expect(state.name).to.equal(undefined);
+      });
+
+      it("gets the current state params", function(){
+        expect(state.resource).to.equal('123');
       });
 
       it("current state of the queue", function(){
@@ -146,7 +155,8 @@
 
           var proposedState = {
             mode: 'learning',
-            name: '123',
+            name: undefined,
+            resource: '123',
             user: undefined,
             queue: []
           }
@@ -189,6 +199,7 @@
           var proposedState = {
             mode: 'learning',
             name: '123',
+            resource: '123',
             user: 'yeehaa',
             queue: []
           }
