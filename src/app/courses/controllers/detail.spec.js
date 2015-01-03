@@ -98,6 +98,10 @@
             expect(updateQueueSpy).not.to.be.calledWith({add: '123'});
           });
 
+          it("updates the resource after save", function(){
+            expect(setAppStateSpy).to.be.calledWith({resource: '123'});
+          });
+
           it("removes the dirty flag from the form", function(){
             expect(vm.form.$dirty).to.false;
           });
@@ -155,23 +159,23 @@
       }
     });
 
-    describe("move to an existing course", function(){
+    describe("move to an existing objective", function(){
       var addNewCourse;
 
       beforeEach(function(){
         vm.goToCourse('123');
       });
 
-      it("can create new courses", function(){
+      it("sets the app state", function(){
         expect(setAppStateSpy).calledWith({
           mode: 'curation',
-          name: 'courses.details', 
+          name: 'courses.detail', 
           resource: '123'
         });
       });
     });
 
-    describe("add new course", function(){
+    describe("add new objective", function(){
       var addNewCourse;
 
       beforeEach(function(){
@@ -182,7 +186,7 @@
       it("can create new courses", function(){
         expect(setAppStateSpy).calledWith({
           mode: 'curation',
-          name: 'courses.details', 
+          name: 'courses.detail',
           resource: 'new'
         });
       });

@@ -30,8 +30,7 @@
       }
 
       dispatcher.setState({
-        mode: 'curation', 
-        name: 'courses.detail',
+        name: 'courses.detail', 
         resource: id 
       });
     }

@@ -1,33 +1,38 @@
 (function(){
- angular.module('unacademic.courses')
+
+  'use strict';
+
+  angular.module('unacademic.courses')
         .factory('resolvers', resolvers);
 
-  function resolvers($q,CoverInfo, Course, dispatcher, $stateParams){
+  function resolvers($q,CoverInfo, Course, dispatcher){
+
     return {
       index: index,
       details: details
     }
   
-    function details(courseId){
+    function details(id){
       let userId = dispatcher.getState().user;
       let schema = Course.schema;
-      
+      let courseId = id || dispatcher.getState().resource;
+
       return $q(function(resolve, reject){
-        var course;
+
+        if(!userId){
+          reject();
+        }
 
         if(userId && courseId === 'new'){
-          var course = new Course(); 
-          $stateParams.courseId = course.id;
+          let course = new Course(); 
           resolve({schema: schema, course: course});
         }
 
         if(userId){
           Course.get(userId, courseId).then(function(data){
-            course = data;
+            let course = data;
             resolve({schema: schema, course: course});
           });
-        } else {
-          reject();
         }
       });
     }

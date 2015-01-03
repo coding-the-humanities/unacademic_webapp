@@ -30,7 +30,6 @@
       }
 
       dispatcher.setState({
-        mode: "curation",
         name: "courses.detail",
         resource: id
       });

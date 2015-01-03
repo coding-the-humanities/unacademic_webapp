@@ -95,7 +95,6 @@
     }
 
     function setServicesState({user, name, mode:nextMode, resource}){
-
       // return promise
 
       if(user){
@@ -108,19 +107,19 @@
 
       // build wrapper around $state ....
 
-      let params;
 
       if(resource){
         let routeName = name || get().name;
         let modelName = routeName.replace(/s\..+/, '') + "Id"
 
-        params = {
+        let params = {
           [modelName]: "" + resource
         }
+        $state.go(routeName, params)
       }
 
-      if(name){
-        $state.go(name, params)
+      if(name && !resource){
+        $state.go(name)
       }
 
       // ...

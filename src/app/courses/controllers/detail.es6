@@ -1,4 +1,5 @@
 (function(){
+
   'use strict';
 
   angular.module('unacademic.courses.controllers.detail', [])
@@ -8,7 +9,6 @@
 
     var vm = this;
     initialize();
-    console.log(data);
 
     function initialize(){
       vm.info = data.course;
@@ -46,6 +46,7 @@
 
       function success(){
         dispatcher.queue({remove: vm.info.id});
+        dispatcher.setState({resource: vm.info.id});
       }
 
       function error(){

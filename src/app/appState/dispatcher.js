@@ -102,8 +102,6 @@
       var name = _ref2.name;
       var nextMode = _ref2.mode;
       var resource = _ref2.resource;
-
-
       // return promise
 
       if (user) {
@@ -116,22 +114,22 @@
 
       // build wrapper around $state ....
 
-      var params;
 
       if (resource) {
         (function () {
           var routeName = name || get().name;
           var modelName = routeName.replace(/s\..+/, "") + "Id";
 
-          params = (function (_params) {
+          var params = (function (_params) {
             _params[modelName] = "" + resource;
             return _params;
           })({});
+          $state.go(routeName, params);
         })();
       }
 
-      if (name) {
-        $state.go(name, params);
+      if (name && !resource) {
+        $state.go(name);
       }
 
       // ...

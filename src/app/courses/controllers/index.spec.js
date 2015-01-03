@@ -162,10 +162,9 @@
         vm.goToCourse('123');
       });
 
-      it("can create new courses", function(){
+      it("sets the app to the correct state", function(){
         expect(setAppStateSpy).calledWith({
-          mode: 'curation',
-          name: 'courses.details', 
+          name: 'courses.detail', 
           resource: '123'
         });
       });
@@ -181,8 +180,7 @@
 
       it("can create new courses", function(){
         expect(setAppStateSpy).calledWith({
-          mode: 'curation',
-          name: 'courses.details', 
+          name: 'courses.detail', 
           resource: 'new'
         });
       });

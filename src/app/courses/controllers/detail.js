@@ -8,7 +8,6 @@
   function Detail(resolvers, $scope, dispatcher, data) {
     var vm = this;
     initialize();
-    console.log(data);
 
     function initialize() {
       vm.info = data.course;
@@ -46,6 +45,7 @@
 
       function success() {
         dispatcher.queue({ remove: vm.info.id });
+        dispatcher.setState({ resource: vm.info.id });
       }
 
       function error() {
