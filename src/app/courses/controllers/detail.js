@@ -5,67 +5,48 @@
 
   angular.module("unacademic.courses.controllers.detail", []).controller("Detail", Detail);
 
-  function Detail(resolvers, $scope, dispatcher, data) {
+  function Detail(resolvers, $scope, dispatcher, data, formHelpers) {
     var vm = this;
     initialize();
 
     function initialize() {
       vm.info = data.course;
+      vm.cards = data.waypoints;
       vm.form = {};
       vm.schema = data.schema;
+
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
+      vm.goToWaypoint = goToWaypoint;
+      vm.submit = function () {
+        return formHelpers.submit(vm.form, vm.info);
+      };
 
-      vm.goToCourse = goToCourse;
-      vm.submit = submit;
+      var checkForm = function () {
+        return formHelpers.checkForm(vm.form, vm.info.id);
+      };
+      $scope.$watch("vm.info", checkForm, true);
 
       dispatcher.registerObserverCallback(updateInfo);
-      $scope.$watch("vm.info", checkForm, true);
     }
 
-    function goToCourse(id) {
+    function goToWaypoint(id) {
       if (!id) {
         id = "new";
       }
 
       dispatcher.setState({
-        mode: "curation",
-        name: "courses.detail",
+        name: "waypoints.detail",
         resource: id
       });
     }
 
-    function submit() {
-      var form = vm.form;
-
-      if (form.$dirty && form.$valid) {
-        form.$setPristine();
-        vm.info.save().then(success, error);
-      }
-
-      function success() {
-        dispatcher.queue({ remove: vm.info.id });
-        dispatcher.setState({ resource: vm.info.id });
-      }
-
-      function error() {
-        form.$setDirty();
-        dispatcher.queue({ add: vm.info.id });
-      }
-    }
-
-    function checkForm(newVal, oldVal) {
-      var form = vm.form;
-
-      if (form.$dirty) {
-        dispatcher.queue({ add: vm.info.id });
-      }
-    }
-
     function updateInfo() {
-      resolvers.details().then(function (_ref) {
+      resolvers.index().then(function (_ref) {
         var course = _ref.course;
+        var waypoints = _ref.waypoints;
         vm.info = course;
+        vm.cards = waypoints;
       });
     }
 
@@ -80,7 +61,7 @@
           type: "button",
           title: "Add New Course",
           onClick: function () {
-            goToCourse();
+            return goToWaypoint();
           }
         }, {
           type: "submit",

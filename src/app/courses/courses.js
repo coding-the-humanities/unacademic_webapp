@@ -1,5 +1,9 @@
 (function(){
-  var app = angular.module('unacademic.courses', [
-    'unacademic.courses.controllers'
+
+  'use strict';
+
+  angular.module('unacademic.courses', [
+    'unacademic.courses.controllers',
+    'unacademic.courses.services'
   ]);
 })();

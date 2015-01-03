@@ -12,24 +12,23 @@
 
     function initialize() {
       vm.info = data.coverInfo;
+      vm.cards = data.courses;
       vm.form = {};
-      vm.courses = data.courses;
       vm.schema = data.schema;
+
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
-
       vm.goToCourse = goToCourse;
-
       vm.submit = function () {
-        _.bind(formHelpers.submit, null, vm.form, vm.info)();
+        return formHelpers.submit(vm.form, vm.info);
       };
 
-      var _checkForm = function () {
-        _.bind(formHelpers.checkForm, null, vm.form, vm.info.id);
+      var checkForm = function () {
+        return formHelpers.checkForm(vm.form, vm.info.id);
       };
+      $scope.$watch("vm.info", checkForm, true);
 
       dispatcher.registerObserverCallback(updateInfo);
-      $scope.$watch("vm.info", _checkForm, true);
     }
 
     function goToCourse(id) {
@@ -48,7 +47,7 @@
         var coverInfo = _ref.coverInfo;
         var courses = _ref.courses;
         vm.info = coverInfo;
-        vm.courses = courses;
+        vm.cards = courses;
       });
     }
 
@@ -63,7 +62,7 @@
           type: "button",
           title: "Add New Course",
           onClick: function () {
-            goToCourse();
+            return goToCourse();
           }
         }, {
           type: "submit",

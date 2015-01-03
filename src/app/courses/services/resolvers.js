@@ -3,7 +3,7 @@
 (function () {
   "use strict";
 
-  angular.module("unacademic.courses").factory("resolvers", resolvers);
+  angular.module("unacademic.courses.services.resolvers", []).factory("resolvers", resolvers);
 
   function resolvers($q, CoverInfo, Course, dispatcher) {
     return {
@@ -26,7 +26,7 @@
           resolve({ schema: schema, course: course });
         }
 
-        if (userId) {
+        if (userId && courseId !== "new") {
           Course.get(userId, courseId).then(function (data) {
             var course = data;
             resolve({ schema: schema, course: course });

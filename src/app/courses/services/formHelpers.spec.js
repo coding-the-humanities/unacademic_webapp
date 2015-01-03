@@ -11,7 +11,7 @@
       dispatcher.queue = sinon.stub();
       dispatcher.setState = sinon.stub();
 
-      module('unacademic.courses.controllers',  function($provide){
+      module('unacademic.courses.services.formHelpers',  function($provide){
         $provide.value('dispatcher', dispatcher);
       });
 
@@ -144,6 +144,36 @@
             expect(dispatcher.queue).calledWith({add: id});
           });
         });
+
+        function submitForm(options){
+          vm.info = {
+            id: '123',
+            save: function(){}
+          }
+
+          vm.form.$valid = options.valid;
+          vm.form.$dirty = options.dirty;
+          vm.form.$setPristine = function(){
+            vm.form.$dirty = false;
+          }
+
+          vm.form.$setDirty = function(){
+            vm.form.$dirty = true;
+          }
+
+          var promise = $q(function(resolve, reject){
+            if(options.resolve){
+              resolve();
+            } else {
+              reject();
+            }
+          });
+
+          saveModelStub = sinon.stub(vm.info, 'save').returns(promise);
+
+          vm.submit();
+          $scope.$digest();
+        }
 
       });
     });

@@ -6,6 +6,6 @@
          form="vm.form">
 </sidebar>
 
-<div class="cards" ng-repeat="course in vm.courses">
-  <card ng-click="vm.goToCourse(course.id)" card="course"></card>
+<div class="cards" ng-repeat="card in vm.cards">
+  <card ng-click="vm.goToCourse(card.id)" card="card"></card>
 </div>
