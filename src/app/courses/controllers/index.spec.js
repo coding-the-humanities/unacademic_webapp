@@ -7,6 +7,7 @@
     var setAppStateSpy;
     var updateQueueSpy;
     var dispatcherObserverSpy;
+    var formHelpers;
 
     beforeEach(function () {
       module('unacademic.courses.controllers.index');
@@ -17,9 +18,15 @@
         registerObserverCallback: function(){ return; }
       }
 
+      formHelpers = {
+        submit: function(){},
+        checkForm: function(){}
+      }
+
       setAppStateSpy = sinon.spy(dispatcher, 'setState');
       updateQueueSpy = sinon.spy(dispatcher, 'queue');
       dispatcherObserverSpy = sinon.spy(dispatcher, 'registerObserverCallback');
+      formHelpers.submit = sinon.stub();
 
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
@@ -28,6 +35,7 @@
           $scope: $scope,
           resolvers: {},
           dispatcher: dispatcher,
+          formHelpers: formHelpers,
           data: {}
         });
       });
@@ -40,6 +48,13 @@
     });
 
     describe("submiting the coverInfo data", function(){
+      it("calls form helpers with the right arguments", function(){
+        vm.submit()
+        expect(formHelpers.submit).called();
+      });
+    });
+
+    xdescribe("submiting the coverInfo data", function(){
       var saveModelStub;
 
       describe("info is valid and pristine", function(){
@@ -97,6 +112,11 @@
           it("does not add the model to the queue", function(){
             expect(updateQueueSpy).not.to.be.calledWith({add: '123'});
           });
+
+          it("updates the resource after save", function(){
+            expect(setAppStateSpy).to.be.calledWith({resource: '123'});
+          });
+
 
           it("removes the dirty flag from the form", function(){
             expect(vm.form.$dirty).to.false;

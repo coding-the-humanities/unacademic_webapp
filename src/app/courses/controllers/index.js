@@ -3,9 +3,10 @@
 (function () {
   "use strict";
 
+
   angular.module("unacademic.courses.controllers.index", []).controller("Index", Index);
 
-  function Index(resolvers, $scope, dispatcher, data) {
+  function Index(resolvers, $scope, dispatcher, data, formHelpers) {
     var vm = this;
     initialize();
 
@@ -18,10 +19,17 @@
       vm.curate = viewProps().curate;
 
       vm.goToCourse = goToCourse;
-      vm.submit = submit;
+
+      vm.submit = function () {
+        _.bind(formHelpers.submit, null, vm.form, vm.info)();
+      };
+
+      var _checkForm = function () {
+        _.bind(formHelpers.checkForm, null, vm.form, vm.info.id);
+      };
 
       dispatcher.registerObserverCallback(updateInfo);
-      $scope.$watch("vm.info", checkForm, true);
+      $scope.$watch("vm.info", _checkForm, true);
     }
 
     function goToCourse(id) {
@@ -33,32 +41,6 @@
         name: "courses.detail",
         resource: id
       });
-    }
-
-    function submit() {
-      var form = vm.form;
-
-      if (form.$dirty && form.$valid) {
-        form.$setPristine();
-        vm.info.save().then(success, error);
-      }
-
-      function success() {
-        dispatcher.queue({ remove: vm.info.id });
-      }
-
-      function error() {
-        form.$setDirty();
-        dispatcher.queue({ add: vm.info.id });
-      }
-    }
-
-    function checkForm(newVal, oldVal) {
-      var form = vm.form;
-
-      if (form.$dirty) {
-        dispatcher.queue({ add: vm.info.id });
-      }
     }
 
     function updateInfo() {
