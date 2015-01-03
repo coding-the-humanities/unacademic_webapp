@@ -1,9 +1,11 @@
-<sidebar mode="vm.mode" 
-         form="vm.form"
-         props = "vm.props"
-         model="vm.info">
+<sidebar model="vm.info"
+         schema="vm.schema"
+         learn="vm.learn"
+         curate="vm.curate"
+         submit="vm.submit()"
+         form="vm.form">
 </sidebar>
 
 <div class="cards" ng-repeat="course in vm.courses">
-  <card ng-click="vm.goTo(course)" card="course"></card>
+  <card ng-click="vm.goToCourse(course.id)" card="course"></card>
 </div>

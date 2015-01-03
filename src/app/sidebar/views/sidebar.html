@@ -4,18 +4,18 @@
 
     <h1>{{sidebar.model.title}}</h1>
 
-    <p ng-repeat="property in sidebar.props.learning">
+    <p ng-repeat="property in sidebar.learn">
       <strong>{{property}}: </strong>{{sidebar.model[property]}}
     </p>
   </div>
 
   <div ng-show="sidebar.mode === 'curation'" class="metabox">
-    <ng-form name="sidebar.form"
-          sf-schema="sidebar.props.schema"
-          sf-form="sidebar.props.curation"
+    <form name="sidebar.form"
+          sf-schema="sidebar.schema"
+          sf-form="sidebar.curate".
           sf-model="sidebar.model"
-          sf-options="{ formDefaults: { ngModelOptions: { updateOn: 'blur' } }}">
-    </ng-form>
+          ng-submit="sidebar.submit()">
+    </form>
   </div>
 
   <div class="toolbox">

@@ -3,16 +3,16 @@
 (function () {
   "use strict";
 
-  angular.module("unacademic.courses.controllers.index", []).controller("Index", Index);
+  angular.module("unacademic.courses.controllers.detail", []).controller("Detail", Detail);
 
-  function Index(resolvers, $scope, dispatcher, data) {
+  function Detail(resolvers, $scope, dispatcher, data) {
     var vm = this;
     initialize();
+    console.log(data);
 
     function initialize() {
-      vm.info = data.coverInfo;
+      vm.info = data.course;
       vm.form = {};
-      vm.courses = data.courses;
       vm.schema = data.schema;
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
@@ -63,11 +63,9 @@
     }
 
     function updateInfo() {
-      resolvers.index().then(function (_ref) {
-        var coverInfo = _ref.coverInfo;
-        var courses = _ref.courses;
-        vm.info = coverInfo;
-        vm.courses = courses;
+      resolvers.details().then(function (_ref) {
+        var course = _ref.course;
+        vm.info = course;
       });
     }
 

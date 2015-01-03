@@ -1,6 +1,6 @@
 (function(){
 
-  describe("Index", function(){
+  describe("Detail", function(){
     var vm;
     var $scope;
 
@@ -9,7 +9,7 @@
     var dispatcherObserverSpy;
 
     beforeEach(function () {
-      module('unacademic.courses.controllers.index');
+      module('unacademic.courses.controllers.detail');
 
       var dispatcher = {
         setState: function(){},
@@ -24,7 +24,7 @@
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
-        vm = $controller('Index', {
+        vm = $controller('Detail', {
           $scope: $scope,
           resolvers: {},
           dispatcher: dispatcher,

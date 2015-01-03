@@ -25,13 +25,13 @@
         }
       })
 
-      .state('courses.details', {
-        url: '/details/:courseId',
-        controller: 'New',
+      .state('courses.detail', {
+        url: '/detail/:courseId',
+        controller: 'Detail',
         controllerAs: 'vm',
         templateUrl: 'courses/views/index.html',
         resolve: {
-          course: function(resolvers, $stateParams){
+          data: function(resolvers, $stateParams){
             var courseId = $stateParams.courseId;
             return resolvers.details(courseId);
           }

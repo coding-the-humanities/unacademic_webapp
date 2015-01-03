@@ -10,21 +10,25 @@
   
     function details(courseId){
       let userId = dispatcher.getState().user;
+      let schema = Course.schema;
       
       return $q(function(resolve, reject){
+        var course;
 
         if(userId && courseId === 'new'){
           var course = new Course(); 
           $stateParams.courseId = course.id;
-          resolve(course);
+          resolve({schema: schema, course: course});
         }
 
         if(userId){
-          var course = Course.get(userId, courseId);
-          resolve(course);
+          Course.get(userId, courseId).then(function(data){
+            course = data;
+            resolve({schema: schema, course: course});
+          });
+        } else {
+          reject();
         }
-
-        reject();
       });
     }
 
@@ -40,8 +44,10 @@
         $q.all(promises).then(function(data){
           let coverInfo = data[0];
           let courses = data[1];
-          resolve({coverInfo, courses});
+          let schema = CoverInfo.schema;
+          resolve({coverInfo, schema, courses});
         });
+
       });
     }
   }

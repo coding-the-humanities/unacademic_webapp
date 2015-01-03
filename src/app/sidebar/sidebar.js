@@ -10,8 +10,12 @@
       templateUrl: 'sidebar/views/sidebar.html',
       replace: true,
       scope: {
-        model: '=',
-        props: '='
+        model:  '=',
+        schema: '=',
+        form:   '=',
+        learn:  '=',
+        curate: '=',
+        submit: '&'
       },
       bindToController: true,
       controllerAs: 'sidebar',

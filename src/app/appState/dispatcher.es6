@@ -16,9 +16,14 @@
     }
 
     function get(){
+
+      // build wrapper around $state and $stateParams
+
       let params = $stateParams;
       let keys = _.keys(params);
       let resource = params[keys[0]];
+
+      // ...
 
       let state = {
         mode: mode.get(),
@@ -27,10 +32,17 @@
         resource: resource,
         queue: queue.get(),
       }
+      
+
+      // return a promise
+
       return state;
+
     }
 
     function set({user, path, mode:nextMode, name, resource}){
+
+      // return a promise
    
       let approvedChanges;
       let changed = false;
@@ -54,10 +66,12 @@
 
       let state = get();
       $log.log(state);
+
       return true;
     }
 
     // Tests are missing things
+
     function createNextState(currentState, user, nextMode, name, resource){
       let state = _.clone(currentState);
 
@@ -81,18 +95,24 @@
     }
 
     function setServicesState({user, name, mode:nextMode, resource}){
-      let params;
+
+      // return promise
 
       if(user){
         currentUser.setId(user);
       }
 
+      if(nextMode){
+        mode.set(nextMode);
+      }
+
       // build wrapper around $state ....
+
+      let params;
+
       if(resource){
-        console.log(resource);
         let routeName = name || get().name;
         let modelName = routeName.replace(/s\..+/, '') + "Id"
-        console.log(routeName);
 
         params = {
           [modelName]: "" + resource
@@ -102,11 +122,9 @@
       if(name){
         $state.go(name, params)
       }
+
       // ...
 
-      if(nextMode){
-        mode.set(nextMode);
-      }
     }
 
     function setQueue(options){
