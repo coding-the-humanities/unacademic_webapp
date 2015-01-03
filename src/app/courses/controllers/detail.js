@@ -42,9 +42,10 @@
     }
 
     function updateInfo() {
-      resolvers.index().then(function (_ref) {
+      resolvers.detail().then(function (_ref) {
         var course = _ref.course;
         var waypoints = _ref.waypoints;
+        console.log(course);
         vm.info = course;
         vm.cards = waypoints;
       });

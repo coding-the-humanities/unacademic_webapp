@@ -33,7 +33,7 @@
         resolve: {
           data: function(resolvers, $stateParams){
             var courseId = $stateParams.courseId;
-            return resolvers.details(courseId);
+            return resolvers.detail(courseId);
           }
         }
       })

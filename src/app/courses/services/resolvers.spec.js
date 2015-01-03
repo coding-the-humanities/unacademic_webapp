@@ -46,7 +46,7 @@
 
         beforeEach(function(){
           dispatcher.getState = sinon.stub().returns({resource: '456'});
-          resolvers.details().then(function(data){
+          resolvers.detail().then(function(data){
             response = data;
           });
           $rootScope.$apply();
@@ -69,7 +69,7 @@
 
         beforeEach(function(){
           dispatcher.getState = sinon.stub().returns({user: '123', resource: '456'});
-          resolvers.details().then(function(data){
+          resolvers.detail().then(function(data){
             response = data;
           });
           $rootScope.$apply();
@@ -93,7 +93,7 @@
 
         beforeEach(function(){
           dispatcher.getState = sinon.stub().returns({user: '123', resource: 'new'});
-          resolvers.details().then(function(data){
+          resolvers.detail().then(function(data){
             response = data;
           });
           $rootScope.$apply();

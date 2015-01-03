@@ -8,10 +8,10 @@
   function resolvers($q, CoverInfo, Course, dispatcher) {
     return {
       index: index,
-      details: details
+      detail: detail
     };
 
-    function details(id) {
+    function detail(id) {
       var userId = dispatcher.getState().user;
       var schema = Course.schema;
       var courseId = id || dispatcher.getState().resource;

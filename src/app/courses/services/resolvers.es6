@@ -9,10 +9,10 @@
 
     return {
       index: index,
-      details: details
+      detail: detail
     }
   
-    function details(id){
+    function detail(id){
       let userId = dispatcher.getState().user;
       let schema = Course.schema;
       let courseId = id || dispatcher.getState().resource;
