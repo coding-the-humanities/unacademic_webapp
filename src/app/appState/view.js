@@ -9,7 +9,7 @@
     var name;
 
     return {
-      name: "view",
+      name: "name",
       get: get,
       set: set
     };
