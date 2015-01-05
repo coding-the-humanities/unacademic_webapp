@@ -31,9 +31,8 @@
         controllerAs: 'vm',
         templateUrl: 'courses/views/index.html',
         resolve: {
-          data: function(resolvers, $stateParams){
-            var courseId = $stateParams.courseId;
-            return resolvers.detail(courseId);
+          data: function(resolvers){
+            return resolvers.detail();
           }
         }
       })

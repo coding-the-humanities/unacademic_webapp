@@ -1,13 +1,15 @@
 (function(){
-  var app = angular.module('unacademic.common.mode', [
-  ]);
 
-  app.factory('mode', mode);
+  'use strict';
+
+  angular.module('unacademic.appState.mode', [])
+         .factory('mode', mode);
 
   function mode($log){
     var mode = 'browsing';
 
     return {
+      name: 'mode',
       get: get,
       set: set,
     }

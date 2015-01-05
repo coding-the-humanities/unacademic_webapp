@@ -4,7 +4,7 @@
     var mode;
 
     beforeEach(function(){
-      module('unacademic.common.mode');
+      module('unacademic.appState.mode');
 
       inject(function(_mode_){
         mode = _mode_;

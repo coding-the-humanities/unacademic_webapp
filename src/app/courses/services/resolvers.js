@@ -11,10 +11,10 @@
       detail: detail
     };
 
-    function detail(id) {
+    function detail() {
       var userId = dispatcher.getState().user;
+      var courseId = dispatcher.getState().resource;
       var schema = Course.schema;
-      var courseId = id || dispatcher.getState().resource;
 
       return $q(function (resolve, reject) {
         if (!userId) {

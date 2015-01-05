@@ -3,7 +3,7 @@
 (function () {
   "use strict";
 
-  angular.module("unacademic.courses.services.formHelpers", []).factory("formHelpers", formHelpers);
+  angular.module("unacademic.common.formHelpers", []).factory("formHelpers", formHelpers);
 
   function formHelpers(dispatcher) {
     return {

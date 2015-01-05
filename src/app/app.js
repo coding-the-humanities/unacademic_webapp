@@ -5,6 +5,7 @@
     'schemaForm',
     'contenteditable',
     'unacademic.common',
+    'unacademic.appState',
     'unacademic.sidebar',
     'unacademic.models',
     'unacademic.courses'
@@ -20,7 +21,7 @@
   app.run(function($state, $rootScope) {
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
       event.preventDefault();
-      $state.go('courses.index'); 
+      $state.go('courses.index');
     });
   });
 

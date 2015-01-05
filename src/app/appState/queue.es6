@@ -1,5 +1,5 @@
 (() => {
-  angular.module('unacademic.common.queue', [])
+  angular.module('unacademic.appState.queue', [])
     .factory('queue', queue);
 
   function queue($log){
@@ -8,6 +8,7 @@
     var queue = new Set();
 
     return {
+      name: 'queue',
       get: get,
       set: set,
     }
@@ -17,7 +18,7 @@
     }
 
     function set({add, remove, register}){
-     
+
       if(register){
         var modelId = `${register}_${count}`;
         count += 1;

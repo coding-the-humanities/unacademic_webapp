@@ -11,7 +11,7 @@
       dispatcher.queue = sinon.stub();
       dispatcher.setState = sinon.stub();
 
-      module('unacademic.courses.services.formHelpers',  function($provide){
+      module('unacademic.common.formHelpers',  function($provide){
         $provide.value('dispatcher', dispatcher);
       });
 

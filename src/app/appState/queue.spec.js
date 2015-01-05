@@ -6,7 +6,7 @@
 
     beforeEach(function(){
 
-      module('unacademic.common.queue');
+      module('unacademic.appState.queue');
 
       inject(function(_queue_, _$log_){
         queue = _queue_;

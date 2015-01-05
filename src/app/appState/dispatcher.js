@@ -3,10 +3,11 @@
 (function () {
   "use strict";
 
-  angular.module("unacademic.common.dispatcher", []).factory("dispatcher", dispatcher);
+  angular.module("unacademic.appState.dispatcher", []).factory("dispatcher", dispatcher);
 
-  function dispatcher($log, queue, currentUser, mode, permission, $state, $stateParams) {
+  function dispatcher($log, queue, view, currentUser, mode, permission, $state, resource) {
     var observerCallbacks = [];
+    var modules = [mode, currentUser, view, resource, queue];
 
     return {
       getState: get,
@@ -16,55 +17,26 @@
     };
 
     function get() {
-      // build wrapper around $state and $stateParams
+      var state = {};
 
-      var params = $stateParams;
-      var keys = _.keys(params);
-      var resource = params[keys[0]];
-
-      // ...
-
-      var state = {
-        mode: mode.get(),
-        user: currentUser.getId(),
-        name: $state.current.name,
-        resource: resource,
-        queue: queue.get() };
-
-
-      // return a promise
+      _.each(modules, function (module) {
+        state[module.name] = module.get();
+      });
 
       return state;
     }
 
-    function set(_ref) {
-      var user = _ref.user;
-      var path = _ref.path;
-      var nextMode = _ref.mode;
-      var name = _ref.name;
-      var resource = _ref.resource;
-
-
-      // return a promise
-
-      var approvedChanges;
+    function set(proposedChanges) {
       var changed = false;
-
       var currentState = get();
-      var nextState = createNextState(currentState, user, nextMode, name, resource);
-
-      approvedChanges = permission.get(nextState, currentState);
+      var proposedState = createNextState(currentState, proposedChanges);
+      var approvedChanges = permission.get(proposedState, currentState);
 
       if (_.isEmpty(approvedChanges)) {
         return false;
       }
 
       setServicesState(approvedChanges);
-
-      _.each(approvedChanges, function (value, key) {
-        $log.info("switched from " + currentState[key] + " to " + nextState[key]);
-      });
-
       notifyObservers();
 
       var state = get();
@@ -73,48 +45,9 @@
       return true;
     }
 
-    // Tests are missing things
+    // TODO: separate service
 
-    function createNextState(currentState, user, nextMode, name, resource) {
-      var state = _.clone(currentState);
-
-      if (user) {
-        state.user = user;
-      }
-
-      if (nextMode) {
-        state.mode = nextMode;
-      }
-
-      if (name) {
-        state.name = name;
-      }
-
-      if (resource) {
-        state.resource = resource;
-      }
-
-      return state;
-    }
-
-    function setServicesState(_ref2) {
-      var user = _ref2.user;
-      var name = _ref2.name;
-      var nextMode = _ref2.mode;
-      var resource = _ref2.resource;
-      // return promise
-
-      if (user) {
-        currentUser.setId(user);
-      }
-
-      if (nextMode) {
-        mode.set(nextMode);
-      }
-
-      // build wrapper around $state ....
-
-
+    function changeRoute(name, resource) {
       if (resource) {
         (function () {
           var routeName = name || get().name;
@@ -131,8 +64,43 @@
       if (name && !resource) {
         $state.go(name);
       }
+    }
 
-      // ...
+
+
+    function setServicesState(changes) {
+      if (changes.user) {
+        currentUser.set(changes.user);
+      }
+
+      if (changes.mode) {
+        mode.set(changes.mode);
+      }
+
+      if (changes.name) {
+        view.set(changes.name);
+      }
+
+      if (changes.resource) {
+        resource.set(changes.resource);
+      }
+
+      if (changes.name || changes.resource) {
+        changeRoute(changes.name, changes.resource);
+      };
+    }
+
+    function createNextState(currentState, changes) {
+      var state = _.clone(currentState);
+      var params = ["user", "mode", "name", "resource"];
+
+      _.each(params, function (param) {
+        if (changes[param]) {
+          state[param] = changes[param];
+        }
+      });
+
+      return state;
     }
 
     function setQueue(options) {

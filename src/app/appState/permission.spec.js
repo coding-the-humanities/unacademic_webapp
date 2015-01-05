@@ -9,7 +9,7 @@
 
     beforeEach(function(){
 
-      module('unacademic.common.permission');
+      module('unacademic.appState.permission');
 
       inject(function(_permission_, _$log_){
         permission = _permission_;

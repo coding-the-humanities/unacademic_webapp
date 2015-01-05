@@ -1,5 +1,5 @@
 (function () {
-  var app = angular.module("unacademic.common.permission", [
+  var app = angular.module("unacademic.appState.permission", [
   ]);
 
   app.factory("permission", permission);

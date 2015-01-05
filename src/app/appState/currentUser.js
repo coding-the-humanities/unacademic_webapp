@@ -1,6 +1,9 @@
 (function(){
-  var app = angular.module('unacademic.common.currentUser', []);
-  app.factory('currentUser', currentUser);
+
+  'use strict';
+
+  angular.module('unacademic.appState.currentUser', [])
+         .factory('currentUser', currentUser);
 
   function currentUser($log){
 
@@ -9,15 +12,16 @@
     var observerCallbacks = [];
 
     return {
-      getId: getId,
-      setId: setId,
+      name: 'user',
+      get: get,
+      set: set,
     }
 
-    function getId(){
+    function get(){
       return currentUserId;
     }
 
-    function setId(userId){
+    function set(userId){
       currentUserId = userId;
       return true;
     }

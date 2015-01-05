@@ -41,7 +41,6 @@
     function updateInfo(){
       resolvers.detail()
         .then(({course, waypoints}) => {
-          console.log(course);
           vm.info = course;
           vm.cards = waypoints;
         })

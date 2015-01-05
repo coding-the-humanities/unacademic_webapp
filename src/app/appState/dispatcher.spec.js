@@ -4,71 +4,75 @@
     var dispatcher;
     var $log;
 
-    var getCurrentUserSpy;
-    var setCurrentUserSpy;
-
-    var getModeSpy;
-    var setModeSpy;
-
-    var getQueueStub;
-    var setQueueStub;
-
-    var getPathSpy;
+    var mode;
+    var currentUser;
+    var view;
+    var resource;
+    var queue;
+    var $state;
 
     var permissionMock;
 
     beforeEach(function(){
 
-      var mode = {
+      mode = {
+        name: 'mode',
         get: function(){},
         set: function(){}
       };
 
-      var queue = {
+      currentUser = {
+        name: 'user',
+        get: function(){},
+        set: function(){}
+      };
+
+      view = {
+        name: 'name',
         get: function(){},
         set: function(){}
       }
 
-      var currentUser = {
-        setId: function(){},
-        getId: function(){}
-      };
+      resource = {
+        name: 'resource',
+        get: function(){},
+        set: function(){}
+      }
+
+      queue = {
+        name: 'queue',
+        get: function(){},
+        set: function(){}
+      }
+
+      var modules = [mode, currentUser, view, resource, queue];
+
+      _.each(modules, function(module){
+        module['get'] = sinon.spy();
+        module['set'] = sinon.spy();
+      });
 
       var permission = {
         get: function(){}
       };
 
+      permissionMock = sinon.mock(permission);
+
       $state = {
-        current: {
-          name: undefined
-        },
         go: function(){}
       };
 
-      $stateParams = {
-        courseId: '123'
-      }
+      $state.go = sinon.spy();
 
-      getCurrentUserSpy = sinon.spy(currentUser, 'getId');
-      setCurrentUserSpy = sinon.spy(currentUser, 'setId');
 
-      getModeSpy = sinon.spy(mode, 'get');
-      setModeSpy = sinon.spy(mode, 'set');
-
-      getQueueStub = sinon.stub(queue, 'get').returns([]);
-      setQueueStub = sinon.stub(queue, 'set').returns('123');
-
-      setNameSpy = sinon.spy($state, 'go')
-
-      permissionMock = sinon.mock(permission);
-
-      module('unacademic.common.dispatcher',  function($provide){
+      module('unacademic.appState.dispatcher',  function($provide){
         $provide.value('permission', permission);
         $provide.value('mode', mode);
         $provide.value('queue', queue);
         $provide.value('currentUser', currentUser);
         $provide.value('$state', $state);
-        $provide.value('$stateParams', $stateParams);
+        $provide.value('view', view);
+        $provide.value('resource', resource);
       });
 
       inject(function(_dispatcher_, _$log_){
@@ -84,28 +88,12 @@
     describe("get", function(){
       var state;
 
-      beforeEach(function(){
+      it("gets the correct data", function(){
         state = dispatcher.getState();
-      });
-
-      it("gets the current user", function(){
-        expect(getCurrentUserSpy).calledOnce;
-      });
-
-      it("gets the current mode", function(){
-        expect(getModeSpy).calledOnce;
-      });
-
-      it("gets the current state name", function(){
-        expect(state.name).to.equal(undefined);
-      });
-
-      it("gets the current state params", function(){
-        expect(state.resource).to.equal('123');
-      });
-
-      it("current state of the queue", function(){
-        expect(getQueueStub).calledOnce;
+        var modules = [currentUser, mode, view, resource, queue];
+        _.each(modules, function(module){
+          expect(module.get).calledOnce;
+        })
       });
     });
 
@@ -135,10 +123,15 @@
         });
 
         it("does not set any value", function(){
-          expect(setCurrentUserSpy).not.called;
-          expect(setNameSpy).not.called;
-          expect(setModeSpy).not.called;
+          expect(currentUser.set).not.called;
+          expect(mode.set).not.called;
+          expect(view.set).not.called;
+          expect(resource.set).not.called;
         });
+
+        it("does not change routes", function(){
+          expect($state.go).not.called;
+        })
 
         it("does not log state", function(){
           expect($log.log.logs.length).to.equal(0);
@@ -149,16 +142,17 @@
       describe("with one change", function(){
 
         beforeEach(function(){
-          var approvedState = {
-            mode: 'learning',
-          }
 
           var proposedState = {
             mode: 'learning',
-            name: undefined,
-            resource: '123',
+            resource: undefined,
             user: undefined,
-            queue: []
+            name: undefined,
+            queue: undefined
+          }
+
+          var approvedState = {
+            mode: 'learning',
           }
 
           permissionMock.expects('get')
@@ -173,10 +167,15 @@
         });
 
         it("sets the values", function(){
-          expect(setCurrentUserSpy).not.called;
-          expect(setNameSpy).not.called;
-          expect(setModeSpy).calledWith('learning');
+          expect(currentUser.set).not.called;
+          expect(mode.set).calledWith('learning');
+          expect(view.set).not.called;
+          expect(resource.set).not.called;
         });
+
+        it("does not change routes", function(){
+          expect($state.go).not.called;
+        })
 
         it("notifies observers", function(){
           expect(notificationSpy).calledOnce;
@@ -190,19 +189,22 @@
       describe("with multiple changes", function(){
 
         beforeEach(function(){
-          var approvedState = {
-            mode: 'learning',
-            name: '123',
-            user: 'yeehaa',
-          }
 
           var proposedState = {
             mode: 'learning',
-            name: '123',
             resource: '123',
             user: 'yeehaa',
-            queue: []
+            name: 'courses.detail',
+            queue: undefined
           }
+
+          var approvedState = {
+            mode: 'learning',
+            resource: '123',
+            name: 'courses.detail',
+            user: 'yeehaa',
+          }
+
 
           permissionMock.expects('get')
             .withArgs(proposedState)
@@ -216,10 +218,16 @@
         });
 
         it("sets the values", function(){
-          expect(setCurrentUserSpy).calledWith('yeehaa');
-          expect(setModeSpy).calledWith('learning');
-          expect(setNameSpy).calledWith('123');
+          expect(currentUser.set).calledWith('yeehaa');
+          expect(mode.set).calledWith('learning');
+          expect(view.set).calledWith('courses.detail');
+          expect(resource.set).calledWith('123');
         });
+
+        it("does not change routes", function(){
+          expect($state.go).calledWith('courses.detail', {courseId: '123'});
+        })
+
 
         it("notifies observers", function(){
           expect(notificationSpy).calledOnce;
@@ -234,8 +242,7 @@
     describe("queue", function(){
       it("delegates to the queue service", function(){
         var returnValue = dispatcher.queue();
-        expect(setQueueStub).calledOnce;
-        expect(returnValue).to.equal('123');
+        expect(queue.set).calledOnce;
       });
     });
   });

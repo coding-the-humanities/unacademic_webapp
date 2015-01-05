@@ -2,11 +2,12 @@
 
   'use strict';
 
-  angular.module('unacademic.common.dispatcher', [])
+  angular.module('unacademic.appState.dispatcher', [])
          .factory('dispatcher', dispatcher);
 
-  function dispatcher($log, queue, currentUser, mode, permission, $state, $stateParams){
+  function dispatcher($log, queue, view, currentUser, mode, permission, $state, resource){
     let observerCallbacks = [];
+    let modules = [mode, currentUser, view, resource, queue];
 
     return {
       getState: get,
@@ -16,52 +17,26 @@
     }
 
     function get(){
+      let state = {};
 
-      // build wrapper around $state and $stateParams
-
-      let params = $stateParams;
-      let keys = _.keys(params);
-      let resource = params[keys[0]];
-
-      // ...
-
-      let state = {
-        mode: mode.get(),
-        user: currentUser.getId(),
-        name: $state.current.name,
-        resource: resource,
-        queue: queue.get(),
-      }
-      
-
-      // return a promise
+      _.each(modules, (module) => {
+         state[module.name] = module.get();
+      });
 
       return state;
-
     }
 
-    function set({user, path, mode:nextMode, name, resource}){
-
-      // return a promise
-   
-      let approvedChanges;
+    function set(proposedChanges){
       let changed = false;
-
       let currentState = get();
-      let nextState = createNextState(currentState, user, nextMode, name, resource);
-
-      approvedChanges = permission.get(nextState, currentState);
+      let proposedState = createNextState(currentState, proposedChanges);
+      let approvedChanges = permission.get(proposedState, currentState);
 
       if(_.isEmpty(approvedChanges)){
         return false;
       }
 
       setServicesState(approvedChanges);
-
-      _.each(approvedChanges, function(value, key){
-        $log.info(`switched from ${currentState[key]} to ${nextState[key]}`);
-      });
-
       notifyObservers();
 
       let state = get();
@@ -70,60 +45,60 @@
       return true;
     }
 
-    // Tests are missing things
+    // TODO: separate service
 
-    function createNextState(currentState, user, nextMode, name, resource){
-      let state = _.clone(currentState);
-
-      if(user){
-        state.user = user;
-      }
-
-      if(nextMode){
-        state.mode = nextMode;
-      }
-
-      if(name){
-        state.name = name;
-      }
-
-      if(resource){
-        state.resource = resource;
-      }
-
-      return state;
-    }
-
-    function setServicesState({user, name, mode:nextMode, resource}){
-      // return promise
-
-      if(user){
-        currentUser.setId(user);
-      }
-
-      if(nextMode){
-        mode.set(nextMode);
-      }
-
-      // build wrapper around $state ....
-
-
+    function changeRoute(name, resource){
       if(resource){
         let routeName = name || get().name;
         let modelName = routeName.replace(/s\..+/, '') + "Id"
 
-        let params = {
-          [modelName]: "" + resource
-        }
+          let params = {
+            [modelName]: "" + resource
+          }
         $state.go(routeName, params)
       }
 
       if(name && !resource){
         $state.go(name)
       }
+    }
 
-      // ...
 
+
+    function setServicesState(changes){
+
+      if(changes.user){
+        currentUser.set(changes.user);
+      }
+
+      if(changes.mode){
+        mode.set(changes.mode);
+      }
+
+      if(changes.name){
+        view.set(changes.name);
+      }
+
+      if(changes.resource){
+        resource.set(changes.resource);
+      }
+
+      if(changes.name || changes.resource){
+        changeRoute(changes.name, changes.resource);
+      };
+    }
+
+    function createNextState(currentState, changes){
+      let state = _.clone(currentState);
+      let params = ["user", "mode", "name", "resource"]
+
+      _.each(params, (param) => {
+        if(changes[param]){
+          state[param] = changes[param];
+        }
+      });
+
+      return state;
     }
 
     function setQueue(options){

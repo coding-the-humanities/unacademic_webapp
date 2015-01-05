@@ -12,10 +12,10 @@
       detail: detail
     }
   
-    function detail(id){
+    function detail(){
       let userId = dispatcher.getState().user;
+      let courseId = dispatcher.getState().resource;
       let schema = Course.schema;
-      let courseId = id || dispatcher.getState().resource;
 
       return $q(function(resolve, reject){
 

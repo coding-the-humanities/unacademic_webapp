@@ -1,13 +1,14 @@
 "use strict";
 
 (function () {
-  angular.module("unacademic.common.queue", []).factory("queue", queue);
+  angular.module("unacademic.appState.queue", []).factory("queue", queue);
 
   function queue($log) {
     var count = 0;
     var queue = new Set();
 
     return {
+      name: "queue",
       get: get,
       set: set };
 

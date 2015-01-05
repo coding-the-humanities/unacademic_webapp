@@ -6,7 +6,7 @@
 
     beforeEach(function(){
 
-      module('unacademic.common.currentUser');
+      module('unacademic.appState.currentUser');
 
       inject(function(_currentUser_, _$log_){
         currentUser = _currentUser_;
@@ -17,7 +17,7 @@
     describe("current user id", function(){
 
       it("is undefined by default", function(){
-        expect(currentUser.getId()).to.be.undefined;
+        expect(currentUser.get()).to.be.undefined;
       });
 
       describe("set", function(){
@@ -27,7 +27,7 @@
 
         beforeEach(function(){
           userId = 'John123';
-          setUserId = currentUser.setId(userId);
+          setUserId = currentUser.set(userId);
         });
 
 
@@ -36,7 +36,7 @@
         });
 
         it("can be set", function(){
-          expect(currentUser.getId()).to.equal(userId);
+          expect(currentUser.get()).to.equal(userId);
         });
       })
     })
