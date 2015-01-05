@@ -5,9 +5,9 @@
 
   angular.module("unacademic.appState.dispatcher", []).factory("dispatcher", dispatcher);
 
-  function dispatcher($log, queue, view, currentUser, mode, permission, $state, resource) {
+  function dispatcher(queue, view, user, mode, permission, resource) {
+    var modules = [mode, user, view, resource, queue];
     var observerCallbacks = [];
-    var modules = [mode, currentUser, view, resource, queue];
 
     return {
       getState: get,
@@ -27,76 +27,30 @@
     }
 
     function set(proposedChanges) {
-      var changed = false;
       var currentState = get();
-      var proposedState = createNextState(currentState, proposedChanges);
-      var approvedChanges = permission.get(proposedState, currentState);
+      var proposal = createProposal(currentState, proposedChanges);
+      var approvedChanges = permission.get(proposal, currentState);
 
-      if (_.isEmpty(approvedChanges)) {
-        return false;
-      }
-
-      setServicesState(approvedChanges);
-      notifyObservers();
-
-      var state = get();
-      $log.log(state);
-
-      return true;
-    }
-
-    // TODO: separate service
-
-    function changeRoute(name, resource) {
-      if (resource) {
-        (function () {
-          var routeName = name || get().name;
-          var modelName = routeName.replace(/s\..+/, "") + "Id";
-
-          var params = (function (_params) {
-            _params[modelName] = "" + resource;
-            return _params;
-          })({});
-          $state.go(routeName, params);
-        })();
-      }
-
-      if (name && !resource) {
-        $state.go(name);
+      if (approvedChanges) {
+        setServicesState(approvedChanges);
+        notifyObservers();
       }
     }
-
-
 
     function setServicesState(changes) {
-      if (changes.user) {
-        currentUser.set(changes.user);
-      }
-
-      if (changes.mode) {
-        mode.set(changes.mode);
-      }
-
-      if (changes.name) {
-        view.set(changes.name);
-      }
-
-      if (changes.resource) {
-        resource.set(changes.resource);
-      }
-
-      if (changes.name || changes.resource) {
-        changeRoute(changes.name, changes.resource);
-      };
+      _.each(modules, function (module) {
+        if (changes[module.name]) {
+          module.set(changes[module.name]);
+        }
+      });
     }
 
-    function createNextState(currentState, changes) {
+    function createProposal(currentState, changes) {
       var state = _.clone(currentState);
-      var params = ["user", "mode", "name", "resource"];
 
-      _.each(params, function (param) {
-        if (changes[param]) {
-          state[param] = changes[param];
+      _.each(modules, function (module) {
+        if (changes[module.name]) {
+          state[module.name] = changes[module.name];
         }
       });
 

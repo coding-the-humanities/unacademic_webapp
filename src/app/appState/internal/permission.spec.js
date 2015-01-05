@@ -44,6 +44,30 @@
           expect($log.warn.logs[0][0]).to.contain('appmode');
         });
       });
+
+      describe("no changes", function(){
+        beforeEach(function(){
+
+          currentState = {
+            user: 'yeehaa',
+            mode: 'learning',
+            name: '123'
+          }
+
+          nextState = {
+            user: 'yeehaa',
+            mode: 'learning',
+            name: '123',
+            queue: new Set()
+          }
+
+          isAllowed = permission.get(nextState, currentState);
+        });
+
+        it("is not allowed to switch", function(){
+          expect(isAllowed).to.be.false;
+        });
+      });
     });
 
     describe("queue", function(){

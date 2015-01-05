@@ -18,14 +18,15 @@
 
   app.constant('baseUrl', 'https://cth-curriculum.firebaseio.com/');
 
-  app.run(function($state, $rootScope) {
+  app.run(function($state, $rootScope, switcher, history) {
+    switcher.initialize();
+    history.initialize();
+    window.backlog = history.get();
+
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
       event.preventDefault();
       $state.go('courses.index');
     });
   });
-
   //app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
-
-
 })();

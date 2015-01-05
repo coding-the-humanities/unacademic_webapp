@@ -23,11 +23,10 @@
         return currentState[key] === value;
       });
 
-
       delete intersection.queue;
 
-      if (intersection.lock === "closed") {
-        return { lock: "closed" };
+      if (_.isEmpty(intersection)) {
+        return false;
       }
 
       return intersection;

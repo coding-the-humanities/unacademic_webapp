@@ -29,7 +29,7 @@
     }
 
     function checkForm(form, modelId) {
-      if (form.$dirty) {
+      if (!!form.$dirty) {
         dispatcher.queue({ add: modelId });
       }
     }

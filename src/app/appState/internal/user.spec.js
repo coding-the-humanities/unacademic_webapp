@@ -1,23 +1,22 @@
 (function(){
 
-  describe("currentUser", function(){
-    var currentUserId;
+  describe("user", function(){
+    var userId;
     var $log;
 
     beforeEach(function(){
 
-      module('unacademic.appState.currentUser');
+      module('unacademic.appState.user');
 
-      inject(function(_currentUser_, _$log_){
-        currentUser = _currentUser_;
-        $log = _$log_;
+      inject(function(_user_){
+        user = _user_;
       });
     });
 
     describe("current user id", function(){
 
       it("is undefined by default", function(){
-        expect(currentUser.get()).to.be.undefined;
+        expect(user.get()).to.be.undefined;
       });
 
       describe("set", function(){
@@ -27,16 +26,15 @@
 
         beforeEach(function(){
           userId = 'John123';
-          setUserId = currentUser.set(userId);
+          setUserId = user.set(userId);
         });
-
 
         it("returns true", function(){
           expect(setUserId).to.be.true;
         });
 
         it("can be set", function(){
-          expect(currentUser.get()).to.equal(userId);
+          expect(user.get()).to.equal(userId);
         });
       })
     })

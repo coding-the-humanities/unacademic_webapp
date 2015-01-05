@@ -1,7 +1,9 @@
 (function(){
   angular.module('unacademic.appState', [
     'unacademic.appState.dispatcher',
-    'unacademic.appState.currentUser',
+    'unacademic.appState.switcher',
+    'unacademic.appState.history',
+    'unacademic.appState.user',
     'unacademic.appState.mode',
     'unacademic.appState.queue',
     'unacademic.appState.permission',

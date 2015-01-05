@@ -2,14 +2,12 @@
 
   describe("dispatcher", function(){
     var dispatcher;
-    var $log;
 
     var mode;
-    var currentUser;
+    var user;
     var view;
     var resource;
     var queue;
-    var $state;
 
     var permissionMock;
 
@@ -21,7 +19,7 @@
         set: function(){}
       };
 
-      currentUser = {
+      user = {
         name: 'user',
         get: function(){},
         set: function(){}
@@ -45,7 +43,7 @@
         set: function(){}
       }
 
-      var modules = [mode, currentUser, view, resource, queue];
+      var modules = [mode, user, view, resource, queue];
 
       _.each(modules, function(module){
         module['get'] = sinon.spy();
@@ -58,26 +56,17 @@
 
       permissionMock = sinon.mock(permission);
 
-      $state = {
-        go: function(){}
-      };
-
-      $state.go = sinon.spy();
-
-
       module('unacademic.appState.dispatcher',  function($provide){
         $provide.value('permission', permission);
         $provide.value('mode', mode);
         $provide.value('queue', queue);
-        $provide.value('currentUser', currentUser);
-        $provide.value('$state', $state);
+        $provide.value('user', user);
         $provide.value('view', view);
         $provide.value('resource', resource);
       });
 
-      inject(function(_dispatcher_, _$log_){
+      inject(function(_dispatcher_){
         dispatcher = _dispatcher_;
-        $log = _$log_;
       });
     });
 
@@ -86,11 +75,10 @@
     });
 
     describe("get", function(){
-      var state;
 
       it("gets the correct data", function(){
         state = dispatcher.getState();
-        var modules = [currentUser, mode, view, resource, queue];
+        var modules = [user, mode, view, resource, queue];
         _.each(modules, function(module){
           expect(module.get).calledOnce;
         })
@@ -109,13 +97,12 @@
       describe("with no changes", function(){
 
         beforeEach(function(){
-          var state = {};
-          permissionMock.expects('get').once().returns(state);
+          permissionMock.expects('get').once().returns(false);
           setState = dispatcher.setState({user: 'yeehaa'});
         });
 
         it("returns false", function(){
-          expect(setState).to.be.false;
+          expect(setState).to.be.undefined;
         });
 
         it("does not notify observers", function(){
@@ -123,21 +110,12 @@
         });
 
         it("does not set any value", function(){
-          expect(currentUser.set).not.called;
+          expect(user.set).not.called;
           expect(mode.set).not.called;
           expect(view.set).not.called;
           expect(resource.set).not.called;
         });
-
-        it("does not change routes", function(){
-          expect($state.go).not.called;
-        })
-
-        it("does not log state", function(){
-          expect($log.log.logs.length).to.equal(0);
-        });
       });
-
 
       describe("with one change", function(){
 
@@ -151,38 +129,27 @@
             queue: undefined
           }
 
-          var approvedState = {
+          var state = {
             mode: 'learning',
           }
 
           permissionMock.expects('get')
             .withArgs(proposedState)
             .once()
-            .returns(approvedState);
-          setState = dispatcher.setState(approvedState);
-        });
+            .returns(state);
 
-        it("returns true", function(){
-          expect(setState).to.be.true;
+          setState = dispatcher.setState(state);
         });
 
         it("sets the values", function(){
-          expect(currentUser.set).not.called;
+          expect(user.set).not.called;
           expect(mode.set).calledWith('learning');
           expect(view.set).not.called;
           expect(resource.set).not.called;
         });
 
-        it("does not change routes", function(){
-          expect($state.go).not.called;
-        })
-
         it("notifies observers", function(){
           expect(notificationSpy).calledOnce;
-        });
-
-        it("logs the state", function(){
-          expect($log.log.logs.length).to.equal(1);
         });
       });
 
@@ -198,7 +165,7 @@
             queue: undefined
           }
 
-          var approvedState = {
+          var state = {
             mode: 'learning',
             resource: '123',
             name: 'courses.detail',
@@ -209,32 +176,20 @@
           permissionMock.expects('get')
             .withArgs(proposedState)
             .once()
-            .returns(approvedState);
-          setState = dispatcher.setState(approvedState);
-        });
+            .returns(state);
 
-        it("returns true", function(){
-          expect(setState).to.be.true;
+          setState = dispatcher.setState(state);
         });
 
         it("sets the values", function(){
-          expect(currentUser.set).calledWith('yeehaa');
+          expect(user.set).calledWith('yeehaa');
           expect(mode.set).calledWith('learning');
           expect(view.set).calledWith('courses.detail');
           expect(resource.set).calledWith('123');
         });
 
-        it("does not change routes", function(){
-          expect($state.go).calledWith('courses.detail', {courseId: '123'});
-        })
-
-
         it("notifies observers", function(){
           expect(notificationSpy).calledOnce;
-        });
-
-        it("logs the state", function(){
-          expect($log.log.logs.length).to.equal(1);
         });
       });
     });
