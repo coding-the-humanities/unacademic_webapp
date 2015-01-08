@@ -70,6 +70,65 @@
       });
     });
 
+    describe("resource changes", function(){
+      describe("no changes", function(){
+        beforeEach(function(){
+
+          currentState = {
+            mode: 'browsing',
+            resource: {
+              id: '123',
+              curator: 'yeehaa'
+            }
+          }
+
+          nextState = {
+            mode: 'browsing',
+            resource: {
+              id: '123',
+              curator: 'yeehaa',
+            },
+            queue: new Set()
+          }
+
+          isAllowed = permission.get(nextState, currentState);
+        });
+
+        it("is not allowed to switch", function(){
+          expect(isAllowed).to.be.false;
+        });
+      })
+
+      describe("changes", function(){
+        beforeEach(function(){
+
+          currentState = {
+            mode: 'browsing',
+            resource: {
+              id: '123',
+              curator: 'yeehaa'
+            }
+          }
+
+          nextState = {
+            mode: 'browsing',
+            resource: {
+              id: '456',
+              curator: 'yeehaa',
+            },
+            queue: new Set()
+          }
+
+          isAllowed = permission.get(nextState, currentState);
+        });
+
+        it("is not allowed to switch", function(){
+          expect(isAllowed.resource.id).to.equal('456');
+        });
+      })
+    });
+
+
     describe("queue", function(){
       describe("is full", function(){
         beforeEach(function(){

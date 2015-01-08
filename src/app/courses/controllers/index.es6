@@ -27,15 +27,26 @@
       dispatcher.registerObserverCallback(updateInfo);
     }
 
-    function goToCourse(id){
-      if(!id){
-        id = 'new';
+    function goToCourse(resource){
+
+      if(!resource){
+       resource = createNewResource();
       }
 
       dispatcher.setState({
-        name: 'courses.detail', 
-        resource: id 
+        name: 'courses.detail',
+        resource: {
+          id: resource.id,
+          curator: resource.curator
+        }
       });
+    }
+
+    function createNewResource(){
+       return {
+         id: 'new',
+        curator: dispatcher.getState().user
+       };
     }
 
     function updateInfo(){
@@ -49,7 +60,7 @@
     function viewProps(){
       return  {
         learn: [
-          'summary', 
+          'summary',
           'description'
         ],
         curate: [
@@ -63,12 +74,12 @@
             key: 'description',
             type: 'textarea',
           },
-          { 
+          {
             type: 'button',
             title: 'Add New Course',
             onClick: () => goToCourse()
           },
-          { 
+          {
             type: 'submit',
             title: 'Save',
           }

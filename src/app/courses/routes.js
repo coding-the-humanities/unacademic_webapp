@@ -26,12 +26,12 @@
       })
 
       .state('courses.detail', {
-        url: '/detail/:courseId',
+        url: '/:curator/:id',
         controller: 'Detail',
         controllerAs: 'vm',
         templateUrl: 'courses/views/index.html',
         resolve: {
-          data: function(resolvers){
+          data: function($stateParams, resolvers){
             return resolvers.detail();
           }
         }

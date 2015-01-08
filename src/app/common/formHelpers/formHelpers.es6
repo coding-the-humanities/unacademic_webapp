@@ -21,7 +21,7 @@
 
       function success(){
         dispatcher.queue({remove: model.id});
-        dispatcher.setState({resource: model.id});
+        dispatcher.setState({resource: {id: model.id, curator: model.curator}});
       }
 
       function error(){

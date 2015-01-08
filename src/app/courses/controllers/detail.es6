@@ -27,15 +27,25 @@
       dispatcher.registerObserverCallback(updateInfo);
     }
 
-    function goToWaypoint(id){
-      if(!id){
-        id = 'new';
+    function goToWaypoint(resource){
+      if(!resource){
+        resource = createNewResource();
       }
 
       dispatcher.setState({
-        name: 'waypoints.detail', 
-        resource: id 
+        name: 'waypoints.detail',
+        resource: {
+          id: resource.id,
+          curator: resource.curator
+        }
       });
+    }
+
+    function createNewResource(){
+       return {
+         id: 'new',
+         curator: dispatcher.getState().user
+       };
     }
 
     function updateInfo(){

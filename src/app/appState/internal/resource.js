@@ -4,8 +4,8 @@
   var app = angular.module("unacademic.appState.resource", []);
   app.factory("resource", resource);
 
-  function resource($stateParams) {
-    var name;
+  function resource() {
+    var _resource;
 
     return {
       name: "resource",
@@ -14,14 +14,11 @@
     };
 
     function get() {
-      var params = $stateParams;
-      var keys = _.keys(params);
-      var defaultName = params[keys[0]];
-      return name = name || defaultName;
+      return _resource;
     }
 
-    function set(newName) {
-      name = newName;
+    function set(newResource) {
+      _resource = newResource;
       return true;
     }
   };

@@ -12,8 +12,8 @@
     };
 
     function detail() {
-      var userId = dispatcher.getState().user;
-      var courseId = dispatcher.getState().resource;
+      var userId = dispatcher.getState().resource.curator;
+      var courseId = dispatcher.getState().resource.id;
       var schema = Course.schema;
 
       return $q(function (resolve, reject) {

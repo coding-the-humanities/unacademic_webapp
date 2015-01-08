@@ -12,10 +12,12 @@
 
       dispatcher = {
         setState: function(){},
+        getState: function(){},
         registerObserverCallback: function(){ return; }
       }
 
       dispatcher.setState = sinon.spy();
+      dispatcher.getState = sinon.stub().returns({user: 'yeehaa'});
       dispatcher.registerObserverCallback = sinon.spy();
 
       formHelpers = {
@@ -89,13 +91,24 @@
       var addNewCourse;
 
       beforeEach(function(){
-        vm.goToCourse('123');
+        var card = {
+          id: '123',
+          curator: 'yeehaa'
+        }
+        vm.goToCourse(card);
+      });
+
+      it("does not calls dispatcher to get the current user", function(){
+        expect(dispatcher.getState).not.called;
       });
 
       it("sets the app to the correct state", function(){
         expect(dispatcher.setState).calledWith({
-          name: 'courses.detail', 
-          resource: '123'
+          name: 'courses.detail',
+          resource: {
+            id: '123',
+            curator: 'yeehaa'
+          }
         });
       });
     });
@@ -108,10 +121,17 @@
         addNewCourse();
       });
 
+      it("calls dispatcher to get the current user", function(){
+        expect(dispatcher.getState).calledOnce;
+      });
+
       it("can create new courses", function(){
         expect(dispatcher.setState).calledWith({
-          name: 'courses.detail', 
-          resource: 'new'
+          name: 'courses.detail',
+          resource: {
+            id: 'new',
+            curator: 'yeehaa'
+          }
         });
       });
     });

@@ -20,19 +20,8 @@
     }
 
     function switchState({name, resource}){
-      if(resource){
-        let routeName = name;
-        let modelName = routeName.replace(/s\..+/, '') + "Id"
-
-          let params = {
-            [modelName]: "" + resource
-          }
-        $state.go(routeName, params)
-      }
-
-      if(name && !resource){
-        $state.go(name)
-      }
+      let params = {};
+      $state.go(name, resource)
     }
   }
 })();

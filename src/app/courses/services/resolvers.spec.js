@@ -19,7 +19,7 @@
 
       Course = function(){};
       Course.schema = '123';
-      
+
       module('unacademic.courses.services.resolvers',  function($provide){
         $provide.value('dispatcher', dispatcher);
         $provide.value('CoverInfo', CoverInfo);
@@ -68,7 +68,11 @@
       describe("with a user and regular id", function(){
 
         beforeEach(function(){
-          dispatcher.getState = sinon.stub().returns({user: '123', resource: '456'});
+          var resource = {
+            id: '456',
+            curator: 'yeehaa'
+          }
+          dispatcher.getState = sinon.stub().returns({user: '123', resource: resource});
           resolvers.detail().then(function(data){
             response = data;
           });
@@ -80,7 +84,7 @@
         });
 
         it("calls the Course service with the right arguments", function(){
-          expect(Course.get).to.be.calledWithExactly('123', '456');
+          expect(Course.get).to.be.calledWithExactly('yeehaa', '456');
         });
 
         it("returns all the necessary data for the detail page", function(){

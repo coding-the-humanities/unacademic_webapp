@@ -40,7 +40,7 @@
           resolvers: {},
           dispatcher: dispatcher,
           formHelpers: formHelpers,
-          data: data 
+          data: data
         });
       });
     });
@@ -85,20 +85,20 @@
 
     });
 
-    describe("move to an existing waypoint", function(){
+    xdescribe("move to an existing waypoint", function(){
       beforeEach(function(){
         vm.goToWaypoint('123');
       });
 
       it("sets the app to the correct state", function(){
         expect(dispatcher.setState).calledWith({
-          name: 'waypoints.detail', 
+          name: 'waypoints.detail',
           resource: '123'
         });
       });
     });
 
-    describe("add new course", function(){
+    xdescribe("add new course", function(){
       var addNewCourse;
 
       beforeEach(function(){
@@ -108,7 +108,7 @@
 
       it("can create new courses", function(){
         expect(dispatcher.setState).calledWith({
-          name: 'waypoints.detail', 
+          name: 'waypoints.detail',
           resource: 'new'
         });
       });

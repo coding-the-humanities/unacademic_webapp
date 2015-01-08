@@ -30,7 +30,8 @@
 
         beforeEach(function(){
           model = {
-            id: '123'
+            id: '123',
+            curator: 'yeehaa'
           };
 
           form = {
@@ -93,7 +94,11 @@
             });
 
             it("set the correct resource id", function(){
-              expect(dispatcher.setState).calledWith({resource: '123'});
+              var resource = {
+                id: '123',
+                curator: 'yeehaa'
+              }
+              expect(dispatcher.setState).calledWith({resource: resource});
             });
           });
 

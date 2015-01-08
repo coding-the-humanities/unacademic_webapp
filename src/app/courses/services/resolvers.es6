@@ -11,10 +11,10 @@
       index: index,
       detail: detail
     }
-  
+
     function detail(){
-      let userId = dispatcher.getState().user;
-      let courseId = dispatcher.getState().resource;
+      let userId = dispatcher.getState().resource.curator;
+      let courseId = dispatcher.getState().resource.id;
       let schema = Course.schema;
 
       return $q(function(resolve, reject){
@@ -24,7 +24,7 @@
         }
 
         if(userId && courseId === 'new'){
-          let course = new Course(); 
+          let course = new Course();
           resolve({schema: schema, course: course});
         }
 

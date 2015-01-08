@@ -19,7 +19,7 @@
       }
 
       var intersection =  _.omit(nextState, function(value, key){
-        return currentState[key] === value;
+        return _.isEqual(currentState[key], value);
       });
 
       delete intersection.queue;
