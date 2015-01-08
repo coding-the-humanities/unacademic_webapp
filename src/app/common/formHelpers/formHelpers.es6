@@ -1,4 +1,5 @@
 (function(){
+
   'use strict';
 
   angular.module('unacademic.common.formHelpers', [])
@@ -36,4 +37,3 @@
     }
   }
 })();
-

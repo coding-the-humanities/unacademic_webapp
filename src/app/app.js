@@ -17,16 +17,26 @@
   });
 
   app.constant('baseUrl', 'https://cth-curriculum.firebaseio.com/');
+  //app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
 
-  app.run(function($state, $rootScope, switcher, history) {
-    switcher.initialize();
-    history.initialize();
-    window.backlog = history.get();
+  app.run(function($state, $rootScope, switcher, history, dispatcher) {
+    initialize();
 
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
       event.preventDefault();
       $state.go('courses.index');
     });
+
+    function initialize(){
+      switcher.initialize();
+      history.initialize();
+
+      dispatcher.setState({
+        name: 'courses.index',
+        mode: 'browsing'
+      });
+
+      window.backlog = history.get();
+    }
   });
-  //app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
 })();

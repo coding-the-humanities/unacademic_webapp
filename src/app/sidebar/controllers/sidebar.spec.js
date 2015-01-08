@@ -3,27 +3,16 @@
   describe("Sidebar", function(){
     var sidebar;
     var $scope;
-    var dispatcherMock;
+    var dispatcher;
 
     beforeEach(function () {
       module('unacademic.sidebar.controller');
 
-      var dispatcher = {
-        getState: function(){},
-        setState: function(){},
-        queue: function(){},
-        registerObserverCallback: function(){}
-      };
+      dispatcher = {};
+      dispatcher.getState = sinon.stub().returns({mode: 'browsing'});
+      dispatcher.setState = sinon.stub();
 
-      dispatcherMock= sinon.mock(dispatcher);
-
-      var state = {
-        user: undefined,
-        mode: 'browsing'
-      }
-
-      dispatcherMock.expects('getState').once().returns(state);
-      dispatcherMock.expects('registerObserverCallback').once();
+      dispatcher.registerObserverCallback = sinon.stub();
 
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
@@ -35,45 +24,62 @@
       });
     });
 
-    afterEach(function(){
-      dispatcherMock.verify();
-    });
-
-    describe("initial state",function(){
+    describe("initialize",function(){
       it("sets the results", function(){
+        expect(dispatcher.registerObserverCallback).called;
         expect(sidebar.user).to.be.undefined;
         expect(sidebar.mode).to.equal('browsing')
       });
     });
 
-    describe("signIn", function(){
-      it("sets the current user id on mode", function(){
-      dispatcherMock.expects('setState').once();
-        sidebar.signIn();
-      });
-    });
+    describe("observer callback triggered", function(){
 
-    describe("changeMode", function(){
-
-      afterEach(function(){
-        sidebar.changeMode();
+      describe("state switching", function(){
+        it("gets the currentState", function(){
+          dispatcher.getState = sinon.stub().returns({mode: 'learning'});
+          dispatcher.registerObserverCallback.callArg(0);
+          expect(sidebar.mode).to.equal('learning')
+        });
       });
 
-      describe("if mode is learning", function(){
+      describe("if mode is browsing", function(){
+        it("attempts to set the mode to learning", function(){
+
+          sidebar.mode = 'browsing';
+          var newState = {
+            user: 'yeehaa',
+            mode: 'learning'
+          }
+
+          sidebar.changeMode();
+
+          expect(dispatcher.setState).calledWith(newState);
+        });
+      });
+
+      describe("if mode is browsing", function(){
         it("attempts to set the mode to curation", function(){
+
           sidebar.mode = 'learning';
-          dispatcherMock.expects('setState')
-            .withArgs({mode: 'curation'})
-            .once();
+          var newState = {
+            mode: 'curation'
+          }
+
+          sidebar.changeMode();
+          expect(dispatcher.setState).calledWith(newState);
         });
       });
 
       describe("if mode is curation", function(){
         it("attempts to set the mode to curation", function(){
+
           sidebar.mode = 'curation';
-          dispatcherMock.expects('setState')
-            .withArgs({mode: 'learning'})
-            .once();
+          var newState = {
+            mode: 'learning'
+          }
+
+          sidebar.changeMode();
+          expect(dispatcher.setState).calledWith(newState);
         });
       });
     });

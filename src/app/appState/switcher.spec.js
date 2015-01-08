@@ -26,7 +26,7 @@
     describe("initialize", function(){
       it("registers the observer", function(){
         switcher.initialize();
-        expect(dispatcher.registerObserverCallback);
+        expect(dispatcher.registerObserverCallback).called;
       });
 
     });

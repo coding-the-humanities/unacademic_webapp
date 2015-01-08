@@ -19,15 +19,9 @@
   </div>
 
   <div class="toolbox">
-
-    <div ng-hide="sidebar.user">
-      <button ng-click="sidebar.signIn()">Sign In</button>
-    </div>
-
-    <div ng-show="sidebar.user">
-      <button ng-click="sidebar.changeMode()">
-        {{sidebar.mode}}
-      </button>
+    <button ng-click="sidebar.changeMode()">
+      {{sidebar.mode}}
+    </button>
 
       <!-- <label class="label-switch"> -->
       <!--   <input type="checkbox" -->
@@ -36,6 +30,5 @@
       <!--          ng-false-value="'learning'"/> -->
       <!--   <div class="checkbox"></div> -->
       <!-- </label> -->
-    </div>
   </div>
 </div>

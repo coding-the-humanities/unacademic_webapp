@@ -18,7 +18,7 @@
           instance.id = utilities.generateUID();
         }
         _.each(props, (prop) => { this[prop] = instance[prop]; });
-        
+
         if(!this.curator || this.curator === 'general'){
           this.curator = dispatcher.getState().user;
         }
@@ -46,17 +46,17 @@
 
       static getAll(userId){
         let extractObjects = _.bind(_extractObjects, this);
-        return DataStore.get(this.name, userId) 
+        return DataStore.get(this.name, userId)
           .then(extractObjects);
       }
 
       static get(userId, id){
         let extractData = _.bind(_extractData, this);
 
-        return DataStore.get(this.name, userId, id) 
+        return DataStore.get(this.name, userId, id)
           .then(extractData);
       }
-      
+
       static initialize({schema, initData}){
         this.schema = schema;
         this.initData = initData;

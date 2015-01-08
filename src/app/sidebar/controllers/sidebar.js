@@ -11,26 +11,25 @@
 
     initialize();
 
-
     function initialize(){
-      sidebar.signIn = signIn;
       sidebar.changeMode = changeMode;
       updateAppState();
       dispatcher.registerObserverCallback(updateAppState);
     }
 
-    function signIn(){
-      dispatcher.setState({
-        user: 'yeehaa',
-        mode: 'learning',
-      });
-    };
-
     function changeMode(){
+
+      if(sidebar.mode == 'browsing'){
+        return dispatcher.setState({user: 'yeehaa', mode: 'learning'});
+      }
+
       if(sidebar.mode === 'learning'){
         return dispatcher.setState({mode: 'curation'});
       }
-      return dispatcher.setState({mode: 'learning'});
+
+      if(sidebar.mode === 'curation'){
+        return dispatcher.setState({mode: 'learning'});
+      }
     }
 
     function updateAppState(){
