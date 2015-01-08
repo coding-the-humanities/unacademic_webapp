@@ -1,7 +1,6 @@
 (function(){
   var app = angular.module('unacademic.courses');
 
-
   /*@ngInject*/
 
   app.config(function($stateProvider) {
@@ -31,11 +30,10 @@
         controllerAs: 'vm',
         templateUrl: 'courses/views/index.html',
         resolve: {
-          data: function($stateParams, resolvers){
+          data: function(resolvers){
             return resolvers.detail();
           }
         }
       })
   });
-
 })();

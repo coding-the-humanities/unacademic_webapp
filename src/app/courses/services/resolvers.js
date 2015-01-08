@@ -12,39 +12,42 @@
     };
 
     function detail() {
+      var schema = Course.schema;
       var userId = dispatcher.getState().resource.curator;
       var courseId = dispatcher.getState().resource.id;
-      var schema = Course.schema;
+      var promises;
 
       return $q(function (resolve, reject) {
         if (!userId) {
-          reject();
+          return reject();
         }
 
         if (userId && courseId === "new") {
           var course = new Course();
-          resolve({ schema: schema, course: course });
+          return resolve({ schema: schema, course: course });
         }
 
-        if (userId && courseId !== "new") {
-          Course.get(userId, courseId).then(function (data) {
-            var course = data;
-            resolve({ schema: schema, course: course });
-          });
-        }
+        promises = [Course.get(userId, courseId)];
+
+        $q.all(promises).then(function (data) {
+          var course = data[0];
+          return resolve({ schema: schema, course: course });
+        });
       });
     }
 
     function index() {
+      var userId = dispatcher.getState().user || "general";
+      var promises;
+
       return $q(function (resolve, reject) {
-        var userId = dispatcher.getState().user || "general";
-        var promises = [CoverInfo.get(userId, "info"), Course.getAll(userId)];
+        promises = [CoverInfo.get(userId, "info"), Course.getAll(userId)];
 
         $q.all(promises).then(function (data) {
           var coverInfo = data[0];
           var courses = data[1];
           var schema = CoverInfo.schema;
-          resolve({ coverInfo: coverInfo, schema: schema, courses: courses });
+          return resolve({ coverInfo: coverInfo, schema: schema, courses: courses });
         });
       });
     }

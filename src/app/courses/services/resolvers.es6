@@ -13,35 +13,39 @@
     }
 
     function detail(){
+      let schema = Course.schema;
       let userId = dispatcher.getState().resource.curator;
       let courseId = dispatcher.getState().resource.id;
-      let schema = Course.schema;
+      let promises;
 
       return $q(function(resolve, reject){
 
         if(!userId){
-          reject();
+          return reject();
         }
 
         if(userId && courseId === 'new'){
           let course = new Course();
-          resolve({schema: schema, course: course});
+          return resolve({schema: schema, course: course});
         }
 
-        if(userId && courseId !== 'new'){
-          Course.get(userId, courseId).then(function(data){
-            let course = data;
-            resolve({schema: schema, course: course});
-          });
-        }
+        promises = [
+          Course.get(userId, courseId)
+        ];
+
+        $q.all(promises).then(function(data){
+          let course = data[0];
+          return resolve({schema: schema, course: course});
+        });
       });
     }
 
     function index(){
+      let userId = dispatcher.getState().user || 'general';
+      let promises;
 
       return $q(function(resolve, reject){
-        let userId = dispatcher.getState().user || 'general';
-        let promises = [
+        promises = [
           CoverInfo.get(userId, 'info'),
           Course.getAll(userId)
         ];
@@ -50,7 +54,7 @@
           let coverInfo = data[0];
           let courses = data[1];
           let schema = CoverInfo.schema;
-          resolve({coverInfo, schema, courses});
+          return resolve({coverInfo, schema, courses});
         });
       });
     }
