@@ -41,12 +41,14 @@
 
     function updateHistory() {
       var state = dispatcher.getState();
+
       if (!state.timestamp) {
         _history = shortenHistory(_history);
         state.timestamp = Date.now();
         _history.unshift(state);
         index = 0;
       }
+      console.log(index);
     }
 
     function shortenHistory(history) {

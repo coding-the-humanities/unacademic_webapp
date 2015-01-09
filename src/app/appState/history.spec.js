@@ -115,8 +115,9 @@
         });
       });
 
-      describe("reset", function(){
+      describe("with timestamp", function(){
         beforeEach(function(){
+          expect(history.get().length).to.equal(2);
           history.previous();
           dispatcher.getState = sinon.stub().returns(state5);
           dispatcher.registerObserverCallback.callArg(0);

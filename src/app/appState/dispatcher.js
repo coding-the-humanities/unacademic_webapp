@@ -8,7 +8,7 @@
   function dispatcher(queue, view, user, mode, permission, resource) {
     var modules = [mode, user, view, resource, queue];
     var observerCallbacks = [];
-    // let timestamp;
+    var timestamp;
 
     return {
       getState: get,
@@ -24,7 +24,10 @@
         state[module.name] = module.get();
       });
 
-      // state.timestamp = timestamp;
+      if (timestamp) {
+        state.timestamp = timestamp;
+      }
+
 
       return state;
     }
@@ -33,9 +36,10 @@
       var currentState = get();
       var proposal = createProposal(currentState, proposedChanges);
       var approvedChanges = permission.get(proposal, currentState);
-      // timestamp = proposedChanges.timestamp;
+
 
       if (approvedChanges) {
+        timestamp = setTimeStamp(proposedChanges.timestamp);
         setServicesState(approvedChanges);
         notifyObservers();
       }
@@ -63,6 +67,10 @@
 
     function setQueue(options) {
       return queue.set(options);
+    }
+
+    function setTimeStamp(proposal) {
+      return proposal || false;
     }
 
     function registerObserverCallback(callback) {

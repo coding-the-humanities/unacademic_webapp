@@ -75,13 +75,21 @@
     });
 
     describe("get", function(){
+      var state;
+
+      beforeEach(function(){
+        state =dispatcher.getState();
+      })
 
       it("gets the correct data", function(){
-        state = dispatcher.getState();
         var modules = [user, mode, view, resource, queue];
         _.each(modules, function(module){
           expect(module.get).calledOnce;
         })
+      });
+
+      it("does not include a timestamp", function(){
+        expect(state).not.to.include.keys('timestamp');
       });
     });
 
@@ -190,6 +198,47 @@
 
         it("notifies observers", function(){
           expect(notificationSpy).calledOnce;
+        });
+      });
+    });
+
+    describe("timestamp", function(){
+
+      describe("without change", function(){
+
+        beforeEach(function(){
+
+          var state = {
+            mode: 'learning',
+            timestamp: '123',
+          }
+
+          permissionMock.expects('get').returns(false);
+
+          setState = dispatcher.setState(state);
+        });
+
+        it("sets the values", function(){
+          expect(dispatcher.getState().timestamp).to.equal(undefined);
+        });
+      });
+
+      describe("with change", function(){
+
+        beforeEach(function(){
+
+          var state = {
+            mode: 'learning',
+            timestamp: '123',
+          }
+
+          permissionMock.expects('get').returns({mode: 'learning'});
+
+          setState = dispatcher.setState(state);
+        });
+
+        it("sets the values", function(){
+          expect(dispatcher.getState().timestamp).to.equal('123');
         });
       });
     });

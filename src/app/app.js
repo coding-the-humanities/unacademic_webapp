@@ -36,7 +36,7 @@
         mode: 'browsing'
       });
 
-      window.backlog = history.get();
+      window.backlog = history.get;
     }
   });
 })();
