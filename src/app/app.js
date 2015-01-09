@@ -8,7 +8,7 @@
     'unacademic.appState',
     'unacademic.sidebar',
     'unacademic.models',
-    'unacademic.courses'
+    'unacademic.content'
   ]);
 
   /*@ngInject*/
@@ -19,7 +19,7 @@
   app.constant('baseUrl', 'https://cth-curriculum.firebaseio.com/');
   //app.constant('baseUrl', 'http://private-7c8dd-unacademic.apiary-mock.com');
 
-  app.run(function($state, $rootScope, switcher, history, dispatcher) {
+  app.run(function($state, $rootScope, switcher, history, navHelpers, dispatcher) {
     initialize();
 
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
@@ -32,11 +32,12 @@
       history.initialize();
 
       dispatcher.setState({
-        name: 'courses.index',
+        name: 'cover',
         mode: 'browsing'
       });
 
       window.backlog = history.get;
+      window.navHelpers = navHelpers;
     }
   });
 })();

@@ -1,6 +1,6 @@
 (function(){
 
-  describe("Index", function(){
+  describe("CoverCtrl", function(){
     var vm;
     var $scope;
     var dispatcher;
@@ -8,7 +8,7 @@
 
     beforeEach(function () {
 
-      module('unacademic.courses.controllers.index');
+      module('unacademic.content.cover');
 
       dispatcher = {
         setState: function(){},
@@ -39,9 +39,9 @@
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
-        vm = $controller('Index', {
+        vm = $controller('CoverCtrl', {
           $scope: $scope,
-          resolvers: {},
+          coverResolver: {},
           dispatcher: dispatcher,
           formHelpers: formHelpers,
           navHelpers: navHelpers,

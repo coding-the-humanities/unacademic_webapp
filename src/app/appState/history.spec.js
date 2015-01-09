@@ -5,7 +5,7 @@
     var $state;
     var state1;
     var state2;
-
+    var status;
 
     beforeEach(function(){
       dispatcher = {};
@@ -41,14 +41,25 @@
         waypoints: 'waypoints.any',
         timestamp: '123'
       }
+      status = history.status;
     });
 
     describe("initialize", function(){
-      it("registers the observer", function(){
+      beforeEach(function(){
         history.initialize();
+      });
+
+      it("registers the observer", function(){
         expect(dispatcher.registerObserverCallback);
       });
 
+      it("is empty", function(){
+        expect(status().length).to.equal(0);
+      });
+
+      it("has an index of 0", function(){
+        expect(status().index).to.equal(0);
+      });
     });
 
     describe("time travel", function(){
@@ -59,19 +70,20 @@
         dispatcher.registerObserverCallback.callArg(0);
         dispatcher.getState = sinon.stub().returns(state2);
         dispatcher.registerObserverCallback.callArg(0);
-        expect(history.get().length).to.equal(2);
+        expect(status().length).to.equal(2);
       });
 
       describe("previous", function(){
 
-
         it("return the previous state", function(){
           expect(history.previous()).to.equal(state1);
+          expect(status().index).to.equal(1);
         });
 
         it("returns the last state if at beginning", function(){
           history.previous();
           history.previous();
+          expect(status().index).to.equal(1);
           expect(history.previous()).to.equal(state1);
         });
       });
@@ -83,11 +95,13 @@
 
         it("return the next state", function(){
           expect(history.next()).to.equal(state2);
+          expect(status().index).to.equal(0);
         });
 
         it("returns the first state if at end", function(){
           history.next();
           expect(history.next()).to.equal(state2);
+          expect(status().index).to.equal(0);
         });
       });
 
@@ -102,7 +116,8 @@
         });
 
         it("adds the state to the history", function(){
-          expect(history.get().length).to.equal(3);
+          expect(status().length).to.equal(3);
+          expect(status().index).to.equal(0);
           expect(history.get()).to.contain(state3);
         });
 
@@ -117,19 +132,21 @@
 
       describe("with timestamp", function(){
         beforeEach(function(){
-          expect(history.get().length).to.equal(2);
+          expect(status().length).to.equal(2);
           history.previous();
           dispatcher.getState = sinon.stub().returns(state5);
           dispatcher.registerObserverCallback.callArg(0);
         });
 
         it("does not add the state to the history", function(){
+          expect(status().index).to.equal(1);
           expect(history.get().length).to.equal(2);
           expect(history.get()).not.to.contain(state5);
         });
 
         it("does not reset the index", function(){
           expect(history.next()).to.equal(state2);
+          expect(status().index).to.equal(0);
         });
       });
     });

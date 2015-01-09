@@ -1,6 +1,6 @@
 (function(){
 
-  describe("Detail", function(){
+  describe("CourseCtrl", function(){
     var vm;
     var $scope;
     var dispatcher;
@@ -8,7 +8,7 @@
 
     beforeEach(function () {
 
-      module('unacademic.courses.controllers.detail');
+      module('unacademic.content.course');
 
       dispatcher = {
         setState: function(){},
@@ -39,9 +39,9 @@
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
-        vm = $controller('Detail', {
+        vm = $controller('CourseCtrl', {
           $scope: $scope,
-          resolvers: {},
+          courseResolver: {},
           dispatcher: dispatcher,
           formHelpers: formHelpers,
           navHelpers: navHelpers,

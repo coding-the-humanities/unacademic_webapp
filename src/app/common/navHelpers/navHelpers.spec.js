@@ -13,6 +13,8 @@
       dispatcher.setState = sinon.stub();
 
       history = {}
+      history.previous = sinon.stub().returns('123');
+      history.status = sinon.stub().returns('123');
 
       module('unacademic.common.navHelpers',  function($provide){
         $provide.value('dispatcher', dispatcher);
@@ -53,7 +55,6 @@
     });
 
     describe("add new course", function(){
-
       beforeEach(function(){
         var name = 'courses.detail';
         navHelpers.goTo(name);
@@ -75,8 +76,6 @@
     });
 
     describe("move back", function(){
-
-
       describe("on initial state", function(){
         beforeEach(function(){
           history.previous = sinon.stub();
@@ -107,6 +106,99 @@
           expect(dispatcher.setState).calledWith('123');
         });
       });
+    });
+
+    describe("move forward", function(){
+      describe("on initial state", function(){
+        beforeEach(function(){
+          history.next = sinon.stub();
+          navHelpers.goForward();
+        });
+
+        it("calls history to get the next state", function(){
+          expect(history.next).calledOnce;
+        });
+
+        it("calls dispatcher to set the next state", function(){
+          expect(dispatcher.setState).not.called;
+        });
+      });
+
+      describe("on subsequent states", function(){
+        beforeEach(function(){
+          history.next = sinon.stub().returns('123');
+          navHelpers.goForward();
+        });
+
+        it("calls history to get the next state", function(){
+          expect(history.next).calledOnce;
+        });
+
+        it("calls dispatcher to set the next state", function(){
+          expect(dispatcher.setState).calledWith('123');
+        });
+      });
+    });
+
+    describe("can travel in time", function(){
+
+      var canGoForward;
+      var canGoBack;
+
+      describe("end of history", function(){
+
+        beforeEach(function(){
+          history.status.returns({length: 10, index: 0});
+          canGoForward = navHelpers.canGoForward();
+          canGoBack = navHelpers.canGoBack();
+        });
+
+        it("calls history to get the next state", function(){
+          expect(history.status).calledTwice;
+        });
+
+        it("calls dispatcher to set the next state", function(){
+          expect(canGoForward).to.be.false;
+          expect(canGoBack).to.be.true;
+        });
+      });
+
+      describe("middle of history", function(){
+
+        beforeEach(function(){
+          history.status.returns({length: 10, index: 5});
+          canGoForward = navHelpers.canGoForward();
+          canGoBack = navHelpers.canGoBack();
+        });
+
+        it("calls history to get the next state", function(){
+          expect(history.status).calledTwice;
+        });
+
+        it("calls dispatcher to set the next state", function(){
+          expect(canGoForward).to.be.true;
+          expect(canGoBack).to.be.true;
+        });
+      });
+
+      describe("end of history", function(){
+
+        beforeEach(function(){
+          history.status.returns({length: 10, index: 10});
+          canGoForward = navHelpers.canGoForward();
+          canGoBack = navHelpers.canGoBack();
+        });
+
+        it("calls history to get the next state", function(){
+          expect(history.status).calledTwice;
+        });
+
+        it("calls dispatcher to set the next state", function(){
+          expect(canGoForward).to.be.true;
+          expect(canGoBack).to.be.false;
+        });
+      });
+
     });
   });
 })();

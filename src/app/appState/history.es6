@@ -7,11 +7,12 @@
 
   function history(dispatcher){
     let history;
-    let index = 0;
+    let index;
 
     return {
       initialize: initialize,
       get: get,
+      status: status,
       previous: previous,
       next: next
     };
@@ -34,8 +35,15 @@
       return history;
     }
 
+    function status(){
+      let length = history.length;
+      let index = index;
+      return {length, index};
+    }
+
     function initialize(){
       history = [];
+      index = 0;
       dispatcher.registerObserverCallback(updateHistory);
     }
 
@@ -48,7 +56,6 @@
          history.unshift(state);
          index = 0;
        }
-       console.log(index);
     }
 
     function shortenHistory(history){

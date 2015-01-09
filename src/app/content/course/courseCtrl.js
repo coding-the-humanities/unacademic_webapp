@@ -3,22 +3,22 @@
 (function () {
   "use strict";
 
+  angular.module("unacademic.content.course", []).controller("CourseCtrl", CourseCtrl);
 
-  angular.module("unacademic.courses.controllers.index", []).controller("Index", Index);
-
-  function Index(resolvers, $scope, dispatcher, data, navHelpers, formHelpers) {
+  function CourseCtrl(courseResolver, $scope, dispatcher, data, navHelpers, formHelpers) {
     var vm = this;
     initialize();
 
     function initialize() {
-      vm.info = data.coverInfo;
-      vm.cards = data.courses;
+      vm.info = data.course;
+      vm.cards = data.waypoints;
       vm.form = {};
       vm.schema = data.schema;
 
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
-      vm.goTo = _.bind(navHelpers.goTo, null, "courses.detail");
+      vm.goTo = _.bind(navHelpers.goTo, null, "waypoints.detail");
+      // test
       vm.goBack = navHelpers.goBack;
       vm.submit = function () {
         return formHelpers.submit(vm.form, vm.info);
@@ -33,11 +33,11 @@
     }
 
     function updateInfo() {
-      resolvers.index().then(function (_ref) {
-        var coverInfo = _ref.coverInfo;
-        var courses = _ref.courses;
-        vm.info = coverInfo;
-        vm.cards = courses;
+      courseResolver().then(function (_ref) {
+        var course = _ref.course;
+        var waypoints = _ref.waypoints;
+        vm.info = course;
+        vm.cards = waypoints;
       });
     }
 
@@ -52,7 +52,7 @@
           type: "button",
           title: "Add New Course",
           onClick: function () {
-            return vm.goTo();
+            return goTo();
           }
         }, {
           type: "button",

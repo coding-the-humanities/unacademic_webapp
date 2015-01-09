@@ -1,25 +1,24 @@
 (function(){
-
   'use strict';
 
-  angular.module('unacademic.courses.controllers.detail', [])
-         .controller('Detail', Detail)
 
-  function Detail(resolvers, $scope, dispatcher, data, navHelpers, formHelpers) {
+  angular.module('unacademic.content.cover')
+         .controller('CoverCtrl', CoverCtrl)
+
+  function CoverCtrl(coverResolver, $scope, dispatcher, data, navHelpers, formHelpers) {
 
     let vm = this;
     initialize();
 
     function initialize(){
-      vm.info = data.course;
-      vm.cards = data.waypoints;
+      vm.info = data.coverInfo;
+      vm.cards = data.courses;
       vm.form = {};
       vm.schema = data.schema;
 
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
-      vm.goTo = _.bind(navHelpers.goTo, null, 'waypoints.detail');
-      // test
+      vm.goTo = _.bind(navHelpers.goTo, null, 'course');
       vm.goBack = navHelpers.goBack;
       vm.submit = ()=> formHelpers.submit(vm.form, vm.info);
 
@@ -30,10 +29,10 @@
     }
 
     function updateInfo(){
-      resolvers.detail()
-        .then(({course, waypoints}) => {
-          vm.info = course;
-          vm.cards = waypoints;
+      coverResolver()
+        .then(({coverInfo, courses}) => {
+          vm.info = coverInfo;
+          vm.cards = courses;
         })
     }
 
@@ -57,7 +56,7 @@
           {
             type: 'button',
             title: 'Add New Course',
-            onClick: () => goToWaypoint()
+            onClick: () => vm.goTo()
           },
           {
             type: 'button',
