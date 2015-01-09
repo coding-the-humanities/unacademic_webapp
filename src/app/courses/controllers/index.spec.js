@@ -12,12 +12,10 @@
 
       dispatcher = {
         setState: function(){},
-        getState: function(){},
         registerObserverCallback: function(){ return; }
       }
 
       dispatcher.setState = sinon.spy();
-      dispatcher.getState = sinon.stub().returns({user: 'yeehaa'});
       dispatcher.registerObserverCallback = sinon.spy();
 
       formHelpers = {
@@ -27,6 +25,10 @@
 
       formHelpers.submit = sinon.spy();
       formHelpers.checkForm = sinon.spy();
+
+      navHelpers = {
+        goTo: function(){}
+      }
 
       var data = {
         coverInfo: '',
@@ -42,6 +44,7 @@
           resolvers: {},
           dispatcher: dispatcher,
           formHelpers: formHelpers,
+          navHelpers: navHelpers,
           data: data
         });
       });
@@ -59,7 +62,7 @@
       it("sets all the necessary actions on the vm", function(){
         expect(vm.learn).not.to.be.undefined;
         expect(vm.curate).not.to.be.undefined;
-        expect(vm.goToCourse).not.to.be.undefined;
+        expect(vm.goTo).not.to.be.undefined;
         expect(vm.submit).not.to.be.undefined;
       });
 
@@ -83,56 +86,6 @@
         vm.info = {id: '456'};
         $scope.$digest();
         expect(formHelpers.checkForm).calledWith('123', '456');
-      });
-
-    });
-
-    describe("move to an existing course", function(){
-      var addNewCourse;
-
-      beforeEach(function(){
-        var card = {
-          id: '123',
-          curator: 'yeehaa'
-        }
-        vm.goToCourse(card);
-      });
-
-      it("does not calls dispatcher to get the current user", function(){
-        expect(dispatcher.getState).not.called;
-      });
-
-      it("sets the app to the correct state", function(){
-        expect(dispatcher.setState).calledWith({
-          name: 'courses.detail',
-          resource: {
-            id: '123',
-            curator: 'yeehaa'
-          }
-        });
-      });
-    });
-
-    describe("add new course", function(){
-      var addNewCourse;
-
-      beforeEach(function(){
-        addNewCourse = vm.curate[3].onClick;
-        addNewCourse();
-      });
-
-      it("calls dispatcher to get the current user", function(){
-        expect(dispatcher.getState).calledOnce;
-      });
-
-      it("can create new courses", function(){
-        expect(dispatcher.setState).calledWith({
-          name: 'courses.detail',
-          resource: {
-            id: 'new',
-            curator: 'yeehaa'
-          }
-        });
       });
     });
   });

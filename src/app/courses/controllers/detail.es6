@@ -5,7 +5,7 @@
   angular.module('unacademic.courses.controllers.detail', [])
          .controller('Detail', Detail)
 
-  function Detail(resolvers, $scope, dispatcher, data, formHelpers) {
+  function Detail(resolvers, $scope, dispatcher, data, navHelpers, formHelpers) {
 
     let vm = this;
     initialize();
@@ -18,34 +18,15 @@
 
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
-      vm.goToWaypoint = goToWaypoint;
+      vm.goTo = _.bind(navHelpers.goTo, null, 'waypoints.detail');
+      // test
+      vm.goBack = navHelpers.goBack;
       vm.submit = ()=> formHelpers.submit(vm.form, vm.info);
 
       let checkForm = ()=> formHelpers.checkForm(vm.form, vm.info.id);
       $scope.$watch('vm.info', checkForm, true);
 
       dispatcher.registerObserverCallback(updateInfo);
-    }
-
-    function goToWaypoint(resource){
-      if(!resource){
-        resource = createNewResource();
-      }
-
-      dispatcher.setState({
-        name: 'waypoints.detail',
-        resource: {
-          id: resource.id,
-          curator: resource.curator
-        }
-      });
-    }
-
-    function createNewResource(){
-       return {
-         id: 'new',
-         curator: dispatcher.getState().user
-       };
     }
 
     function updateInfo(){
@@ -59,7 +40,7 @@
     function viewProps(){
       return  {
         learn: [
-          'summary', 
+          'summary',
           'description'
         ],
         curate: [
@@ -73,12 +54,17 @@
             key: 'description',
             type: 'textarea',
           },
-          { 
+          {
             type: 'button',
             title: 'Add New Course',
             onClick: () => goToWaypoint()
           },
-          { 
+          {
+            type: 'button',
+            title: 'Back',
+            onClick: () => vm.goBack()
+          },
+          {
             type: 'submit',
             title: 'Save',
           }

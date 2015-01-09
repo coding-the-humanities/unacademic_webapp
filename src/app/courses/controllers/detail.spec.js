@@ -26,6 +26,10 @@
       formHelpers.submit = sinon.spy();
       formHelpers.checkForm = sinon.spy();
 
+      navHelpers = {
+        goTo: function(){}
+      }
+
       var data = {
         course: '',
         waypoints: '',
@@ -40,6 +44,7 @@
           resolvers: {},
           dispatcher: dispatcher,
           formHelpers: formHelpers,
+          navHelpers: navHelpers,
           data: data
         });
       });
@@ -57,7 +62,7 @@
       it("sets all the necessary actions on the vm", function(){
         expect(vm.learn).not.to.be.undefined;
         expect(vm.curate).not.to.be.undefined;
-        expect(vm.goToWaypoint).not.to.be.undefined;
+        expect(vm.goTo).not.to.be.undefined;
         expect(vm.submit).not.to.be.undefined;
       });
 
@@ -81,36 +86,6 @@
         vm.info = {id: '456'};
         $scope.$digest();
         expect(formHelpers.checkForm).calledWith('123', '456');
-      });
-
-    });
-
-    xdescribe("move to an existing waypoint", function(){
-      beforeEach(function(){
-        vm.goToWaypoint('123');
-      });
-
-      it("sets the app to the correct state", function(){
-        expect(dispatcher.setState).calledWith({
-          name: 'waypoints.detail',
-          resource: '123'
-        });
-      });
-    });
-
-    xdescribe("add new course", function(){
-      var addNewCourse;
-
-      beforeEach(function(){
-        addNewWayPoint = vm.curate[3].onClick;
-        addNewWayPoint();
-      });
-
-      it("can create new courses", function(){
-        expect(dispatcher.setState).calledWith({
-          name: 'waypoints.detail',
-          resource: 'new'
-        });
       });
     });
   });

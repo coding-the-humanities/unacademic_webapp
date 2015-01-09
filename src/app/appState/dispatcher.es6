@@ -8,6 +8,7 @@
   function dispatcher(queue, view, user, mode, permission, resource){
     let modules = [mode, user, view, resource, queue];
     let observerCallbacks = [];
+    // let timestamp;
 
     return {
       getState: get,
@@ -23,6 +24,8 @@
          state[module.name] = module.get();
       });
 
+      // state.timestamp = timestamp;
+
       return state;
     }
 
@@ -30,6 +33,7 @@
       let currentState = get();
       let proposal = createProposal(currentState, proposedChanges);
       let approvedChanges = permission.get(proposal, currentState);
+      // timestamp = proposedChanges.timestamp;
 
       if(approvedChanges){
         setServicesState(approvedChanges);

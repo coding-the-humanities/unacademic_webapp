@@ -5,7 +5,7 @@
   angular.module('unacademic.courses.controllers.index', [])
          .controller('Index', Index)
 
-  function Index(resolvers, $scope, dispatcher, data, formHelpers) {
+  function Index(resolvers, $scope, dispatcher, data, navHelpers, formHelpers) {
 
     let vm = this;
     initialize();
@@ -18,35 +18,14 @@
 
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
-      vm.goToCourse = goToCourse;
+      vm.goTo = _.bind(navHelpers.goTo, null, 'courses.detail');
+      vm.goBack = navHelpers.goBack;
       vm.submit = ()=> formHelpers.submit(vm.form, vm.info);
 
       let checkForm = ()=> formHelpers.checkForm(vm.form, vm.info.id);
       $scope.$watch('vm.info', checkForm, true);
 
       dispatcher.registerObserverCallback(updateInfo);
-    }
-
-    function goToCourse(resource){
-
-      if(!resource){
-       resource = createNewResource();
-      }
-
-      dispatcher.setState({
-        name: 'courses.detail',
-        resource: {
-          id: resource.id,
-          curator: resource.curator
-        }
-      });
-    }
-
-    function createNewResource(){
-       return {
-         id: 'new',
-        curator: dispatcher.getState().user
-       };
     }
 
     function updateInfo(){
@@ -77,7 +56,12 @@
           {
             type: 'button',
             title: 'Add New Course',
-            onClick: () => goToCourse()
+            onClick: () => vm.goTo()
+          },
+          {
+            type: 'button',
+            title: 'Back',
+            onClick: () => vm.goBack()
           },
           {
             type: 'submit',
