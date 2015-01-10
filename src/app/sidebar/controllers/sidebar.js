@@ -31,28 +31,45 @@
     }
 
     function signIn(){
-      return dispatcher.setState({user: 'marijn', mode: 'learning'});
+      return dispatcher.setState({user: 'yeehaa', mode: 'learning'});
     }
 
     $scope.$watch('sidebar.mode', changeCuration);
     $scope.$watch('sidebar.curation', changeMode);
 
     function changeMode(newVal, oldVal){
-      if(sidebar.mode !== 'browsing'){
+      if(sidebar.mode === 'browsing'){
+        sidebar.curation = false;
+      }
+
+      if(sidebar.mode === 'learning'){
+        sidebar.curation = false;
         if(newVal){
-          return dispatcher.setState({mode: 'curation'});
-        } else {
-          return dispatcher.setState({mode: 'learning'});
+          dispatcher.setState({mode: 'curation'});
         }
       }
-      return sidebar.curation = false;
+
+      if(sidebar.mode === 'curation'){
+        sidebar.curation = true;
+        if(!newVal){
+          dispatcher.setState({mode: 'learning'});
+        }
+      }
     }
 
     function changeCuration(newVal, oldVal){
-      if(sidebar.mode === 'curation'){
-        return sidebar.curation = true;
+
+      if(sidebar.mode === 'browsing'){
+        sidebar.curation = false;
       }
-      return sidebar.curation = false;
+
+      if(sidebar.mode === 'learning'){
+        sidebar.curation = false;
+      }
+
+      if(sidebar.mode === 'curation'){
+        sidebar.curation = true;
+      }
     }
 
     function updateAppState(){

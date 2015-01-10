@@ -24,7 +24,7 @@
 
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
       event.preventDefault();
-      $state.go('courses.index');
+      $state.go('cover');
     });
 
     function initialize(){
@@ -32,8 +32,12 @@
       history.initialize();
 
       dispatcher.setState({
-        name: 'cover',
-        mode: 'browsing'
+        name: 'course',
+        mode: 'browsing',
+        resource: {
+          curator: 'yeehaa',
+          id: '1420924907004'
+        }
       });
 
       window.backlog = history.get;

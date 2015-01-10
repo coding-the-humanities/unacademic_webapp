@@ -20,7 +20,6 @@
     }
 
     function switchState({name, resource}){
-      let params = {};
       $state.go(name, resource)
     }
   }

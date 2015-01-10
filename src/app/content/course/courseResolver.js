@@ -10,21 +10,21 @@
 
     function data() {
       var schema = Course.schema;
-      var userId = dispatcher.getState().resource.curator;
+      var curatorId = dispatcher.getState().resource.curator;
       var courseId = dispatcher.getState().resource.id;
       var promises;
 
       return $q(function (resolve, reject) {
-        if (!userId) {
+        if (!curatorId) {
           return reject();
         }
 
-        if (userId && courseId === "new") {
+        if (curatorId && courseId === "new") {
           var course = new Course();
           return resolve({ schema: schema, course: course });
         }
 
-        promises = [Course.get(userId, courseId)];
+        promises = [Course.get(curatorId, courseId)];
 
         $q.all(promises).then(function (data) {
           var course = data[0];

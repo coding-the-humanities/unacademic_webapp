@@ -22,7 +22,6 @@
     function switchState(_ref) {
       var name = _ref.name;
       var resource = _ref.resource;
-      var params = {};
       $state.go(name, resource);
     }
   }

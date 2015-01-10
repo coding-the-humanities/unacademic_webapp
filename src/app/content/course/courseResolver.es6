@@ -11,23 +11,23 @@
 
     function data(){
       let schema = Course.schema;
-      let userId = dispatcher.getState().resource.curator;
+      let curatorId = dispatcher.getState().resource.curator;
       let courseId = dispatcher.getState().resource.id;
       let promises;
 
       return $q(function(resolve, reject){
 
-        if(!userId){
+        if(!curatorId){
           return reject();
         }
 
-        if(userId && courseId === 'new'){
+        if(curatorId && courseId === 'new'){
           let course = new Course();
           return resolve({schema: schema, course: course});
         }
 
         promises = [
-          Course.get(userId, courseId)
+          Course.get(curatorId, courseId)
         ];
 
         $q.all(promises).then(function(data){

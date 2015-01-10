@@ -19,7 +19,7 @@
       })
 
       .state('course', {
-        url: 'course/:curator/:id',
+        url: '/course/:curator/:id',
         controller: 'CourseCtrl',
         controllerAs: 'vm',
         templateUrl: 'content/views/index.html',

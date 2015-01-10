@@ -28,7 +28,6 @@
         state.timestamp = timestamp;
       }
 
-
       return state;
     }
 
