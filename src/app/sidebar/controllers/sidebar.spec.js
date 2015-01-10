@@ -4,6 +4,7 @@
     var sidebar;
     var $scope;
     var dispatcher;
+    var navHelpers;
 
     beforeEach(function () {
       module('unacademic.sidebar.controller');
@@ -14,11 +15,16 @@
 
       dispatcher.registerObserverCallback = sinon.stub();
 
+      navHelpers = {};
+      navHelpers.goBack = sinon.spy();
+      navHelpers.goForward = sinon.spy();
+
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
         sidebar = $controller('Sidebar', {
           $scope: $scope,
+          navHelpers: navHelpers,
           dispatcher: dispatcher
         });
       });
@@ -27,59 +33,75 @@
     describe("initialize",function(){
       it("sets the results", function(){
         expect(dispatcher.registerObserverCallback).called;
+        expect(dispatcher.getState).called;
         expect(sidebar.user).to.be.undefined;
         expect(sidebar.mode).to.equal('browsing')
       });
     });
 
-    describe("observer callback triggered", function(){
+    describe("time travel", function(){
+
+      it("calls navhelpers.back", function(){
+        sidebar.back();
+        expect(navHelpers.goBack).to.be.called;
+      });
+
+      it("calls navhelpers.forward", function(){
+        sidebar.forward();
+        expect(navHelpers.goForward).to.be.called;
+      });
+    });
+
+    describe("mode switching", function(){
 
       describe("state switching", function(){
-        it("gets the currentState", function(){
-          dispatcher.getState = sinon.stub().returns({mode: 'learning'});
-          dispatcher.registerObserverCallback.callArg(0);
-          expect(sidebar.mode).to.equal('learning')
+
+        describe("to browsing", function(){
+          beforeEach(function(){
+            dispatcher.getState = sinon.stub().returns({mode: 'browsing'});
+            dispatcher.registerObserverCallback.callArg(0);
+            $scope.$digest();
+          });
+
+          it("sets the mode to curation", function(){
+            expect(sidebar.mode).to.equal('browsing');
+          });
+
+          it("sets curation to true", function(){
+            expect(sidebar.curation).to.be.false;
+          });
         });
-      });
 
-      describe("if mode is browsing", function(){
-        it("attempts to set the mode to learning", function(){
+        describe("to learning", function(){
+          beforeEach(function(){
+            dispatcher.getState = sinon.stub().returns({mode: 'learning'});
+            dispatcher.registerObserverCallback.callArg(0);
+            $scope.$digest();
+          });
 
-          sidebar.mode = 'browsing';
-          var newState = {
-            user: 'yeehaa',
-            mode: 'learning'
-          }
+          it("sets the mode to curation", function(){
+            expect(sidebar.mode).to.equal('learning');
+          });
 
-          sidebar.changeMode();
-
-          expect(dispatcher.setState).calledWith(newState);
+          it("sets curation to true", function(){
+            expect(sidebar.curation).to.be.false;
+          });
         });
-      });
 
-      describe("if mode is browsing", function(){
-        it("attempts to set the mode to curation", function(){
+        describe("to curation", function(){
+          beforeEach(function(){
+            dispatcher.getState = sinon.stub().returns({mode: 'curation'});
+            dispatcher.registerObserverCallback.callArg(0);
+            $scope.$digest();
+          });
 
-          sidebar.mode = 'learning';
-          var newState = {
-            mode: 'curation'
-          }
+          it("sets the mode to curation", function(){
+            expect(sidebar.mode).to.equal('curation');
+          });
 
-          sidebar.changeMode();
-          expect(dispatcher.setState).calledWith(newState);
-        });
-      });
-
-      describe("if mode is curation", function(){
-        it("attempts to set the mode to curation", function(){
-
-          sidebar.mode = 'curation';
-          var newState = {
-            mode: 'learning'
-          }
-
-          sidebar.changeMode();
-          expect(dispatcher.setState).calledWith(newState);
+          it("sets curation to true", function(){
+            expect(sidebar.curation).to.be.true;
+          });
         });
       });
     });

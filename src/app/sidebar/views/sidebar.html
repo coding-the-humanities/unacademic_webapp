@@ -19,16 +19,18 @@
   </div>
 
   <div class="toolbox">
-    <button ng-click="sidebar.changeMode()">
-      {{sidebar.mode}}
-    </button>
 
-      <!-- <label class="label-switch"> -->
-      <!--   <input type="checkbox" -->
-      <!--          ng-model="sidebar.mode" -->
-      <!--          ng-true-value="'curation'" -->
-      <!--          ng-false-value="'learning'"/> -->
-      <!--   <div class="checkbox"></div> -->
-      <!-- </label> -->
+    <button class="signIn"
+            ng-hide="sidebar.user"
+            ng-click="sidebar.signIn()">Sign In</button>
+
+    <button class="back" ng-click="sidebar.back()">Back</button>
+    <button class="forward" ng-click="sidebar.forward()">Forward</button>
+
+    <label class="label-switch">
+      <input type="checkbox"
+             ng-model="sidebar.curation">
+      <div class="checkbox"></div>
+    </label>
   </div>
 </div>

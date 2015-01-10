@@ -28,7 +28,11 @@
         let schema = this.constructor.schema;
         let props = _.keys(schema.properties);
 
-        let required = _.select(props, required);
+
+        let required = _.select(props, function(prop){
+           return schema.properties[prop].required;
+        });
+
         let valid = true;
 
         _.each(required, (field) => {
@@ -45,9 +49,16 @@
       }
 
       static getAll(userId){
+        let extractUserData = _.bind(_extractUserData, this);
         let extractObjects = _.bind(_extractObjects, this);
-        return DataStore.get(this.name, userId)
-          .then(extractObjects);
+
+        if(!userId){
+          return DataStore.get(this.name)
+            .then(extractUserData);
+        } else {
+          return DataStore.get(this.name, userId)
+            .then(extractObjects);
+        }
       }
 
       static get(userId, id){
@@ -60,6 +71,16 @@
       static initialize({schema, initData}){
         this.schema = schema;
         this.initData = initData;
+      }
+    }
+
+    function _extractUserData(data){
+      let extractObjects = _.bind(_extractObjects, this);
+      if(data){
+        let names = _.keys(data);
+        let users = _.map(names, (name) => data[name]);
+        let objects = _.map(users, (user) => extractObjects(user));
+        return _.flatten(objects);
       }
     }
 

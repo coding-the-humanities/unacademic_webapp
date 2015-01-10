@@ -9,11 +9,13 @@
     return data;
 
     function data() {
-      var userId = dispatcher.getState().user || "general";
+      var userId = dispatcher.getState().user;
       var promises;
 
+      var coverUser = userId || "general";
+
       return $q(function (resolve, reject) {
-        promises = [CoverInfo.get(userId, "info"), Course.getAll(userId)];
+        promises = [CoverInfo.get(coverUser, "info"), Course.getAll(userId)];
 
         $q.all(promises).then(function (data) {
           var coverInfo = data[0];

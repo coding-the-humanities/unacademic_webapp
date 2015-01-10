@@ -53,15 +53,15 @@
       beforeEach(function(){
 
         MockDataStore.expects('get')
-        .withArgs('BaseClass', 'general', '123')
-        .once()
-        .returns($q.when({title: 'Mock Title'}));
+          .withArgs('BaseClass', 'general', '123')
+          .once()
+          .returns($q.when({title: 'Mock Title'}));
 
-      BaseClass.get('general', '123').then(function(data){
-        response = data;
-      });
+        BaseClass.get('general', '123').then(function(data){
+          response = data;
+        });
 
-      $rootScope.$apply();
+        $rootScope.$apply();
       });
 
 
@@ -78,34 +78,75 @@
       var response;
 
 
-      beforeEach(function(){
+      describe("without userId", function(){
+        beforeEach(function(){
 
-        MockDataStore.expects('get')
-        .withArgs('BaseClass', 'general')
-        .once()
-        .returns($q.when({
-          "123": {
-            curator: 'yeehaa'
-          }
-        }));
+          MockDataStore.expects('get')
+            .withArgs('BaseClass')
+            .once()
+            .returns($q.when({
+              "yeehaa": {
+                "123": {
+                  curator: 'yeehaa'
+                }
+              },
+              "marijn": {
+                "456": {
+                  curator: 'marijn'
+                }
+              }
+            }));
 
-      BaseClass.getAll('general').then(function(data){
-        response = data;
+          BaseClass.getAll().then(function(data){
+            response = data;
+          });
+
+          $rootScope.$apply();
+        });
+
+        it("returns an array of objects", function(){
+          expect(response.length).to.equal(2);
+        });
+
+        it("returns an instance of CoverInfo", function(){
+          expect(response[0]).to.be.an.instanceOf(BaseClass);
+        });
+
+        it("gets the info", function(){
+          expect(response[0].curator).to.equal('yeehaa');
+        });
       });
 
-      $rootScope.$apply();
-      });
+      describe("with userId", function(){
+        beforeEach(function(){
 
-      it("returns an array of objects", function(){
-        expect(response.length).to.equal(1);
-      });
+          MockDataStore.expects('get')
+            .withArgs('BaseClass', 'yeehaa')
+            .once()
+            .returns($q.when({
+              "123": {
+                curator: 'yeehaa'
+              }
+            }));
 
-      it("returns an instance of CoverInfo", function(){
-        expect(response[0]).to.be.an.instanceOf(BaseClass);
-      });
+          BaseClass.getAll('yeehaa').then(function(data){
+            response = data;
+          });
 
-      it("gets the info", function(){
-        expect(response[0].curator).to.equal('yeehaa');
+          $rootScope.$apply();
+        });
+
+        it("returns an array of objects", function(){
+          expect(response.length).to.equal(1);
+        });
+
+        it("returns an instance of CoverInfo", function(){
+          expect(response[0]).to.be.an.instanceOf(BaseClass);
+        });
+
+        it("gets the info", function(){
+          expect(response[0].curator).to.equal('yeehaa');
+        });
       });
     });
 
@@ -133,8 +174,7 @@
 
       it("calls the datastore if required fields are missing", function(){
         instance = new BaseClass({});
-        MockDataStore.expects('save')
-          .never()
+        MockDataStore.expects('save').never()
       });
 
       it("calls the datastore to save the model", function(){
@@ -161,8 +201,8 @@
       },
       initData: {
         title: 'UnAcademic'
-      } 
-    } 
+      }
+    }
   }
 
   function fakeDS(){

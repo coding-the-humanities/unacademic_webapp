@@ -19,8 +19,6 @@
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
       vm.goTo = _.bind(navHelpers.goTo, null, 'waypoints.detail');
-      // test
-      vm.goBack = navHelpers.goBack;
       vm.submit = ()=> formHelpers.submit(vm.form, vm.info);
 
       let checkForm = ()=> formHelpers.checkForm(vm.form, vm.info.id);
@@ -40,8 +38,12 @@
     function viewProps(){
       return  {
         learn: [
+          'curator',
           'summary',
-          'description'
+          'description',
+          'keywords',
+          'learners',
+          'waypoints'
         ],
         curate: [
           {
@@ -55,14 +57,12 @@
             type: 'textarea',
           },
           {
-            type: 'button',
-            title: 'Add New Course',
-            onClick: () => goTo()
+            key: 'keywords',
           },
           {
             type: 'button',
-            title: 'Back',
-            onClick: () => vm.goBack()
+            title: 'Add New Course',
+            onClick: () => goTo()
           },
           {
             type: 'submit',

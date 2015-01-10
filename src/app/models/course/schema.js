@@ -14,22 +14,37 @@
         },
         title: {
           type: 'string',
-          required: true,
           minLength: 5,
-          maxLength: 25
-
+          maxLength: 25,
+          required: true
         },
         curator: {
           type: 'string',
           required: true
         },
+        keywords: {
+          type: 'array',
+          items: {
+            type: 'string'
+          }
+        },
+        waypoints: {
+          type: 'array',
+          items: {
+            type: 'string'
+          }
+        },
+        learners: {
+          type: 'array',
+          items: {
+            type: 'string'
+          }
+        },
         summary: {
           type: 'string',
-          required: true
         },
         description: {
           type: 'string',
-          required: true
         }
       }
     };

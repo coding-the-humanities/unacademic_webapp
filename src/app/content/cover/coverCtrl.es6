@@ -19,7 +19,6 @@
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
       vm.goTo = _.bind(navHelpers.goTo, null, 'course');
-      vm.goBack = navHelpers.goBack;
       vm.submit = ()=> formHelpers.submit(vm.form, vm.info);
 
       let checkForm = ()=> formHelpers.checkForm(vm.form, vm.info.id);
@@ -57,11 +56,6 @@
             type: 'button',
             title: 'Add New Course',
             onClick: () => vm.goTo()
-          },
-          {
-            type: 'button',
-            title: 'Back',
-            onClick: () => vm.goBack()
           },
           {
             type: 'submit',

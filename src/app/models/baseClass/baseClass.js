@@ -31,7 +31,11 @@
         var schema = this.constructor.schema;
         var props = _.keys(schema.properties);
 
-        var required = _.select(props, required);
+
+        var required = _.select(props, function (prop) {
+          return schema.properties[prop].required;
+        });
+
         var valid = true;
 
         _.each(required, function (field) {
@@ -47,8 +51,14 @@
       };
 
       BaseClass.getAll = function (userId) {
+        var extractUserData = _.bind(_extractUserData, this);
         var extractObjects = _.bind(_extractObjects, this);
-        return DataStore.get(this.name, userId).then(extractObjects);
+
+        if (!userId) {
+          return DataStore.get(this.name).then(extractUserData);
+        } else {
+          return DataStore.get(this.name, userId).then(extractObjects);
+        }
       };
 
       BaseClass.get = function (userId, id) {
@@ -66,6 +76,26 @@
 
       return BaseClass;
     })();
+
+    function _extractUserData(data) {
+      var extractObjects = _.bind(_extractObjects, this);
+      if (data) {
+        var _ret = (function () {
+          var names = _.keys(data);
+          var users = _.map(names, function (name) {
+            return data[name];
+          });
+          var objects = _.map(users, function (user) {
+            return extractObjects(user);
+          });
+          return {
+            v: _.flatten(objects)
+          };
+        })();
+
+        if (typeof _ret === "object") return _ret.v;
+      }
+    }
 
     function _extractObjects(data) {
       var _this3 = this;

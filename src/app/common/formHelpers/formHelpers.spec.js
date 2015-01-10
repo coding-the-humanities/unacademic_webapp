@@ -5,6 +5,7 @@
     var dispatcher;
     var $rootScope;
     var $q;
+    var queue;
 
     beforeEach(function(){
       dispatcher = {}
@@ -98,7 +99,7 @@
                 id: '123',
                 curator: 'yeehaa'
               }
-              expect(dispatcher.setState).calledWith({resource: resource});
+              expect(dispatcher.setState).calledWith({mode: 'learning', resource: resource});
             });
           });
 
@@ -118,8 +119,8 @@
               expect(model.save).called;
             });
 
-            it("adds the model to the queue", function(){
-              expect(dispatcher.queue).calledWith({add: '123'});
+            it("leaves the model in the queue", function(){
+              expect(dispatcher.queue).not.called;
             });
           });
         });

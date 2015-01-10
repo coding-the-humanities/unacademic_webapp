@@ -10,13 +10,15 @@
     return data;
 
     function data(){
-      let userId = dispatcher.getState().user || 'general';
+      let userId = dispatcher.getState().user;
       let promises;
+
+      let coverUser = userId || 'general';
 
       return $q(function(resolve, reject){
         promises = [
-          CoverInfo.get(userId, 'info'),
-          Course.getAll(userId)
+          CoverInfo.get(coverUser, 'info'),
+          Course.getAll(userId) 
         ];
 
         $q.all(promises).then(function(data){

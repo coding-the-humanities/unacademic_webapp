@@ -19,7 +19,6 @@
       vm.learn = viewProps().learn;
       vm.curate = viewProps().curate;
       vm.goTo = _.bind(navHelpers.goTo, null, "course");
-      vm.goBack = navHelpers.goBack;
       vm.submit = function () {
         return formHelpers.submit(vm.form, vm.info);
       };
@@ -53,12 +52,6 @@
           title: "Add New Course",
           onClick: function () {
             return vm.goTo();
-          }
-        }, {
-          type: "button",
-          title: "Back",
-          onClick: function () {
-            return vm.goBack();
           }
         }, {
           type: "submit",
