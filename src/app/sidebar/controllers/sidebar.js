@@ -8,10 +8,14 @@
 
     var sidebar = this;
     var modelId;
-
+    var users = ['yeehaa', 'marijn', 'reika', 'peter'];
+    var user;
     initialize();
 
     function initialize(){
+
+      user = _.sample(users);
+
       sidebar.changeMode = changeMode;
       sidebar.back = back;
       sidebar.forward = forward;
@@ -19,7 +23,6 @@
       sidebar.curation = false;
       updateAppState();
       dispatcher.registerObserverCallback(updateAppState);
-      window.sidebar = sidebar;
     }
 
     function back(){
@@ -31,7 +34,7 @@
     }
 
     function signIn(){
-      return dispatcher.setState({user: 'yeehaa', mode: 'learning'});
+      return dispatcher.setState({user: user, mode: 'learning'});
     }
 
     $scope.$watch('sidebar.mode', changeCuration);

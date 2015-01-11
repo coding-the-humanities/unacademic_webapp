@@ -27,19 +27,17 @@
       vm.goTo = function () {
         navHelpers.goTo(vm.childViewName);
       };
-
-      var props = init[vm.viewName].props(vm.goTo);
-
-      vm.learn = props.learn;
-      vm.curate = props.curate;
-
       vm.submit = function () {
         return formHelpers.submit(vm.form, vm.info);
       };
-
       var checkForm = function () {
         return formHelpers.checkForm(vm.form, vm.info.id);
       };
+
+      var props = init[vm.viewName].props(vm.goTo);
+      vm.learn = props.learn;
+      vm.curate = props.curate;
+
       $scope.$watch("vm.info", checkForm, true);
 
       dispatcher.registerObserverCallback(updateInfo);

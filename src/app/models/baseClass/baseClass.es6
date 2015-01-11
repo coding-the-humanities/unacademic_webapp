@@ -4,7 +4,7 @@
   angular.module('unacademic.models.baseClass', [])
          .factory('BaseClass', initBaseClass);
 
-  function initBaseClass($http, $q, DataStore, utilities, dispatcher){
+  function initBaseClass($http, $q, navHelpers, DataStore, utilities, dispatcher){
 
     class BaseClass {
 

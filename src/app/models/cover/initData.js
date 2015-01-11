@@ -9,7 +9,7 @@
 
     return {
       id: 'info',
-      title: "UnAcademic",
+      title: '_Unacademic',
       curator: dispatcher.getState().user || 'general',
       summary: 'Learning by Dwelling',
       description: description,
