@@ -8,24 +8,24 @@
 
       .state('cover', {
         url: '/cover',
-        controller: 'CoverCtrl',
+        controller: 'MainCtrl',
         controllerAs: 'vm',
         templateUrl: 'content/views/index.html',
         resolve: {
-          data: function(coverResolver){
-            return coverResolver();
+          data: function(init){
+            return init.cover.resolver();
           },
         }
       })
 
       .state('course', {
         url: '/course/:curator/:id',
-        controller: 'CourseCtrl',
+        controller: 'MainCtrl',
         controllerAs: 'vm',
         templateUrl: 'content/views/index.html',
         resolve: {
-          data: function(courseResolver){
-            return courseResolver();
+          data: function(init){
+            return init.course.resolver();
           }
         }
       })

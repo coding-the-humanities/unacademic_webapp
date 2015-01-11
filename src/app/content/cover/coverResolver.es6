@@ -5,7 +5,7 @@
   angular.module('unacademic.content.cover')
         .factory('coverResolver', coverResolver);
 
-  function coverResolver($q, CoverInfo, Course, dispatcher){
+  function coverResolver($q, Cover, Course, dispatcher){
 
     return data;
 
@@ -17,15 +17,16 @@
 
       return $q(function(resolve, reject){
         promises = [
-          CoverInfo.get(coverUser, 'info'),
+          Cover.get(coverUser, 'info'),
           Course.getAll(userId) 
         ];
 
         $q.all(promises).then(function(data){
-          let coverInfo = data[0];
-          let courses = data[1];
-          let schema = CoverInfo.schema;
-          return resolve({coverInfo, schema, courses});
+          let name = 'cover';
+          let info = data[0];
+          let cards = data[1];
+          let schema = Cover.schema;
+          return resolve({name, info, schema, cards});
         });
       });
     }

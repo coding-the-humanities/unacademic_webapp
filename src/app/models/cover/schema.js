@@ -1,6 +1,6 @@
 (function(){
 
-  var app = angular.module('unacademic.models.coverInfo');
+  var app = angular.module('unacademic.models.cover');
 
   app.factory('schema', schema);
 

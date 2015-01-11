@@ -3,7 +3,7 @@
   describe("coverResolver", function(){
     var coverResolver;
     var dispatcher;
-    var CoverInfo;
+    var Cover;
     var $rootScope;
     var $q;
 
@@ -11,7 +11,7 @@
       dispatcher = {};
       dispatcher.getState = sinon.stub().returns({user: '123', resource: '456'});
 
-      CoverInfo = {
+      Cover = {
         schema: '123'
       };
 
@@ -20,7 +20,7 @@
 
       module('unacademic.content.cover',  function($provide){
         $provide.value('dispatcher', dispatcher);
-        $provide.value('CoverInfo', CoverInfo);
+        $provide.value('Cover', Cover);
         $provide.value('Course', Course);
       });
 
@@ -32,7 +32,7 @@
 
       var promise = $q.when('123');
 
-      CoverInfo.get = sinon.stub().returns(promise);
+      Cover.get = sinon.stub().returns(promise);
       Course.getAll = sinon.stub().returns(promise);
     });
 
@@ -52,7 +52,7 @@
       });
 
       it("calls the CoverInfo service with the right arguments", function(){
-        expect(CoverInfo.get).to.be.calledWith('123', 'info');
+        expect(Cover.get).to.be.calledWith('123', 'info');
       });
 
       it("calls the Course service with the right arguments", function(){
@@ -60,8 +60,9 @@
       });
 
       it("returns all the necessary data for the detail page", function(){
-        expect(response.coverInfo).not.to.be.undefined;
-        expect(response.courses).not.to.be.undefined;
+        expect(response.name).not.to.be.undefined;
+        expect(response.info).not.to.be.undefined;
+        expect(response.cards).not.to.be.undefined;
         expect(response.schema).not.to.be.undefined;
       });
     });

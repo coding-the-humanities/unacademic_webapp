@@ -5,7 +5,7 @@
       <img src="http://www.innovata-llc.com/fullpanel/uploads/files/global-data.jpg" alt="background" class="bg">
       <div class="desc">
         <h3>{{card.curator}}</h3>
-        <p>{{card.descriptions}}</p>
+        <p>{{card.description}}</p>
         <div class="tags">
           <p>{{card.keywords}}</p>
         </div>
@@ -19,8 +19,8 @@
     </div>
   </div>
 
+  <p class="summary">{{card.summary}}</p>
   <div class="content">
-    <p class="summary">{{card.summary}}</p>
     <div class="data">
       <ul>
         <li>
@@ -37,10 +37,9 @@
         </li>
       </ul>
     </div>
+  <div ng-click="card.goTo(card)" class="follow">Learn</div>
+  <div ng-click="card.goTo(card)" class="follow">Browse</div>
 
-    <div ng-click="card.goTo(card)" class="follow">Learn</div>
-    <div ng-click="card.goTo(card)" class="follow">Browse</div>
-    <div ng-click="card.goTo(card)" class="follow">Edit</div>
   </div>
 </div>
 </section>

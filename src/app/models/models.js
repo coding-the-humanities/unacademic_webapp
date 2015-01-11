@@ -5,7 +5,7 @@
     'unacademic.DataStore',
     'unacademic.models.baseClass',
     'unacademic.models.course',
-    'unacademic.models.coverInfo'
+    'unacademic.models.cover'
   ]);
 
 })();

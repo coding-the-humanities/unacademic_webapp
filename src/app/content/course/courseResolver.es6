@@ -23,7 +23,7 @@
 
         if(curatorId && courseId === 'new'){
           let course = new Course();
-          return resolve({schema: schema, course: course});
+          return resolve({schema: schema, info: course, cards: course.waypoints});
         }
 
         promises = [
@@ -31,8 +31,9 @@
         ];
 
         $q.all(promises).then(function(data){
-          let course = data[0];
-          return resolve({schema: schema, course: course});
+          let info = data[0];
+          let cards = data[0].waypoints;
+          return resolve({name, info, schema, cards});
         });
       });
     }

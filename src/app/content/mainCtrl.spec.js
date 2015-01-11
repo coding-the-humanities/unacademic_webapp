@@ -1,14 +1,16 @@
 (function(){
 
-  describe("CoverCtrl", function(){
+  describe("MainCtrl", function(){
     var vm;
     var $scope;
     var dispatcher;
     var formHelpers;
+    var navHelpers;
+    var data;
 
     beforeEach(function () {
 
-      module('unacademic.content.cover');
+      module('unacademic.content.controller');
 
       dispatcher = {
         setState: function(){},
@@ -30,18 +32,37 @@
         goTo: function(){}
       }
 
-      var data = {
-        coverInfo: '',
-        courses: '',
+      navHelpers.goTo = sinon.spy();
+
+      data = {
+        info: {
+          constructor: {
+            name: 'cover'
+          }
+        },
+        cards: '',
         schema: ''
       }
+
+      var init = {
+        cover: {
+          props: function(){},
+          resolver: function(){}
+        }
+      }
+      var props = {
+        learn: '123',
+        curate: '123',
+      }
+
+      init.cover.props = sinon.stub().returns(props);
 
       inject(function ($rootScope, $controller, _$q_) {
         $scope = $rootScope.$new();
         $q = _$q_;
-        vm = $controller('CoverCtrl', {
+        vm = $controller('MainCtrl', {
           $scope: $scope,
-          coverResolver: {},
+          init: init,
           dispatcher: dispatcher,
           formHelpers: formHelpers,
           navHelpers: navHelpers,
@@ -52,18 +73,28 @@
 
     describe("general", function(){
 
+      it("knows itself and its family", function(){
+        expect(vm.viewName).to.equal('cover');
+        expect(vm.childViewName).to.equal('course');
+      });
+
       it("sets all the necessary props on the vm", function(){
         expect(vm.info).not.to.be.undefined;
         expect(vm.form).not.to.be.undefined;
         expect(vm.cards).not.to.be.undefined;
         expect(vm.schema).not.to.be.undefined;
-      });
-
-      it("sets all the necessary actions on the vm", function(){
         expect(vm.learn).not.to.be.undefined;
         expect(vm.curate).not.to.be.undefined;
-        expect(vm.goTo).not.to.be.undefined;
-        expect(vm.submit).not.to.be.undefined;
+      });
+
+      it("binds goto correctly to the vm", function(){
+        vm.goTo();
+        expect(navHelpers.goTo).to.be.calledWith('course');
+      });
+
+      it("binds submit correctly to the vm", function(){
+        vm.submit();
+        expect(formHelpers.submit).to.be.calledWith({}, data.info);
       });
 
       it("registers the dispatcher observer callback", function(){

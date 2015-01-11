@@ -1,6 +1,6 @@
 (function(){
 
-  angular.module('unacademic.models.coverInfo')
+  angular.module('unacademic.models.cover')
          .factory('initData', initData);
 
 

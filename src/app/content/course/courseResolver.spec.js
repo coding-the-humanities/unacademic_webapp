@@ -26,7 +26,10 @@
         $q = _$q_;
       });
 
-      var promise = $q.when('123');
+      var course = {
+        waypoints: '123'
+      }
+      var promise = $q.when(course);
       Course.getAll = sinon.stub().returns(promise);
       Course.get = sinon.stub().returns(promise);
 
@@ -81,7 +84,8 @@
         });
 
         it("returns all the necessary data for the detail page", function(){
-          expect(response.course).not.to.be.undefined;
+          expect(response.info).not.to.be.undefined;
+          expect(response.cards).not.to.be.undefined;
           expect(response.schema).not.to.be.undefined;
         });
       });
@@ -105,7 +109,8 @@
         });
 
         it("returns all the necessary data for the detail page", function(){
-          expect(response.course).not.to.be.undefined;
+          expect(response.info).not.to.be.undefined;
+          expect(response.cards).not.to.be.undefined;
           expect(response.schema).not.to.be.undefined;
         });
       });
