@@ -32,13 +32,18 @@
       history.initialize();
 
       dispatcher.setState({
-        name: 'course',
+        name: 'cover',
         mode: 'browsing',
-        resource: {
-          curator: 'yeehaa',
-          id: '1420924907004'
-        }
       });
+
+      // dispatcher.setState({
+      //   name: 'course',
+      //   mode: 'browsing',
+      //   resource: {
+      //     curator: 'yeehaa',
+      //     id: '1420924907004'
+      //   }
+      // });
 
       window.backlog = history.get;
       window.navHelpers = navHelpers;

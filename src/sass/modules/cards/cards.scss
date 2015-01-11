@@ -1,133 +1,195 @@
 .cards {
   @include clearfix;
+  width: 500px;
+  float: right;
 }
+
+$radius: 0px;
+
 .card {
-  $card-border-color: $base-border-color;
-  $card-border: 1px solid $card-border-color;
-  $card-background: lighten($card-border-color, 10);
-  $card-header-background: $card-background;
-  $card-hover-background: lighten($card-background, 5);
-  $card-image-background: white;
-  $card-image-hover-background: lighten($card-image-background, 5);
-  $card-stats-color: lighten($base-accent-color, 10);
+  width: 380px;
+  margin: 3em auto 1em auto;
+  border-radius: $radius;
+  padding-bottom: 1.5em;
+  background-color: black;
+  box-shadow: #bdc3c7 0 5px 5px;
+  color: white;
 
-  @include transition (all 0.2s ease-in-out);
-  background-color: $card-background;
-  border-radius: $base-border-radius;
-  border: $card-border;
-  margin-bottom: $base-spacing;
-  cursor: pointer;
-  box-shadow: 0 2px 4px darken($base-background-color, 10);
-  position: relative;
-  width: 90%;
-
-  // @include media($large-screen) {
-  //   @include span-columns(4);
-  //   @include omega(3n);
-  // }
-
-  .card-image {
-    overflow: hidden;
-    margin: 5px;
-
-    img {
-      width: 100%;
-      @include transition (all 0.2s ease-in-out);
-      background: $card-image-background;
-      border-top-left-radius: $base-border-radius;
-      border-top-right-radius: $base-border-radius;
-    }
+  h1{
+    text-align: center;
+    font-size: 2em;
+    font-weight: 700;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
   }
 
-  .ribbon-wrapper {
-    $ribbon-size: 85px;
-    $ribbon-background: $base-accent-color;
-    @include size($ribbon-size);
+  h4{
+    font-weight: 500;
+    font-size: 1em;
+  }
+
+  .heading {
+    display: block;
     overflow: hidden;
+    position: relative;
+    border-top-left-radius: $radius;
+    border-top-right-radius: $radius;
+  }
+
+  .tags{
     position: absolute;
-    top: -1px;
-    right: -1px;
+    bottom:0;
+  }
 
-    .ribbon {
-      font-size: .8em;
-      font-weight: 800;
-      text-align: center;
-      @include transform(rotate(45deg));
-      position: relative;
-      padding: 2px 7px;
-      left: -5px;
-      top: 15px;
-      width: 120px;
-      background-color: $ribbon-background;
-      color: white;
-      box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+  .bg {
+    border-bottom: 8px solid #B67F78;
+    height: 180px;
+    width:100%;
+  }
+
+  .bio:hover > .desc {
+    cursor: pointer;
+    opacity: 1; 
+  }
+
+  .avatarcontainer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    width: 70px;
+    height: 70px;
+    display: block;
+  }
+
+  .avatarcontainer:hover > .hover {
+    opacity: 1; 
+  }
+
+  .avatar {
+    width: 100%;
+    border: 8px solid #264353;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative; 
+  }
+
+  .avatar img {
+    width: 65px;
+    height: 65px; 
+  }
+
+  avatar:hover + .hover {
+    opacity: 1;
+    cursor: pointer; 
+  }
+
+  .hover {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    background-color: #264353;
+    top: 0;
+    font-size: 1.8em;
+    text-align: center;
+    color: white;
+    padding-top: 18%;
+    opacity: 0;
+    font-family: 'FontAwesome';
+    font-weight: 300;
+    border: 8px solid #6699B6;
+    transition-property: all;
+    transition-duration: 0.5s;
+    transition-timing-function: ease; 
+  }
+
+  .summary {
+    font-size: 1.2em;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 8px solid #B67F78;
+  }
+
+  .data {
+    margin-top: .6em;
+    color: #81878b; 
+  }
+
+  .data li {
+    width: 30%;
+    text-align: center;
+    display: inline-block;
+    font-size: 1em;
+    border-right: solid 1px #bdc3c7; 
+
+    &:last-child {
+      border: none; 
+    }
+
+    li span {
+      display: block;
+      text-transform: uppercase;
+      font-size: 0.5em;
+      margin-top: .6em;
+      font-weight:700;
     }
   }
 
-  .card-header {
-    @include transition (all 0.2s ease-in-out);
-    background-color: $card-header-background;
-    border-bottom: $card-border;
-    border-radius: $base-border-radius $base-border-radius 0 0;
-    font-weight: bold;
-    padding: $base-spacing/3 $gutter/2;
-  }
+  .desc {
+    position: absolute;
+    top: 70px;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 170px;
+    padding: 1.2em 1em 0 1em;
+    color: white;
+    text-align: center;
+    opacity: 0;
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in; 
 
-  .card-copy {
-    padding: $base-spacing/2 $gutter/2;
-    font-size: .9em;
-    line-height: 1.5em;
-  }
+    h3 {
+      font-size: 1.5em;
+      margin-top: .5em;
+      margin-bottom: .5em;
+      font-weight: 700;
+      color: #B67F78;
+    }
 
-  .card-stats {
-    padding: $base-spacing/2 $gutter/2;
-    overflow: auto;
-
-    ul li {
-      display: inline;
-      color: $card-stats-color;
-      font-weight: 800;
-      font-size: 1.2em;
-      float: left;
-      border-right: 1px solid transparentize($base-font-color, .8);
-      line-height: 1.1em;
-      padding: 0 .7em 0 .7em;
-
-      &:first-child {
-        padding-left: 0;
-      }
-
-      &:last-child {
-        border-right: 0;
-      }
-
-      span {
-        color: $base-font-color;
-        font-size: .7em;
-        display: block;
-        font-weight: normal;
-      }
+    p {
+      font-size: .9em;
+      line-height: 1.5em; 
     }
   }
 
-  &:hover {
-    background-color: $card-hover-background;
-
-    .card-image img {
-      background: $card-image-hover-background;
-    }
-
-    .card-header {
-      background-color: $card-hover-background;
+  .tags {
+    p {
+      color: #6699B6;
+      font-size: 17px;
+      font-weight: 700;
     }
   }
 
-  &:active {
-    background-color: $card-background;
+  .follow {
+    margin: 1.5em auto 0 auto;
+    background-color:  #264353;
+    width: 90%;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    padding: .5em;
+    border-radius: 5px;
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: ease; 
+  }
 
-    .card-header {
-      background-color: $card-background;
-    }
+  .follow:hover {
+    background-color: #6699B6;
+    cursor: pointer; 
   }
 }
-

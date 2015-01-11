@@ -1,23 +1,46 @@
 <section class="card ng-class:card.type">
-  <div ng-show="card.isFork" class="ribbon-wrapper">
-    <div class="ribbon">Fork</div>
+  <div class="heading">
+    <div class="bio">
+      <h1>{{card.title}}</h1>
+      <img src="http://www.innovata-llc.com/fullpanel/uploads/files/global-data.jpg" alt="background" class="bg">
+      <div class="desc">
+        <h3>{{card.curator}}</h3>
+        <p>{{card.descriptions}}</p>
+        <div class="tags">
+          <p>{{card.keywords}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="avatarcontainer">
+      <div class="hover">
+        <div class="icon-anchor"></div>
+      </div>
+    </div>
   </div>
-  <div class="card-image">
-    <img ng-src="{{card.image_url}}" alt="">
+
+  <div class="content">
+    <p class="summary">{{card.summary}}</p>
+    <div class="data">
+      <ul>
+        <li>
+        <h4>8,5</h4>
+        <span>Rating</span>
+        </li>
+        <li>
+        <h4>1,119</h4>
+        <span>Followers</span>
+        </li>
+        <li>
+        <h4>30000</h4>
+        <span>Likes</span>
+        </li>
+      </ul>
+    </div>
+
+    <div ng-click="card.goTo(card)" class="follow">Learn</div>
+    <div ng-click="card.goTo(card)" class="follow">Browse</div>
+    <div ng-click="card.goTo(card)" class="follow">Edit</div>
   </div>
-  <div class="card-header">
-    {{card.title}}
-  </div>
-  <div class="card-copy">
-    <p><strong>Summary: </strong>{{card.summary}}</p>
-    <hr/>
-    <p><strong>Description: </strong>{{card.description}}</p>
-  </div>
-  <div class="card-stats">
-    <ul>
-      <li>{{card.version}}<span>Version</span></li>
-      <li>{{card.placesCount}}<span>Places</span></li>
-      <li>{{card.learnersCount}}<span>Learners</span></li>
-    </ul>
-  </div>
+</div>
 </section>
