@@ -1,30 +1,24 @@
 (function(){
 
-  xdescribe("dispatcher", function(){
+  describe("dispatcher", function(){
     var dispatcher;
+    var $rootScope;
 
     var currentState;
     var queue;
     var modules;
+    var switcher;
 
     var permissionMock;
 
     beforeEach(function(){
 
-      currentState = {
-        name: 'currentState',
-        get: function(){},
-        set: function(){}
-      }
+      currentState = {}
 
       currentState.get = sinon.stub().returns({mode: '123'});
       currentState.set = sinon.spy();
 
-      queue = {
-        name: 'queue',
-        get: function(){},
-        set: function(){}
-      }
+      queue = {}
 
       queue.get = sinon.stub().returns(['123']);
       queue.set = sinon.spy();
@@ -33,17 +27,25 @@
         get: function(){}
       };
 
+      var switcher = {}
+
       permissionMock = sinon.mock(permission);
 
       module('unacademic.appState.dispatcher',  function($provide){
         $provide.value('permission', permission);
         $provide.value('queue', queue);
+        $provide.value('switcher', switcher);
         $provide.value('currentState', currentState);
       });
 
-      inject(function(_dispatcher_){
+      inject(function(_dispatcher_, _$q_, _$rootScope_){
         dispatcher = _dispatcher_;
+        $q = _$q_;
+        $rootScope = _$rootScope_;
       });
+
+      var promise = $q.when();
+      switcher.set = sinon.stub().returns(promise);
     });
 
 
@@ -69,7 +71,6 @@
 
     describe("set", function(){
       var notificationSpy;
-      var getAppStateSpy;
 
       beforeEach(function(){
         notificationSpy = sinon.spy();
@@ -84,11 +85,7 @@
 
         beforeEach(function(){
           permissionMock.expects('get').once().returns({});
-          setState = dispatcher.setState({user: 'yeehaa'});
-        });
-
-        it("returns false", function(){
-          expect(setState).to.be.undefined;
+          dispatcher.setState({user: 'yeehaa'});
         });
 
         it("does not notify observers", function(){
@@ -100,54 +97,12 @@
         });
       });
 
-      describe("with one change", function(){
+      describe("with changes", function(){
 
         beforeEach(function(){
 
-          var proposedState = {
-            mode: 'learning',
-            queue: ['123']
-          }
-
           var currentState = {
             mode: '123',
-            queue: ['123']
-          }
-
-          var state = {
-            mode: 'learning',
-          }
-
-          permissionMock.expects('get')
-            .withArgs(proposedState, currentState)
-            .once()
-            .returns(state);
-
-          setState = dispatcher.setState(state);
-        });
-
-        it("sets the values", function(){
-          expect(currentState.set).called;
-        });
-
-        it("notifies observers", function(){
-          expect(notificationSpy).calledOnce;
-        });
-      });
-
-      describe("with multiple changes", function(){
-
-        beforeEach(function(){
-
-          var proposedState = {
-            mode: 'learning',
-            resource: '123',
-            queue: ['123']
-          }
-
-          var currentState = {
-            mode: '123',
-            resource: '123',
             queue: ['123']
           }
 
@@ -158,11 +113,12 @@
 
 
           permissionMock.expects('get')
-            .withArgs(proposedState)
+            .withArgs(currentState, state)
             .once()
             .returns(state);
 
-          setState = dispatcher.setState(state);
+          dispatcher.setState(state);
+          $rootScope.$digest();
         });
 
         it("sets the values", function(){
@@ -183,5 +139,4 @@
       });
     });
   });
-
 })();

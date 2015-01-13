@@ -11,20 +11,40 @@
       get: get
     }
 
-    function get(nextState, currentState) {
-      var valid = checkPermissions(currentState, nextState);
+    function get(currentState, changes) {
+      let proposal = createProposal(currentState, changes)
+      var valid = checkPermissions(currentState, proposal);
 
       if(!valid){
         return {};
       }
 
-      var intersection =  _.omit(nextState, function(value, key){
+      var intersection =  _.omit(proposal, function(value, key){
         return _.isEqual(currentState[key], value);
       });
+
+      var hasResource = _.has(intersection, 'resource');
+      var hasName = _.has(intersection, 'name');
+
+      if(hasResource && !hasName){
+        intersection.name = currentState.name;
+      }
 
       delete intersection.queue;
 
       return intersection;
+    }
+
+    function createProposal(currentState, changes){
+      let modules = ["mode", "name", "user", "resource", "queue"]
+      let state = _.clone(currentState);
+
+      _.each(modules, (module) => {
+        if(changes[module]){
+          state[module] = changes[module];
+        }
+      });
+      return state;
     }
 
     function checkPermissions(currentState, nextState){

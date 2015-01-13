@@ -23,31 +23,18 @@
 
     function set(proposedChanges) {
       var _currentState = get();
-      var proposal = createProposal(_currentState, proposedChanges);
-      var approvedChanges = permission.get(proposal, _currentState);
+      var changes = permission.get(_currentState, proposedChanges);
 
-      if (!_.isEmpty(approvedChanges)) {
-        switcher.set(approvedChanges).then(function (msg) {
-          setServicesState(approvedChanges);
-          notifyObservers(approvedChanges);
+      if (!_.isEmpty(changes)) {
+        switcher.set(changes).then(function () {
+          setServicesState(changes);
+          notifyObservers(changes);
         })["catch"](function (err) {});
       }
     }
 
     function setServicesState(changes) {
       currentState.set(changes);
-    }
-
-    function createProposal(currentState, changes) {
-      var modules = ["mode", "name", "user", "resource"];
-      var state = _.clone(currentState);
-
-      _.each(modules, function (module) {
-        if (changes[module]) {
-          state[module] = changes[module];
-        }
-      });
-      return state;
     }
 
     function setQueue(options) {
