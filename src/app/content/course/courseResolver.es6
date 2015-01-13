@@ -18,9 +18,10 @@
         curatorId = curator;
       }
 
-      if(courseId){
+      if(id){
         courseId = id;
       }
+
 
       let promises;
 
@@ -32,7 +33,6 @@
 
         if(curatorId && courseId === 'new'){
           let course = new Course();
-          console.log(course);
           return resolve({schema: schema, info: course, cards: course.waypoints});
         }
 

@@ -41,15 +41,10 @@
       describe("without a user and with a regular id", function(){
 
         beforeEach(function(){
-          dispatcher.getState = sinon.stub().returns({resource: '456'});
-          courseResolver().then(function(data){
+          courseResolver({resource: '456'}).then(function(data){
             response = data;
           });
           $rootScope.$apply();
-        });
-
-        it("calls the dispatcher to get the current user", function(){
-          expect(dispatcher.getState).to.be.calledTwice;
         });
 
         it("calls the Course service with the right arguments", function(){
@@ -68,15 +63,10 @@
             id: '456',
             curator: 'yeehaa'
           }
-          dispatcher.getState = sinon.stub().returns({user: '123', resource: resource});
-          courseResolver().then(function(data){
+          courseResolver(resource).then(function(data){
             response = data;
           });
           $rootScope.$apply();
-        });
-
-        it("calls the dispatcher to get the current user", function(){
-          expect(dispatcher.getState).to.be.calledTwice;
         });
 
         it("calls the Course service with the right arguments", function(){
@@ -93,19 +83,15 @@
       describe("with a user and new as id", function(){
 
         beforeEach(function(){
-          dispatcher.getState = sinon.stub().returns({user: '123', resource: 'new'});
-          courseResolver().then(function(data){
+          var resource = {
+            id: '456',
+            curator: 'yeehaa'
+          }
+
+          courseResolver(resource).then(function(data){
             response = data;
           });
           $rootScope.$apply();
-        });
-
-        it("calls the dispatcher to get the current user", function(){
-          expect(dispatcher.getState).to.be.calledTwice;
-        });
-
-        it("calls the Course service with the right arguments", function(){
-          expect(Course.get).not.to.be.called;
         });
 
         it("returns all the necessary data for the detail page", function(){
