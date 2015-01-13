@@ -6,35 +6,28 @@
 
     var currentState;
     var queue;
-    var modules;
-    var switcher;
+    var mutator;
 
     var permissionMock;
 
     beforeEach(function(){
 
-      currentState = {}
+      currentState = {};
+      queue = {};
 
-      currentState.get = sinon.stub().returns({mode: '123'});
-      currentState.set = sinon.spy();
-
-      queue = {}
-
-      queue.get = sinon.stub().returns(['123']);
-      queue.set = sinon.spy();
 
       var permission = {
         get: function(){}
       };
 
-      var switcher = {}
+      mutator = {}
 
       permissionMock = sinon.mock(permission);
 
       module('unacademic.appState.dispatcher',  function($provide){
         $provide.value('permission', permission);
         $provide.value('queue', queue);
-        $provide.value('switcher', switcher);
+        $provide.value('mutator', mutator);
         $provide.value('currentState', currentState);
       });
 
@@ -44,8 +37,14 @@
         $rootScope = _$rootScope_;
       });
 
+      currentState.get = sinon.stub().returns({mode: 'learning'});
+      currentState.set = sinon.spy();
+
+      queue.get = sinon.stub().returns(['123']);
+      queue.set = sinon.spy();
+
       var promise = $q.when();
-      switcher.set = sinon.stub().returns(promise);
+      mutator.set = sinon.stub().returns(promise);
     });
 
 
@@ -58,14 +57,6 @@
 
       it("gets the currentState", function(){
         expect(currentState.get).calledOnce;
-      });
-
-      it("gets the queue", function(){
-        expect(queue.get).calledOnce;
-      });
-
-      it("returns a composite object", function(){
-        expect(state).to.deep.equal({mode: '123', queue: ['123']});
       });
     });
 
@@ -88,47 +79,47 @@
           dispatcher.setState({user: 'yeehaa'});
         });
 
-        it("does not notify observers", function(){
-          expect(notificationSpy).not.called;
+        it("does not call the mutator", function(){
+          expect(mutator.set).not.called;
         });
 
-        it("does not set any value", function(){
-          expect(currentState.set).not.called;
+        it("does not notify observers", function(){
+          expect(notificationSpy).not.called;
         });
       });
 
       describe("with changes", function(){
+        var changes;
+        var state;
 
         beforeEach(function(){
 
-          var currentState = {
-            mode: '123',
+          state = {
+            mode: 'learning',
             queue: ['123']
           }
 
-          var state = {
+          changes = {
             mode: 'learning',
-            resource: '123',
           }
 
-
           permissionMock.expects('get')
-            .withArgs(currentState, state)
+            .withArgs(state, changes)
             .once()
-            .returns(state);
+            .returns(changes);
 
-          dispatcher.setState(state);
+          dispatcher.setState(changes);
           $rootScope.$digest();
         });
 
-        it("sets the values", function(){
-          expect(currentState.set).called;
-          expect(queue.set).not.called;
+        it("calls the mutator with", function(){
+          expect(mutator.set).calledWith(changes);
         });
 
         it("notifies observers", function(){
           expect(notificationSpy).calledOnce;
         });
+
       });
     });
 

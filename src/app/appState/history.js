@@ -5,13 +5,14 @@
 
   angular.module("unacademic.appState.history", []).factory("history", history);
 
-  function history(dispatcher) {
+  function history() {
     var _history;
     var index;
 
     return {
       initialize: initialize,
       get: get,
+      add: add,
       status: status,
       previous: previous,
       next: next
@@ -44,12 +45,9 @@
     function initialize() {
       _history = [];
       index = 0;
-      dispatcher.registerObserverCallback(updateHistory);
     }
 
-    function updateHistory() {
-      var state = dispatcher.getState();
-
+    function add(state) {
       if (!state.timestamp) {
         _history = shortenHistory(_history);
         state.timestamp = Date.now();

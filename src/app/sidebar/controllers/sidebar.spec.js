@@ -100,20 +100,6 @@
 
     describe("state switching", function(){
 
-      describe("no mode, no user", function(){
-        beforeEach(function(){
-          dispatcher.registerObserverCallback.callArgWith(0, {});
-        });
-
-        it("sets the mode to learning", function(){
-          expect(sidebar.mode).to.equal('browsing');
-        });
-
-        it("keep the mode to learning", function(){
-          expect(sidebar.user).to.undefined;
-        });
-      });
-
       describe("new mode, same user", function(){
         beforeEach(function(){
           dispatcher.registerObserverCallback.callArgWith(0, {mode: 'learning'});

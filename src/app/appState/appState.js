@@ -5,6 +5,7 @@
     'unacademic.appState.currentState',
     'unacademic.appState.history',
     'unacademic.appState.queue',
+    'unacademic.appState.mutator',
     'unacademic.appState.permission',
   ]);
 })();

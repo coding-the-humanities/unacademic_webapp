@@ -47,15 +47,10 @@
       dispatcher.setState({mode: newMode});
     }
 
-    function updateAppState({user, mode}){
-      if(user){
-        sidebar.user = user;
-      }
-
-      if(mode){
-        currentMode = mode;
-        sidebar.mode = mode;
-      }
+    function updateAppState(state){
+      sidebar.user = state.user;
+      currentMode = state.mode;
+      sidebar.mode = state.mode;
     }
   }
 })();

@@ -11,8 +11,6 @@
       dispatcher = {};
       dispatcher.getState = sinon.stub();
 
-      dispatcher.registerObserverCallback = sinon.stub();
-
       module('unacademic.appState.history',  function($provide){
         $provide.value('dispatcher', dispatcher);
       });
@@ -49,10 +47,6 @@
         history.initialize();
       });
 
-      it("registers the observer", function(){
-        expect(dispatcher.registerObserverCallback);
-      });
-
       it("is empty", function(){
         expect(status().length).to.equal(0);
       });
@@ -66,10 +60,8 @@
 
       beforeEach(function(){
         history.initialize();
-        dispatcher.getState = sinon.stub().returns(state1);
-        dispatcher.registerObserverCallback.callArg(0);
-        dispatcher.getState = sinon.stub().returns(state2);
-        dispatcher.registerObserverCallback.callArg(0);
+        history.add(state1);
+        history.add(state2);
         expect(status().length).to.equal(2);
       });
 
@@ -109,10 +101,8 @@
 
         beforeEach(function(){
           history.previous();
-          dispatcher.getState = sinon.stub().returns(state3);
-          dispatcher.registerObserverCallback.callArg(0);
-          dispatcher.getState = sinon.stub().returns(state4);
-          dispatcher.registerObserverCallback.callArg(0);
+          history.add(state3);
+          history.add(state4);
         });
 
         it("adds the state to the history", function(){
@@ -134,8 +124,7 @@
         beforeEach(function(){
           expect(status().length).to.equal(2);
           history.previous();
-          dispatcher.getState = sinon.stub().returns(state5);
-          dispatcher.registerObserverCallback.callArg(0);
+          history.add(state5);
         });
 
         it("does not add the state to the history", function(){

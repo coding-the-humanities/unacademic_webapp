@@ -49,17 +49,10 @@
       dispatcher.setState({ mode: newMode });
     }
 
-    function updateAppState(_ref2) {
-      var user = _ref2.user;
-      var mode = _ref2.mode;
-      if (user) {
-        sidebar.user = user;
-      }
-
-      if (mode) {
-        currentMode = mode;
-        sidebar.mode = mode;
-      }
+    function updateAppState(state) {
+      sidebar.user = state.user;
+      currentMode = state.mode;
+      sidebar.mode = state.mode;
     }
   }
 })();

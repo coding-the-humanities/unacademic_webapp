@@ -5,7 +5,7 @@
 
   angular.module("unacademic.appState.dispatcher", []).factory("dispatcher", dispatcher);
 
-  function dispatcher(currentState, queue, permission, switcher) {
+  function dispatcher(currentState, queue, permission, mutator) {
     var observerCallbacks = [];
 
     return {
@@ -16,25 +16,20 @@
     };
 
     function get() {
-      var state = currentState.get();
-      state.queue = queue.get();
-      return state;
+      return currentState.get();
     }
 
-    function set(proposedChanges) {
-      var _currentState = get();
-      var changes = permission.get(_currentState, proposedChanges);
+    function set(proposals) {
+      var state = get();
+      state.queue = queue.get();
+
+      var changes = permission.get(state, proposals);
 
       if (!_.isEmpty(changes)) {
-        switcher.set(changes).then(function () {
-          setServicesState(changes);
-          notifyObservers(changes);
-        })["catch"](function (err) {});
+        mutator.set(changes).then(function (data) {
+          notifyObservers(data);
+        });
       }
-    }
-
-    function setServicesState(changes) {
-      currentState.set(changes);
     }
 
     function setQueue(options) {
