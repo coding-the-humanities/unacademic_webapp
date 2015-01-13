@@ -15,7 +15,7 @@
       var valid = checkPermissions(currentState, nextState);
 
       if(!valid){
-        return false;
+        return {};
       }
 
       var intersection =  _.omit(nextState, function(value, key){
@@ -23,10 +23,6 @@
       });
 
       delete intersection.queue;
-
-      if(_.isEmpty(intersection)){
-        return false;
-      }
 
       return intersection;
     }

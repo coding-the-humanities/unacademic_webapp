@@ -3,80 +3,69 @@
   describe("switcher", function(){
     var switcher;
     var $state;
+    var $rootScope;
+    var $q;
 
     beforeEach(function(){
       $state = {};
-      $state.go = sinon.stub();
+
       dispatcher = {};
       dispatcher.getState = sinon.stub();
-
-      dispatcher.registerObserverCallback = sinon.stub();
 
       module('unacademic.appState.switcher',  function($provide){
         $provide.value('$state', $state);
         $provide.value('dispatcher', dispatcher);
       });
 
-      inject(function(_switcher_){
+      inject(function(_switcher_, _$q_, _$rootScope_){
         switcher = _switcher_;
+        $q = _$q_;
+        $rootScope = _$rootScope_;
       });
 
-    });
-
-    describe("initialize", function(){
-      it("registers the observer", function(){
-        switcher.initialize();
-        expect(dispatcher.registerObserverCallback).called;
-      });
-
+      var promise = $q.when('123');
+      $state.go = sinon.stub().returns(promise);
     });
 
     describe("state switching", function(){
       var state;
+      var response;
 
-      describe("it has a name but no resource", function(){
+      describe("it has no name", function(){
+        beforeEach(function(){
+          state = {};
+          switcher.set(state).then(function(msg){
+            response = msg;
+          });
+          $rootScope.$digest();
+        });
 
+        it("calls state with the correct parameters", function(){
+          expect($state.go).not.to.be.called;
+        });
 
+        it("returns the success message", function(){
+          expect(response).to.contain('change');
+        });
+      });
+
+      describe("it has a name", function(){
         beforeEach(function(){
           state = { name: 'waypoints.detail' };
-          dispatcher.registerObserverCallback = sinon.stub()
-            .callsArg(0)
-          dispatcher.getState = sinon.stub().returns(state);
-          switcher.initialize();
+          switcher.set(state).then(function(msg){
+            response = msg;
+          })
+          $rootScope.$digest();
         });
 
-        it("gets the currentState", function(){
-          expect(dispatcher.getState).called;
-        });
-
-        it("does nothing", function(){
+        it("calls state with the correct parameters", function(){
           expect($state.go).to.be.calledWithExactly(state.name, undefined);
         });
-      });
 
-
-      describe("it has a name and a resource", function(){
-
-        beforeEach(function(){
-          state = {
-            name: 'waypoints.detail',
-            resource: '123'
-          };
-          dispatcher.registerObserverCallback = sinon.stub()
-            .callsArg(0)
-          dispatcher.getState = sinon.stub().returns(state);
-          switcher.initialize();
-        });
-
-        it("gets the currentState", function(){
-          expect(dispatcher.getState).called;
-        });
-
-        it("does nothing", function(){
-          expect($state.go).to.be.calledWithExactly(state.name, state.resource);
+        it("returns the success message", function(){
+          expect(response).to.equal('123');
         });
       });
-
     })
   });
 })();

@@ -5,22 +5,16 @@
   angular.module('unacademic.appState.switcher', [])
          .factory('switcher', switcher);
 
-  function switcher($state, dispatcher){
+  function switcher($state, $q){
     return {
-      initialize: initialize
+      set: set
     };
 
-    function initialize(){
-      dispatcher.registerObserverCallback(updateState);
-    }
-
-    function updateState(){
-      let state = dispatcher.getState();
-      switchState(state);
-    }
-
-    function switchState({name, resource}){
-      $state.go(name, resource)
-    }
+    function set({name, resource}){
+      if(name || resource){
+        return $state.go(name, resource);
+      }
+      return $q.when('no route change');
+    };
   }
 })();

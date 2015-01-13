@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  angular.module('unacademic.appState.view', [])
+  angular.module('unacademic.appState.currentState.view', [])
          .factory('view', view);
 
   function view($state){

@@ -1,84 +1,58 @@
-(function(){
-  'use strict';
+"use strict";
 
-  angular.module('unacademic.sidebar.controller', [])
-         .controller('Sidebar', Sidebar);
+(function () {
+  "use strict";
 
-  function Sidebar($scope, dispatcher, navHelpers){
+  angular.module("unacademic.sidebar.controller", []).controller("Sidebar", Sidebar);
 
+  function Sidebar($scope, dispatcher, navHelpers) {
     var sidebar = this;
     var modelId;
-    var users = ['yeehaa', 'marijn', 'reika', 'peter'];
+    var users = ["yeehaa", "marijn", "reika", "peter"];
     var user;
+    var currentMode = "browsing";
     initialize();
 
-    function initialize(){
-
+    function initialize() {
       user = _.sample(users);
-
-      sidebar.changeMode = changeMode;
+      sidebar.user = undefined;
+      sidebar.modes = ["browsing", "learning", "curation"];
+      sidebar.mode = currentMode;
       sidebar.back = back;
       sidebar.forward = forward;
       sidebar.signIn = signIn;
-      sidebar.curation = false;
-      updateAppState();
+      sidebar.checkMode = checkMode;
       dispatcher.registerObserverCallback(updateAppState);
     }
 
-    function back(){
+    function back() {
       navHelpers.goBack();
     }
 
-    function forward(){
+    function forward() {
       navHelpers.goForward();
     }
 
-    function signIn(){
-      return dispatcher.setState({user: user, mode: 'learning'});
+    function signIn() {
+      return dispatcher.setState({ user: user, mode: "learning" });
     }
 
-    $scope.$watch('sidebar.mode', changeCuration);
-    $scope.$watch('sidebar.curation', changeMode);
-
-    function changeMode(newVal, oldVal){
-      if(sidebar.mode === 'browsing'){
-        sidebar.curation = false;
-      }
-
-      if(sidebar.mode === 'learning'){
-        sidebar.curation = false;
-        if(newVal){
-          dispatcher.setState({mode: 'curation'});
-        }
-      }
-
-      if(sidebar.mode === 'curation'){
-        sidebar.curation = true;
-        if(!newVal){
-          dispatcher.setState({mode: 'learning'});
-        }
-      }
+    function checkMode(newMode) {
+      sidebar.mode = currentMode;
+      return dispatcher.setState({ mode: newMode });
     }
 
-    function changeCuration(newVal, oldVal){
-
-      if(sidebar.mode === 'browsing'){
-        sidebar.curation = false;
+    function updateAppState(_ref) {
+      var user = _ref.user;
+      var mode = _ref.mode;
+      if (user) {
+        sidebar.user = user;
       }
 
-      if(sidebar.mode === 'learning'){
-        sidebar.curation = false;
+      if (mode) {
+        currentMode = mode;
+        sidebar.mode = mode;
       }
-
-      if(sidebar.mode === 'curation'){
-        sidebar.curation = true;
-      }
-    }
-
-    function updateAppState(){
-      var state = dispatcher.getState();
-      sidebar.user = state.user;
-      sidebar.mode = state.mode;
     }
   }
 })();

@@ -2,10 +2,10 @@
 
   'use strict';
 
-  angular.module('unacademic.appState.mode', [])
+  angular.module('unacademic.appState.currentState.mode', [])
          .factory('mode', mode);
 
-  function mode($log){
+  function mode(){
     var mode = 'browsing';
 
     return {

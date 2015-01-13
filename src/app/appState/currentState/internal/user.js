@@ -3,7 +3,7 @@
 (function () {
   "use strict";
 
-  angular.module("unacademic.appState.user", []).factory("user", user);
+  angular.module("unacademic.appState.currentState.user", []).factory("user", user);
 
   function user() {
     var userId;

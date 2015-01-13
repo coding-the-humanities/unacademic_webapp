@@ -5,10 +5,8 @@
 
   angular.module("unacademic.appState.dispatcher", []).factory("dispatcher", dispatcher);
 
-  function dispatcher(queue, view, user, mode, permission, resource) {
-    var modules = [mode, user, view, resource, queue];
+  function dispatcher(currentState, queue, permission, switcher) {
     var observerCallbacks = [];
-    var timestamp;
 
     return {
       getState: get,
@@ -18,49 +16,39 @@
     };
 
     function get() {
-      var state = {};
-
-      _.each(modules, function (module) {
-        state[module.name] = module.get();
-      });
-
-      if (timestamp) {
-        state.timestamp = timestamp;
-      }
-
+      var state = currentState.get();
+      state.queue = queue.get();
       return state;
     }
 
     function set(proposedChanges) {
-      var currentState = get();
-      var proposal = createProposal(currentState, proposedChanges);
-      var approvedChanges = permission.get(proposal, currentState);
+      var _currentState = get();
+      var proposal = createProposal(_currentState, proposedChanges);
+      var approvedChanges = permission.get(proposal, _currentState);
 
-
-      if (approvedChanges) {
-        timestamp = setTimeStamp(proposedChanges.timestamp);
-        setServicesState(approvedChanges);
-        notifyObservers();
+      if (!_.isEmpty(approvedChanges)) {
+        switcher.set(approvedChanges).then(function (msg) {
+          setServicesState(approvedChanges);
+          notifyObservers(approvedChanges);
+        })["catch"](function (err) {
+          set(proposedChanges);
+        });
       }
     }
 
     function setServicesState(changes) {
-      _.each(modules, function (module) {
-        if (changes[module.name]) {
-          module.set(changes[module.name]);
-        }
-      });
+      currentState.set(changes);
     }
 
     function createProposal(currentState, changes) {
+      var modules = ["mode", "name", "user", "resource"];
       var state = _.clone(currentState);
 
       _.each(modules, function (module) {
-        if (changes[module.name]) {
-          state[module.name] = changes[module.name];
+        if (changes[module]) {
+          state[module] = changes[module];
         }
       });
-
       return state;
     }
 
@@ -68,17 +56,13 @@
       return queue.set(options);
     }
 
-    function setTimeStamp(proposal) {
-      return proposal || false;
-    }
-
     function registerObserverCallback(callback) {
       observerCallbacks.push(callback);
     }
 
-    function notifyObservers() {
+    function notifyObservers(msg) {
       _.each(observerCallbacks, function (callback) {
-        callback();
+        callback(msg);
       });
     };
   };

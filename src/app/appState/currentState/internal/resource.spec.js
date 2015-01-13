@@ -5,7 +5,7 @@
 
     beforeEach(function(){
 
-      module('unacademic.appState.resource');
+      module('unacademic.appState.currentState.resource');
 
       inject(function(_resource_, _$rootScope_){
         resource = _resource_;

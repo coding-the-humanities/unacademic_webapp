@@ -27,10 +27,12 @@
     <button class="back" ng-click="sidebar.back()">Back</button>
     <button class="forward" ng-click="sidebar.forward()">Forward</button>
 
-    <label class="label-switch">
-      <input type="checkbox"
-             ng-model="sidebar.curation">
-      <div class="checkbox"></div>
-    </label>
-  </div>
+
+    <div class="button-group">
+      <label ng-repeat="mode in sidebar.modes">
+        <input type="radio" ng-model="sidebar.mode" ng-change="sidebar.checkMode(mode)" ng-value="mode">
+        <span class="button-group-item">{{mode}}</span>
+      </label>
+    </div>
+
 </div>

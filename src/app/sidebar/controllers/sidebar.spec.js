@@ -32,6 +32,7 @@
 
     describe("initialize",function(){
       it("sets the results", function(){
+        $scope.$digest();
         expect(dispatcher.registerObserverCallback).called;
         expect(dispatcher.getState).called;
         expect(sidebar.user).to.be.undefined;
@@ -53,55 +54,33 @@
     });
 
     describe("mode switching", function(){
-
-      describe("state switching", function(){
-
-        describe("to browsing", function(){
-          beforeEach(function(){
-            dispatcher.getState = sinon.stub().returns({mode: 'browsing'});
-            dispatcher.registerObserverCallback.callArg(0);
-            $scope.$digest();
-          });
-
-          it("sets the mode to curation", function(){
-            expect(sidebar.mode).to.equal('browsing');
-          });
-
-          it("sets curation to true", function(){
-            expect(sidebar.curation).to.be.false;
-          });
+      describe("when the returned mode matches the new one", function(){
+        beforeEach(function(){
+          sidebar.mode = 'learning';
+          dispatcher.getState = sinon.stub().returns({mode: 'learning'});
+          dispatcher.registerObserverCallback.callArg(0);
+          $scope.$digest();
         });
 
-        describe("to learning", function(){
-          beforeEach(function(){
-            dispatcher.getState = sinon.stub().returns({mode: 'learning'});
-            dispatcher.registerObserverCallback.callArg(0);
-            $scope.$digest();
-          });
+        it("keep the mode to learning", function(){
+          expect(sidebar.mode).to.equal('learning');
+        });
+      });
 
-          it("sets the mode to curation", function(){
-            expect(sidebar.mode).to.equal('learning');
-          });
-
-          it("sets curation to true", function(){
-            expect(sidebar.curation).to.be.false;
-          });
+      describe("when the returned mode does not match", function(){
+        beforeEach(function(){
+          dispatcher.getState = sinon.stub().returns({mode: 'learning'});
+          dispatcher.registerObserverCallback.callArg(0);
+          sidebar.mode = 'browsing';
+          $scope.$digest();
         });
 
-        describe("to curation", function(){
-          beforeEach(function(){
-            dispatcher.getState = sinon.stub().returns({mode: 'curation'});
-            dispatcher.registerObserverCallback.callArg(0);
-            $scope.$digest();
-          });
+        it("requests to set the current state", function(){
+          expect(dispatcher.setState).calledWith({mode: 'browsing'});
+        })
 
-          it("sets the mode to curation", function(){
-            expect(sidebar.mode).to.equal('curation');
-          });
-
-          it("sets curation to true", function(){
-            expect(sidebar.curation).to.be.true;
-          });
+        it("keep the mode to learning", function(){
+          expect(sidebar.mode).to.equal('learning');
         });
       });
     });

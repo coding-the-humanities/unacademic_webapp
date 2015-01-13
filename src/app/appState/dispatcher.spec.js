@@ -1,41 +1,24 @@
 (function(){
 
-  describe("dispatcher", function(){
+  xdescribe("dispatcher", function(){
     var dispatcher;
 
-    var mode;
-    var user;
-    var view;
-    var resource;
+    var currentState;
     var queue;
+    var modules;
 
     var permissionMock;
 
     beforeEach(function(){
 
-      mode = {
-        name: 'mode',
-        get: function(){},
-        set: function(){}
-      };
-
-      user = {
-        name: 'user',
-        get: function(){},
-        set: function(){}
-      };
-
-      view = {
-        name: 'name',
+      currentState = {
+        name: 'currentState',
         get: function(){},
         set: function(){}
       }
 
-      resource = {
-        name: 'resource',
-        get: function(){},
-        set: function(){}
-      }
+      currentState.get = sinon.stub().returns({mode: '123'});
+      currentState.set = sinon.spy();
 
       queue = {
         name: 'queue',
@@ -43,12 +26,8 @@
         set: function(){}
       }
 
-      var modules = [mode, user, view, resource, queue];
-
-      _.each(modules, function(module){
-        module['get'] = sinon.spy();
-        module['set'] = sinon.spy();
-      });
+      queue.get = sinon.stub().returns(['123']);
+      queue.set = sinon.spy();
 
       var permission = {
         get: function(){}
@@ -58,11 +37,8 @@
 
       module('unacademic.appState.dispatcher',  function($provide){
         $provide.value('permission', permission);
-        $provide.value('mode', mode);
         $provide.value('queue', queue);
-        $provide.value('user', user);
-        $provide.value('view', view);
-        $provide.value('resource', resource);
+        $provide.value('currentState', currentState);
       });
 
       inject(function(_dispatcher_){
@@ -70,26 +46,24 @@
       });
     });
 
-    afterEach(function(){
-      permissionMock.verify();
-    });
 
     describe("get", function(){
       var state;
 
       beforeEach(function(){
-        state =dispatcher.getState();
+        state = dispatcher.getState();
       })
 
-      it("gets the correct data", function(){
-        var modules = [user, mode, view, resource, queue];
-        _.each(modules, function(module){
-          expect(module.get).calledOnce;
-        })
+      it("gets the currentState", function(){
+        expect(currentState.get).calledOnce;
       });
 
-      it("does not include a timestamp", function(){
-        expect(state).not.to.include.keys('timestamp');
+      it("gets the queue", function(){
+        expect(queue.get).calledOnce;
+      });
+
+      it("returns a composite object", function(){
+        expect(state).to.deep.equal({mode: '123', queue: ['123']});
       });
     });
 
@@ -102,10 +76,14 @@
         dispatcher.registerObserverCallback(notificationSpy);
       });
 
+      afterEach(function(){
+        permissionMock.verify();
+      });
+
       describe("with no changes", function(){
 
         beforeEach(function(){
-          permissionMock.expects('get').once().returns(false);
+          permissionMock.expects('get').once().returns({});
           setState = dispatcher.setState({user: 'yeehaa'});
         });
 
@@ -118,10 +96,7 @@
         });
 
         it("does not set any value", function(){
-          expect(user.set).not.called;
-          expect(mode.set).not.called;
-          expect(view.set).not.called;
-          expect(resource.set).not.called;
+          expect(currentState.set).not.called;
         });
       });
 
@@ -131,10 +106,12 @@
 
           var proposedState = {
             mode: 'learning',
-            resource: undefined,
-            user: undefined,
-            name: undefined,
-            queue: undefined
+            queue: ['123']
+          }
+
+          var currentState = {
+            mode: '123',
+            queue: ['123']
           }
 
           var state = {
@@ -142,7 +119,7 @@
           }
 
           permissionMock.expects('get')
-            .withArgs(proposedState)
+            .withArgs(proposedState, currentState)
             .once()
             .returns(state);
 
@@ -150,10 +127,7 @@
         });
 
         it("sets the values", function(){
-          expect(user.set).not.called;
-          expect(mode.set).calledWith('learning');
-          expect(view.set).not.called;
-          expect(resource.set).not.called;
+          expect(currentState.set).called;
         });
 
         it("notifies observers", function(){
@@ -168,16 +142,18 @@
           var proposedState = {
             mode: 'learning',
             resource: '123',
-            user: 'yeehaa',
-            name: 'courses.detail',
-            queue: undefined
+            queue: ['123']
+          }
+
+          var currentState = {
+            mode: '123',
+            resource: '123',
+            queue: ['123']
           }
 
           var state = {
             mode: 'learning',
             resource: '123',
-            name: 'courses.detail',
-            user: 'yeehaa',
           }
 
 
@@ -190,55 +166,12 @@
         });
 
         it("sets the values", function(){
-          expect(user.set).calledWith('yeehaa');
-          expect(mode.set).calledWith('learning');
-          expect(view.set).calledWith('courses.detail');
-          expect(resource.set).calledWith('123');
+          expect(currentState.set).called;
+          expect(queue.set).not.called;
         });
 
         it("notifies observers", function(){
           expect(notificationSpy).calledOnce;
-        });
-      });
-    });
-
-    describe("timestamp", function(){
-
-      describe("without change", function(){
-
-        beforeEach(function(){
-
-          var state = {
-            mode: 'learning',
-            timestamp: '123',
-          }
-
-          permissionMock.expects('get').returns(false);
-
-          setState = dispatcher.setState(state);
-        });
-
-        it("sets the values", function(){
-          expect(dispatcher.getState().timestamp).to.equal(undefined);
-        });
-      });
-
-      describe("with change", function(){
-
-        beforeEach(function(){
-
-          var state = {
-            mode: 'learning',
-            timestamp: '123',
-          }
-
-          permissionMock.expects('get').returns({mode: 'learning'});
-
-          setState = dispatcher.setState(state);
-        });
-
-        it("sets the values", function(){
-          expect(dispatcher.getState().timestamp).to.equal('123');
         });
       });
     });

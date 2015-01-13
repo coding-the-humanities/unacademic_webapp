@@ -6,7 +6,7 @@
 
     beforeEach(function(){
 
-      module('unacademic.appState.user');
+      module('unacademic.appState.currentState.user');
 
       inject(function(_user_){
         user = _user_;

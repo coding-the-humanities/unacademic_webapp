@@ -2,7 +2,7 @@
 
   'use strict';
 
-  angular.module('unacademic.appState.user', [])
+  angular.module('unacademic.appState.currentState.user', [])
          .factory('user', user);
 
   function user(){

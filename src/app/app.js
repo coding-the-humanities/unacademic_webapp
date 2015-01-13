@@ -28,7 +28,6 @@
     });
 
     function initialize(){
-      switcher.initialize();
       history.initialize();
 
       dispatcher.setState({

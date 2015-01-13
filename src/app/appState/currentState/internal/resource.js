@@ -1,7 +1,7 @@
 "use strict";
 
 (function () {
-  var app = angular.module("unacademic.appState.resource", []);
+  var app = angular.module("unacademic.appState.currentState.resource", []);
   app.factory("resource", resource);
 
   function resource() {

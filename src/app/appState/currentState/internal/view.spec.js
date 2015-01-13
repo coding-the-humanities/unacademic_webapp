@@ -6,7 +6,7 @@
 
     beforeEach(function(){
 
-      module('unacademic.appState.view');
+      module('unacademic.appState.currentState.view');
 
       $state = {
         current: {

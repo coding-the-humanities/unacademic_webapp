@@ -39,7 +39,7 @@
         });
 
         it("is not allowed to switch", function(){
-          expect(isAllowed).to.be.false;
+          expect(isAllowed).to.deep.equal({});
           expect($log.warn.logs.length).to.equal(1);
           expect($log.warn.logs[0][0]).to.contain('appmode');
         });
@@ -65,7 +65,7 @@
         });
 
         it("is not allowed to switch", function(){
-          expect(isAllowed).to.be.false;
+          expect(isAllowed).to.deep.equal({});
         });
       });
     });
@@ -95,7 +95,7 @@
         });
 
         it("is not allowed to switch", function(){
-          expect(isAllowed).to.be.false;
+          expect(isAllowed).to.deep.equal({});
         });
       })
 
@@ -125,6 +125,11 @@
         it("is not allowed to switch", function(){
           expect(isAllowed.resource.id).to.equal('456');
         });
+
+        xit("always includes the view name", function(){
+          expect(isAllowed.name).not.to.be.undefined;
+        });
+
       })
     });
 
@@ -148,7 +153,7 @@
         });
 
         it("is not allowed to switch", function(){
-          expect(isAllowed).to.be.false;
+          expect(isAllowed).to.deep.equal({});
           expect($log.warn.logs.length).to.equal(1);
           expect($log.warn.logs[0][0]).to.contain('locked');
         });
@@ -177,7 +182,7 @@
         }
 
         isAllowed = permission.get(nextState, currentState);
-        expect(isAllowed).to.be.false;
+        expect(isAllowed).to.deep.equal({});
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('signing in');
       });
@@ -192,7 +197,7 @@
         }
 
         isAllowed = permission.get(nextState, currentState);
-        expect(isAllowed).to.be.false;
+        expect(isAllowed).to.deep.equal({});
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('signing in');
       });
@@ -246,7 +251,7 @@
         }
 
         isAllowed = permission.get(nextState, currentState);
-        expect(isAllowed).to.be.false;
+        expect(isAllowed).to.deep.equal({});
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('browsing mode');
       });
@@ -286,7 +291,7 @@
         }
 
         isAllowed = permission.get(nextState, currentState);
-        expect(isAllowed).to.be.false;
+        expect(isAllowed).to.deep.equal({});
         expect($log.warn.logs.length).to.equal(1);
         expect($log.warn.logs[0][0]).to.contain('browsing mode');
       });

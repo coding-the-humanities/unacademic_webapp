@@ -3,7 +3,7 @@
 (function () {
   "use strict";
 
-  angular.module("unacademic.appState.view", []).factory("view", view);
+  angular.module("unacademic.appState.currentState.view", []).factory("view", view);
 
   function view($state) {
     var name;
