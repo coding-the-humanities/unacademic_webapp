@@ -31,7 +31,7 @@
           setServicesState(approvedChanges);
           notifyObservers(approvedChanges);
         }).catch(function(err){
-          set(proposedChanges);
+          // set(proposedChanges);
         });
       }
     }

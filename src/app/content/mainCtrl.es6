@@ -37,8 +37,8 @@
       dispatcher.registerObserverCallback(updateInfo);
     }
 
-    function updateInfo(){
-      init[vm.viewName].resolver()
+    function updateInfo(params){
+      init[vm.viewName].resolver(params)
         .then(({info, cards}) => {
           vm.info = info;
           vm.cards = cards;

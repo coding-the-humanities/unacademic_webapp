@@ -4,25 +4,28 @@
   angular.module('unacademic.sidebar.controller', [])
          .controller('Sidebar', Sidebar);
 
-  function Sidebar($scope, dispatcher, navHelpers){
+  function Sidebar(dispatcher, navHelpers){
 
-    var sidebar = this;
-    var modelId;
-    var users = ['yeehaa', 'marijn', 'reika', 'peter'];
-    var user;
-    var currentMode = 'browsing';
+    let sidebar = this;
+    var modes = ['browsing', 'learning', 'curation'];
+    var currentMode;
     initialize();
 
     function initialize(){
-      user = _.sample(users);
-      sidebar.user = undefined;
-      sidebar.modes = ['browsing', 'learning', 'curation'];
-      sidebar.mode = currentMode;
+      let state = dispatcher.getState();
+      currentMode = state.mode;
+      initSidebar(state);
+      dispatcher.registerObserverCallback(updateAppState);
+    }
+
+    function initSidebar({mode, user}){
+      sidebar.modes = modes;
+      sidebar.user = user;
+      sidebar.mode = mode;
       sidebar.back = back;
       sidebar.forward = forward;
       sidebar.signIn = signIn;
       sidebar.checkMode = checkMode;
-      dispatcher.registerObserverCallback(updateAppState);
     }
 
     function back(){
@@ -34,12 +37,14 @@
     }
 
     function signIn(){
+      let users = ['yeehaa', 'marijn', 'reika', 'peter'];
+      let user = _.sample(users);
       return dispatcher.setState({user: user, mode: 'learning'});
     }
 
     function checkMode(newMode){
       sidebar.mode = currentMode;
-      return dispatcher.setState({mode: newMode});
+      dispatcher.setState({mode: newMode});
     }
 
     function updateAppState({user, mode}){

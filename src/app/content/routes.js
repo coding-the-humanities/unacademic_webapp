@@ -24,8 +24,9 @@
         controllerAs: 'vm',
         templateUrl: 'content/views/index.html',
         resolve: {
-          data: function(init){
-            return init.course.resolver();
+          data: function(init, $stateParams){
+            var params = $stateParams
+            return init.course.resolver(params);
           }
         }
       })

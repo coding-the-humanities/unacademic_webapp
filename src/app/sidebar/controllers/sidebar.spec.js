@@ -2,7 +2,6 @@
 
   describe("Sidebar", function(){
     var sidebar;
-    var $scope;
     var dispatcher;
     var navHelpers;
 
@@ -20,10 +19,8 @@
       navHelpers.goForward = sinon.spy();
 
       inject(function ($rootScope, $controller, _$q_) {
-        $scope = $rootScope.$new();
         $q = _$q_;
         sidebar = $controller('Sidebar', {
-          $scope: $scope,
           navHelpers: navHelpers,
           dispatcher: dispatcher
         });
@@ -31,56 +28,117 @@
     });
 
     describe("initialize",function(){
-      it("sets the results", function(){
-        $scope.$digest();
+
+      describe("app state", function(){
+        it("gets the app state", function(){
+          expect(dispatcher.getState).called;
+        });
+
+        it("sets the corresponding props", function(){
+          expect(sidebar.user).to.be.undefined;
+          expect(sidebar.mode).to.equal('browsing')
+        });
+      });
+
+      describe("nav props", function(){
+        it("sets the other vm props", function(){
+          expect(sidebar.back).not.to.be.undefined;
+          expect(sidebar.forward).not.to.be.undefined;
+        });
+      });
+
+      describe("other props", function(){
+        it("sets the other vm props", function(){
+          expect(sidebar.modes).not.to.be.undefined;
+          expect(sidebar.signIn).not.to.be.undefined;
+          expect(sidebar.checkMode).not.to.be.undefined;
+        });
+      });
+
+      it("sets the observer", function(){
         expect(dispatcher.registerObserverCallback).called;
-        expect(dispatcher.getState).called;
-        expect(sidebar.user).to.be.undefined;
-        expect(sidebar.mode).to.equal('browsing')
       });
     });
 
-    describe("time travel", function(){
+    describe("navigation", function(){
 
-      it("calls navhelpers.back", function(){
+      it("wires up navhelpers.back", function(){
         sidebar.back();
         expect(navHelpers.goBack).to.be.called;
       });
 
-      it("calls navhelpers.forward", function(){
+      it("wires up navhelpers.forward", function(){
         sidebar.forward();
         expect(navHelpers.goForward).to.be.called;
       });
     });
 
-    describe("mode switching", function(){
-      describe("when the returned mode matches the new one", function(){
+    describe("signing in", function(){
+
+      it("sets the state", function(){
+        sidebar.signIn();
+        expect(dispatcher.setState).to.be.called;
+      });
+
+    });
+
+    describe("check mode", function(){
+
+      beforeEach(function(){
+        sidebar.checkMode('learning');
+      });
+
+      it('keeps the old mode', function(){
+        expect(sidebar.mode).to.equal('browsing');
+      });
+
+      it("sets the state", function(){
+        expect(dispatcher.setState).to.be.called;
+      });
+
+    });
+
+    describe("state switching", function(){
+
+      describe("no mode, no user", function(){
         beforeEach(function(){
-          sidebar.mode = 'learning';
-          dispatcher.getState = sinon.stub().returns({mode: 'learning'});
-          dispatcher.registerObserverCallback.callArg(0);
-          $scope.$digest();
+          dispatcher.registerObserverCallback.callArgWith(0, {});
+        });
+
+        it("sets the mode to learning", function(){
+          expect(sidebar.mode).to.equal('browsing');
         });
 
         it("keep the mode to learning", function(){
-          expect(sidebar.mode).to.equal('learning');
+          expect(sidebar.user).to.undefined;
         });
       });
 
-      describe("when the returned mode does not match", function(){
+      describe("new mode, same user", function(){
         beforeEach(function(){
-          dispatcher.getState = sinon.stub().returns({mode: 'learning'});
-          dispatcher.registerObserverCallback.callArg(0);
-          sidebar.mode = 'browsing';
-          $scope.$digest();
+          dispatcher.registerObserverCallback.callArgWith(0, {mode: 'learning'});
         });
 
-        it("requests to set the current state", function(){
-          expect(dispatcher.setState).calledWith({mode: 'browsing'});
-        })
+        it("sets the mode to learning", function(){
+          expect(sidebar.mode).to.equal('learning');
+        });
 
         it("keep the mode to learning", function(){
+          expect(sidebar.user).to.undefined;
+        });
+      });
+
+      describe("new mode, new user", function(){
+        beforeEach(function(){
+          dispatcher.registerObserverCallback.callArgWith(0, {mode: 'learning', user: 'yeehaa'});
+        });
+
+        it("sets the mode to learning", function(){
           expect(sidebar.mode).to.equal('learning');
+        });
+
+        it("keep the mode to learning", function(){
+          expect(sidebar.user).to.equal('yeehaa');
         });
       });
     });

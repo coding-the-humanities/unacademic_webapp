@@ -8,10 +8,21 @@
   function courseResolver($q, Course, dispatcher) {
     return data;
 
-    function data() {
+    function data(_ref) {
+      var curator = _ref.curator;
+      var id = _ref.id;
       var schema = Course.schema;
-      var curatorId = dispatcher.getState().resource.curator;
-      var courseId = dispatcher.getState().resource.id;
+      var curatorId;
+      var courseId;
+
+      if (curator) {
+        curatorId = curator;
+      }
+
+      if (courseId) {
+        courseId = id;
+      }
+
       var promises;
 
       return $q(function (resolve, reject) {
@@ -21,6 +32,7 @@
 
         if (curatorId && courseId === "new") {
           var course = new Course();
+          console.log(course);
           return resolve({ schema: schema, info: course, cards: course.waypoints });
         }
 

@@ -30,9 +30,7 @@
         switcher.set(approvedChanges).then(function (msg) {
           setServicesState(approvedChanges);
           notifyObservers(approvedChanges);
-        })["catch"](function (err) {
-          set(proposedChanges);
-        });
+        })["catch"](function (err) {});
       }
     }
 

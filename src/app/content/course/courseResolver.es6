@@ -9,10 +9,19 @@
 
     return data;
 
-    function data(){
+    function data({curator, id}){
       let schema = Course.schema;
-      let curatorId = dispatcher.getState().resource.curator;
-      let courseId = dispatcher.getState().resource.id;
+      let curatorId;
+      let courseId;
+
+      if(curator){
+        curatorId = curator;
+      }
+
+      if(courseId){
+        courseId = id;
+      }
+
       let promises;
 
       return $q(function(resolve, reject){
@@ -23,6 +32,7 @@
 
         if(curatorId && courseId === 'new'){
           let course = new Course();
+          console.log(course);
           return resolve({schema: schema, info: course, cards: course.waypoints});
         }
 
