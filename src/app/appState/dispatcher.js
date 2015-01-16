@@ -23,10 +23,11 @@
       var state = get();
       state.queue = queue.get();
 
-      var changes = permission.get(state, proposals);
+      var approval = permission.get(state, proposals);
 
-      if (!_.isEmpty(changes)) {
-        mutator.set(changes).then(function (data) {
+
+      if (!_.isEmpty(approval)) {
+        mutator.set(approval).then(function (data) {
           notifyObservers(data);
         });
       }

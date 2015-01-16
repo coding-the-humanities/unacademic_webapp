@@ -37,7 +37,7 @@
     }
 
     function createProposal(currentState, changes) {
-      var modules = ["mode", "name", "user", "resource", "queue"];
+      var modules = ["mode", "name", "user", "resource", "queue", "timestamp"];
       var state = _.clone(currentState);
 
       _.each(modules, function (module) {

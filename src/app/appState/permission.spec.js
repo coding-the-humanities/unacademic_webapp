@@ -78,6 +78,7 @@
 
           currentState = {
             mode: 'browsing',
+
             resource: {
               id: '123',
               curator: 'yeehaa'

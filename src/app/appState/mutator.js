@@ -14,7 +14,6 @@
       return $q(function (resolve, reject) {
         switcher.set(changes).then(function () {
           setCurrentState(changes);
-
           var state = currentState.get();
           history.add(state);
           resolve(state);

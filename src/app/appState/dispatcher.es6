@@ -23,10 +23,11 @@
       let state = get();
       state.queue = queue.get();
 
-      let changes = permission.get(state, proposals);
+      let approval = permission.get(state, proposals);
 
-      if(!_.isEmpty(changes)){
-        mutator.set(changes).then((data) => { notifyObservers(data); });
+
+      if(!_.isEmpty(approval)){
+        mutator.set(approval).then((data) => { notifyObservers(data); });
       }
     }
 

@@ -9,7 +9,7 @@
     let time;
 
     return {
-      name: 'name',
+      name: 'timestamp',
       get: get,
       set: set
     }

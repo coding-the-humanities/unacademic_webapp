@@ -2,9 +2,11 @@
 
   describe("history", function(){
     var history;
-    var $state;
     var state1;
     var state2;
+    var state3;
+    var state4;
+    var state5;
     var status;
 
     beforeEach(function(){

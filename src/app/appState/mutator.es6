@@ -15,7 +15,6 @@
         switcher.set(changes)
           .then(function(){
             setCurrentState(changes);
-
             let state = currentState.get();
             history.add(state);
             resolve(state)
@@ -31,4 +30,5 @@
        currentState.set(changes);
     }
   };
+
 })();
